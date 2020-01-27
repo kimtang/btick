@@ -1,0 +1,85 @@
+{
+  "global": {
+    "data": "data",
+    "audit": "audit",
+    "instance": 1,
+    "host": "localhost"
+  },
+
+  "admin": {
+    "process": {
+      "pm2": {
+        "library": "randomSeed,setPort,hopen,bus.client,heartbeat.client,error.client",
+        "arg": {
+          "setPort": "%basePort% + 1"
+        }
+      },
+      "bus": {
+        "library": "randomSeed,setPort,hopen,bus.server,heartbeat.client,error.client",
+        "arg": {
+          "setPort": "%basePort% + 2"
+        }
+      },
+      "tick": {
+        "library": "randomSeed,setPort,hopen,bus.client,tick.stream,tick.hft,heartbeat.server,usage.server,error.server",
+        "arg": {
+          "tick": "hft",
+          "setPort": "%basePort% + 3"
+        }
+      },
+      "replay": {
+        "library": "randomSeed,setPort,hopen,bus.client,tick.replay,heartbeat.client,error.client",
+        "arg": {
+          "setPort": "%basePort% + 4"
+        }
+      },
+      "rdb": {
+        "library": "randomSeed,setPort,hopen,bus.client,tick.sub,heartbeat.client,error.client",
+        "arg": {
+          "setPort": "%basePort% + 5"
+        }
+      },
+      "cdb": {
+        "library": "randomSeed,setPort,hopen,bus.client,tick.cdb,heartbeat.client,error.client",
+        "arg": {
+          "setPort": "%basePort% + 6"
+        }
+      }
+    }
+  },
+
+  "backfill": {
+    "process": {
+
+      "bus": {
+        "library": "randomSeed,setPort,hopen,bus.server,heartbeat.client,error.client",
+        "arg": {
+          "setPort": "%basePort% + 1"
+        }
+      },
+
+      "rdb": {
+        "library": "randomSeed,setPort,hopen,bus.client,heartbeat.client,backfill.rdb,error.client",
+        "arg": {
+          "setPort": "%basePort% + 2"
+        }
+      },
+
+      "tick": {
+        "library": "randomSeed,setPort,hopen,bus.client,heartbeat.client,backfill.tick,error.client",
+        "arg": {
+          "setPort": "%basePort% + 3"
+        }
+      },
+
+      "replay": {
+        "library": "randomSeed,setPort,hopen,bus.client,heartbeat.client,backfill.replay,error.client",
+        "arg": {
+          "setPort": "%basePort% + 4"
+        }
+      }
+
+    }
+  }
+
+}

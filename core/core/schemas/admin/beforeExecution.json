@@ -1,0 +1,11 @@
+{
+  "tname": "beforeExecution",
+  "column": "time,uid,etime,guid,user,hdl,host,arg",
+  "tipe": "pspgsi**",
+  "rattr": "sg******",
+  "hattr": "Sp******",
+  "tick": "default",
+  "rsubscriber": "default",
+  "hsubscriber": "default",
+  "addTime": true
+}

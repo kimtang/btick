@@ -1,0 +1,10 @@
+{
+  "tname": "heartbeat",
+  "column": "time,uid,used,heap,peak,wmax,mmap,mphy,syms,symw",
+  "tipe": "psjjjjjjjj",
+  "rattr": "sg********",
+  "hattr": "Sp********",
+  "tick": "default",
+  "rsubscriber": "default",
+  "hsubscriber": "default"
+}
