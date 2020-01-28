@@ -6,14 +6,16 @@ Btick is implemented very modular so it is very easy to be extended and modified
 
 The features of btick will include but not limited by:
 
-Process Management tool: btick will contain several smaller micro processes. And each micro process will have a name and a subsystem to belong to. 
-
-Code Management Behaviour: Each process can optionally load common or process type/name specific code bases. All code loading is error trapped.
-
-Usage Behaviour: All Hdbs and Rdbs will log their synchronous and asynchronous queries from user to an admin subsystem. This is then later used to understand how the platform is used. So people can react to it.
-
-Heartbeating: each process will publish heartbeats and their health data to the admin subsystem.
-
-
-## Install and requirement
+* Multiple tickerplants and multiple rdb approach:
+  Rdb can subscribe to multiple tickerplants.
+* Intraday-EOD-Writedown:
+  Tickerplant will truncate the logfile every 30 minutes such that these logfiles can be used for intraday writedown.
+* Non-Rdb-EOD-Writedown:
+  Rdb is not used for eod writedown but another process
+* Bus-Grid-Communication:
+  All processes are connected via a communication grid.
+* Backfill subsystem:
+  A backfill subsystem is automatically created for user to backfill data
+* Admin subsystem:
+  An admin subsystem is automatically created to collect health data
 
