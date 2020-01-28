@@ -10,20 +10,15 @@
 .env.lin:not .env.win;
 .env.qhome:$[not ""~getenv `QHOME;hsym `$getenv `QHOME;.env.win;`$":C:\\q";hsym`$getenv[`HOME],"/q"];
 
-if[not `bt.q in key .env.qhome;
- 0N!"Please install missing bt.q into q home directory;Download it from https://github.com/kimtang/behaviourTag";
+if[""~getenv`BTSRC;
+ 0N!"Please define the missing variable BTSRC to point to the btick implementation";
  exit 0;
  ];
 
-
-\l bt.q
+if[ not`bt in key `;system "l ",getenv[`BTSRC],"/bt.q"];
 
 \c 1000 1000
 
-if[""~getenv`BTSRC;
- 0N!"Please define the missing variable BTSRC to point to the btick3 implementation";
- exit 0;
- ];
 
 .env.btsrc:getenv`BTSRC
 .env.libs:1#`util

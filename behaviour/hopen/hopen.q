@@ -11,8 +11,6 @@
 
 .hopen.con:1!enlist`uid`host`port`user`passwd`hdl!(`;`;0nj;`;`;0ni)
 
-.bt.addTest[`.hopen.add;`.test.hopen.add]{[setPort] 1=count select from .hopen.con where not null uid }
-
 .bt.add[`;`.hopen.add]{[allData]
  if[not min `uid`host`port in key allData;.bt.stdOut0[`error;`hopen] "Uid,host and port are missing";'`.hopen.param];
  if[null allData`uid;.bt.stdOut0[`error;`hopen] "uid is null";'`.hopen.param];  
@@ -49,5 +47,4 @@
  update hdl:0ni from `.hopen.con where hdl = zw;
  }
 
-.bt.testAction[`.hopen.add] `uid`host`port!(`myself;`;0);
 

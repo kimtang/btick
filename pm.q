@@ -13,13 +13,6 @@
 .env.lin:not .env.win;
 .env.btsrc:getenv`BTSRC
 
-{
-  qhome:$[not ""~getenv `QHOME;hsym `$getenv `QHOME;.env.win;`$":C:\\q";hsym`$getenv[`HOME],"/q"];
-  if[`bt.q in key qhome;:()];
-  0N!"Please install missing bt.q into q home directory;Download it from https://github.com/kimtang/behaviourTag";
-  exit 0;
- }[];
-
 if[""~getenv`BTSRC;
  0N!"Please define the missing variable BTSRC to point to the btick3 implementation";
  exit 0;
