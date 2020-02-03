@@ -130,7 +130,7 @@ edelay:{[sym;allData]
 action:{[sym;allData]
  sym:$[10h=type sym;`$sym;sym];
  h:.bt.hist sym;  
- allData0:allData,enlist[`allData]!enlist allData;
+ allData0:{x,(`$string[key x],\:"0")!value x} allData,enlist[`allData]!enlist allData;
  f:.bt.eiff[sym]allData0;
  if[not (f`iff) and null f`error;:allData]; 
  r:@[{[fnc;arg] `result`error!(fnc . arg;`) }[b`fnc];;.bt.ecatch[sym;allData0] ] arg:allData0(b:.bt.sel[sym]`behaviour)`arg;
