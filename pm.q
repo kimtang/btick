@@ -28,7 +28,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 
 .env.libs:1#`util
 .env.behaviours:0#`
-.env.arg:.Q.def[`folder`env`subsys`proc`debug!`plant```all,0b] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x
+.env.arg:.Q.def[`folder`env`subsys`proc`debug`print!`plant```all,01b] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x
 
 
 if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
@@ -125,7 +125,8 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 .bt.addIff[`.pm.os.status]{[cmd] cmd = `status}
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.status]{[result]
  result:select subsys,proc,port,pid,pm2 from result;
- 1 .Q.s result
+ .bt.md[`result] result 
+ / 1 .Q.s result
  }
 
 .bt.addIff[`.pm.os.start]{[cmd] cmd = `start}
@@ -133,7 +134,8 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  {@[system;x;()]}@'exec startcmd from result where null pid;
  result:result lj 1!select cmd,pid from .pm2.getOsStatus [];
  result:select subsys,proc,port,pid,pm2 from result;
- 1 .Q.s result  
+ .bt.md[`result] result
+ / 1 .Q.s result  
  }
 
 .bt.addIff[`.pm.os.kill]{[cmd] cmd in `kill`stop}
@@ -142,7 +144,8 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  result:update pid:0nj from result;
  result:result lj 1!select cmd,pid from .pm2.getOsStatus[];
  result:select subsys,proc,port,pid,pm2 from result;
- 1 .Q.s result  
+ .bt.md[`result] result
+ / 1 .Q.s result  
  }
 
 .bt.addIff[`.pm.os.restart]{[cmd] cmd = `restart}
@@ -151,7 +154,8 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  {@[system;x;()]}@'exec startcmd from result where null pid;
  result:result lj 1!select cmd,pid from .pm2.getOsStatus[];
  result:select subsys,proc,port,pid,pm2 from result;
- 1 .Q.s result  
+ .bt.md[`result] result
+ / 1 .Q.s result  
  }  
 
 .bt.addIff[`.pm.os.debug]{[cmd;result] cmd = `debug}
@@ -168,9 +172,13 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  1 "We will create system.sbl";
  `:../cfg/system.sbl 0: .bt.print["/ %uid%:%host%:%port%::"] @'select uid:.Q.dd'[env;flip (subsys;process;id)],host:`localhost,port from result where not null port} 
 
-.bt.addIff[`.pm.exit]{[debug] not debug}
-.bt.add[`.pm.showFolder`.pm.os.status`.pm.os.start`.pm.os.kill`.pm.os.restart`.pm.os.sbl;`.pm.exit]{exit 0 }
 
+.bt.add[`.pm.os.status`.pm.os.start`.pm.os.kill`.pm.os.restart;`.pm.show]{[print;result]
+ if[print; 1 .Q.s result];   
+ }
+
+.bt.addIff[`.pm.exit]{[debug] not debug}
+.bt.add[`.pm.showFolder`.pm.show`.pm.os.sbl;`.pm.exit]{exit 0 }
 
 if[.z.f like "*pm.q";.bt.action[`.pm.init] .env.arg];
 
