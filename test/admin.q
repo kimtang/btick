@@ -17,6 +17,7 @@ r:.bt.action[`.pm.init] (`folder`env`subsys`proc`cmd`debug`print!(`testPlant```a
 
 result:update hdl:{@[hopen;x;0ni] }@'hp from select uid:.Q.dd'[subsys;flip (process;id)],hp:{enlist[;2000] `$ .bt.print[":localhost:%0::"] enlist x }@'port,pid,library from r`result;
 
+result:update hdl:{@[hopen;x;0ni] }@'hp from result where null hdl;
 
 .test.add[`admin;"All processes are up"] not any null result`pid;
 .test.add[`admin;"All processes are connectable"] not any null result`hdl;
@@ -29,11 +30,11 @@ hdls:exec uid!hdl from result;
 
 .test.add[`admin;"All tables are created"] min `afterExecution`beforeExecution`error`heartbeat in hdls[ `admin.rdb.0] "tables[]";
 
-.test.sleep 1;
+.test.sleep 5;
 
 .test.add[`admin;"Heartbeats are created"] 0 < hdls[ `admin.rdb.0] (count get@;`heartbeat);
 
-.test.sleep 1;
+.test.sleep 10;
 
 .test.add[`admin;"Heartbeats are published by all process"] count[result] = hdls[ `admin.rdb.0] ({count select by uid from heartbeat};());
 

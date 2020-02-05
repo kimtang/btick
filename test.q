@@ -26,7 +26,7 @@ if[ not`pm in key `;system "l ",.env.btsrc,"/pm.q"];
 
 .env.libs:`util`test
 .env.behaviours:0#`
-.env.arg:.Q.def[`folder`testFile`mode`debug!`test``,0b] .Q.opt .z.x
+.env.arg:.Q.def[`folder`testFile`mode`debug`interactive!`test``,00b] .Q.opt .z.x
 
 if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 
@@ -35,9 +35,6 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 
 .pm.parseFolder:first .bt.repository[enlist `.pm.parseFolder`behaviour]`fnc
 .pm.parseEnv:first .bt.repository[enlist `.pm.parseEnv`behaviour]`fnc
-.pm.addPid:first .bt.repository[enlist `.pm.win.addPid`behaviour]`fnc
-.pm.start:first .bt.repository[enlist `.pm.os.start`behaviour]`fnc
-.pm.stop:first .bt.repository[enlist `.pm.os.kill`behaviour]`fnc
 
 
 .bt.addIff[`.test.parseFolder]{[env] null env}
@@ -56,9 +53,9 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  }
 
 .bt.addIff[`.test.selectTest]{[mode;testFile] not (null testFile) and null mode}
-.bt.add[`.test.parseFolder;`.test.selectTest]{[mode0;testFile0;result]
+.bt.add[`.test.parseFolder;`.test.selectTest]{[allData;mode0;testFile0;result]
  tests:select from result where mode=mode0,testFile=testFile0;
- .bt.action[`.test.executeTest]@'tests; 
+ {[allData;test] .bt.action[`.test.executeTest] allData,test}[allData]@'tests; 
  }
 
 .bt.addIff[`.test.executeTest.win]{ .env.win }
@@ -84,17 +81,34 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  }
 
 
-.bt.add[`.test.executeTest.win;`.test.executeTest.file]{[allData;path]
- .test.t 
+.bt.add[`.test.executeTest.win;`.test.executeTest.prepare]{[path]
+ .bt.stdOut0[`test;`run_file] .bt.print["Prepare test file: %0"] enlist path:1_string path;	
  opt:(`folder`env`subsys`proc`debug`print!(`testPlant```all,10b) ), (``env#.test.env);
+ .bt.stdOut0[`test;`prepare] "Stop all processes";
  .bt.action[`.pm.init] opt,.bt.md[`cmd] `stop;
- .bt.action[`.pm.init] opt,.bt.md[`cmd] `start; 
-
- system "l ",1_string path;
-
- .bt.action[`.pm.init] opt,.bt.md[`cmd] `stop;
- 1 .Q.s .test.t
+ .bt.stdOut0[`test;`prepare] "Start all processes"; 
+ .bt.action[`.pm.init] opt,.bt.md[`cmd] `start;
+ `path`opt!(path;opt)
  }
+
+.bt.addIff[`.test.executeTest.file]{[interactive] not interactive}
+
+.bt.add[`.test.executeTest.prepare;`.test.executeTest.file]{[path]
+ .bt.stdOut0[`test;`run_file] .bt.print["Run test file: %0"] enlist path;
+ system "l ",path;
+ .bt.stdOut0[`test;`run_file] .bt.print["Finished test file: %0"] enlist path;	
+ }
+
+.bt.add[`.test.executeTest.file;`.test.executeTest.clean]{[opt]
+ .bt.stdOut0[`test;`prepare] "Stop all processes";
+ .bt.action[`.pm.init] opt,.bt.md[`cmd] `stop;
+ }
+
+.bt.add[`.test.selectTest;`.test.executeTest.show]{
+ .Q.dd[`:testResult;.z.d,`$string[.z.t] 0 1 3 4 6 7] 0: "," 0: .test.t;	
+ 1 .Q.s .test.t;
+ }
+
 
 .bt.addIff[`.test.executeTest.lin]{ .env.lin }
 .bt.add[`.test.executeTest;`.test.executeTest.lin]{[allData;path]
@@ -103,8 +117,8 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 
 
 
-.bt.addIff[`.test.stop]{[debug]not debug}
-.bt.add[`.test.show;`.test.stop]{[allData] exit 0;}
+.bt.addIff[`.test.stop]{[interactive;debug](not interactive) and not debug}
+.bt.add[`.test.show`.test.executeTest.show;`.test.stop]{[allData] exit 0;}
 
 
 .bt.action[`.test.init] .env.arg;
