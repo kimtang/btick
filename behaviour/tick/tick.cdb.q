@@ -16,11 +16,14 @@
 
 .bt.addIff[`.tick.loadHdb]{ not ()~key hsym `$ $[.tick.cwd~"";.tick.cdb;"."] }
 
-.bt.add[`.tick.init.schemas`.replay.eod;`.tick.loadHdb]{
+.bt.add[`.tick.init.schemas`.replay.eod`.backfill.receive.newData;`.tick.loadHdb]{
  dbpath:$[.tick.cwd~"";.tick.cdb;"."];
  system "l ",dbpath;
  .tick.cwd:.tick.cdb;
  }
+
+.bt.addIff[`.backfill.receive.newData]{[data] schema:data`schema;.proc.subsys = schema`subsys}
+.bt.add[`;`.backfill.receive.newData]{}
 
 
 .bt.addIff[`.replay.eod]{[data] .tick.con[`uid] in data`uid  }

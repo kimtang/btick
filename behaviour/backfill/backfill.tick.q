@@ -1,6 +1,6 @@
 
 .backfill.msize:900f / mb
-.backfill.con:flip`uid`time`status`subsys`tname`parted_column`partition_column`columns`tipe`ftime!"gpsssss**p"$\:()
+.backfill.con:flip`uid`time`status`subsys`tname`parted_column`partition_column`column`tipe`ftime!"gpsssss**p"$\:()
 
 .backfill.logFiles:flip`uid`time`nLogFile`file`hdl`size`ftime!"gpjsifp"$\:()
 .backfill.hlogFiles:0#.backfill.logFiles
@@ -17,7 +17,7 @@
  }
 
 .bt.add[`;`.backfill.receive.create.logFile]{[data]
- `.backfill.con insert data;
+ `.backfill.con insert cols[.backfill.con]#data,.bt.md[`ftime] 0np;
  }
 
 .bt.add[`.backfill.receive.create.logFile;`.backfill.create.logFile]{[data]

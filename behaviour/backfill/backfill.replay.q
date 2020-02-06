@@ -7,16 +7,6 @@
  .backfill.tick:first select from .sys where uid = .backfill.tick`uid;
  }
 
-/ .bt.putAction `.backfill.replay.ran.schedule
-/ select from .bt.history where not null error
-/ select  from .bt.history where mode =`behaviour,action like ".bus.receiveTweet",arg[;0]=`.backfill.replay.ran.schedule
-/ .bt.putArg 312725j
-/ .bt.action[topic] .bt.md[`data]data
-/ .bt.putAction `.backfill.replay.ran.schedule
-
-/ select from .bt.history where action like ".backfill.replay.non_automated_parted"
-/ .bt.putArg 355835j
-
 .bt.add[`;`.backfill.replay.ran.schedule]{[data]
  logFolder:`$.bt.print[":%gData%/logFile/%uid%"] .backfill.tick,data;
  schema:get .Q.dd[logFolder]`data;
@@ -33,21 +23,12 @@
 
 .bt.addIff[`.backfill.replay.non_automated_parted]{[schema]not `automatic ~ schema`partition_column }
 
-/ mnist
-
 .bt.add[`.backfill.replay.ran.schedule;`.backfill.replay.non_automated_parted]{[allData;schema]
- (schema`tname) set flip schema[`columns] ! schema[`tipe]$\:();
+ (schema`tname) set flip schema[`column] ! schema[`tipe]$\:();
  allData[`root]:`$.bt.print[":%data%/staging/%uid%"] allData,allData[`schema],allData[`data],``data#.proc;
  allData:{[x;y]  -11!y; x:.bt.action[`.backfill.non_automated_save_down] x;x } over enlist[allData], allData . `logFiles`path;
- / pcol:allData . `schema`parted_column;
- / f set `p#g ind:iasc g:get f:first exec file from t where cls = pcol;
- / {[ind;file] file set get[file] ind  }[ind]each exec file from t where not cls = pcol; 
  allData
  }
-
-/ select from .bt.history where action like ".backfill.replay.non_automated_parted.enum"
-/ .bt.putAction `.backfill.replay.non_automated_parted.enum
-/ mnist
 
 .bt.addIff[`.backfill.non_automated_save_down]{[schema] 0<count get schema`tname }
 .bt.add[`;`.backfill.non_automated_save_down]{[allData;schema]
@@ -72,7 +53,7 @@
  symname set get sym_file;
  t:update path:.Q.dd'[path;cls]from ungroup update cls:key each path from update path:.Q.dd'[path;tname]from ungroup update tname:key each path from update path:.Q.dd'[path;folder] from ([]path:allData[`root];folder:key allData[`root]); 
  t:select from t where not cls like "*#";
- t:t lj 1!([]cls:schema[`columns];tipe:schema[`tipe]);
+ t:t lj 1!([]cls:schema[`column];tipe:schema[`tipe]);
  t:update toPath:.Q.dd'[allData`cdb;flip (folder;tname;cls)] from t;
  pcol:allData . `schema`parted_column;
  t:update pcolv:count[cls]# enlist iasc get first path where cls=pcol by folder  from t;
@@ -90,7 +71,7 @@
 
 .bt.add[`.backfill.replay.ran.schedule;`.backfill.replay.automated_parted]{[allData;schema]
  allData[`parted_number]: 1 + max ("J"$string allData . `cdbFolder`file),-1;	
- (schema`tname) set flip schema[`columns] ! schema[`tipe]$\:();
+ (schema`tname) set flip schema[`column] ! schema[`tipe]$\:();
  allData[`root]:`$.bt.print[":%data%/staging/%uid%"] allData,allData[`schema],allData[`data],``data#.proc;
  allData[`non_iff_check]:0b;
  allData:{[x;y]  -11!y; x:.bt.action[`.backfill.automated_save_down] x;x } over enlist[allData], allData . `logFiles`path;
@@ -108,7 +89,7 @@
  symname set get sym_file;
  t:update path:.Q.dd'[path;cls]from ungroup update cls:key each path from update path:.Q.dd'[path;tname]from ungroup update tname:key each path from update path:.Q.dd'[path;folder] from ([]path:allData[`root];folder:key allData[`root]); 
  t:select from t where not cls like "*#";
- t:t lj 1!([]cls:schema[`columns];tipe:schema[`tipe]);
+ t:t lj 1!([]cls:schema[`column];tipe:schema[`tipe]);
  t:update toPath:.Q.dd'[allData`cdb;flip (folder;tname;cls)] from t;
  select toPath{[toPath;path] -19! path,toPath,.backfill.zd  }'path from t where not tipe = "s";
  select {[symname;toPath;path] (toPath,.backfill.zd) set symname?get path  }'[symname;toPath;path] from t where tipe = "s";

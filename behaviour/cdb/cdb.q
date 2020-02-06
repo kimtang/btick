@@ -4,7 +4,8 @@
  }
 
 .bt.addIff[`.backfill.receive.newData]{[data] schema:data`schema;.proc.subsys = schema`subsys}
-.bt.add[`;`.backfill.receive.newData]{}
+
+.bt.add[`;`.backfill.receive.newData]{[allData]}
 
 .bt.addIff[`.cdb.loadHdb]{ not ()~key hsym `$ $[.cdb.cwd~"";.cdb.path;"."] }
 
@@ -14,7 +15,7 @@
  .cdb.cwd:dbpath;
  }
 
-/
+/ 
 
 
 
@@ -23,3 +24,5 @@ tables[]
 select cnt:count i by sym from mnist
 
 select from .bt.history where action = `.backfill.receive.newData
+
+select  by arg from .bt.history where action like ".bus.re*",mode = `behaviour

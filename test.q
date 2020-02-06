@@ -54,7 +54,9 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 
 .bt.addIff[`.test.selectTest]{[mode;testFile] not (null testFile) and null mode}
 .bt.add[`.test.parseFolder;`.test.selectTest]{[allData;mode0;testFile0;result]
- tests:select from result where mode=mode0,testFile=testFile0;
+ tests:select from result where (mode0=`all) or mode=mode0,(testFile0=`all) or testFile=testFile0;
+ / env:first .pm.parseFolder[ allData]`result;
+ / .test.env:env; 
  {[allData;test] .bt.action[`.test.executeTest] allData,test}[allData]@'tests; 
  }
 
@@ -102,6 +104,7 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 .bt.add[`.test.executeTest.file;`.test.executeTest.clean]{[opt]
  .bt.stdOut0[`test;`prepare] "Stop all processes";
  .bt.action[`.pm.init] opt,.bt.md[`cmd] `stop;
+ .test.sleep 20;
  }
 
 .bt.add[`.test.selectTest;`.test.executeTest.show]{
@@ -122,30 +125,6 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 
 
 .bt.action[`.test.init] .env.arg;
-
-
-
-
-/
-
-.bt.action[`.test.selectTest] `mode0`testFile0`result!(mode0;testFile0;result)
-
-
-
-allData`path
-
-
-.bt.putAction `.test.selectTest
-.bt.putAction `.test.executeTest.win
-
-
-
-
-
-
-
-
-
 
 
 

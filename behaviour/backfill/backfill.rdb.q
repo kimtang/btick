@@ -1,5 +1,5 @@
 
-.backfill.con:flip`uid`time`status`subsys`tname`parted_column`partition_column`columns`tipe!"gpsssss**"$\:()
+.backfill.con:flip`uid`time`status`subsys`tname`parted_column`partition_column`column`tipe!"gpsssss**"$\:()
 
 .bt.add[`.library.init;`.backfill.init.schemas]{[allData]
  .tick.con:first select uid,subsys,host:`$host,port,hdl:0ni from .sys where `backfill.tick {max x in y}/:library;	
@@ -16,31 +16,44 @@
 
 / .backfill.createSchedule:{[data] .bt.action[`.backfill.createSchedule;data]`uid  }
 
-.bt.add[`;`.backfill.createSchedule]{[allData]
- allData:@[allData;`subsys;{[x;y]$[10h = abs type x;`$x;x]};()];
- allData:@[allData;`tname;{[x;y]$[10h = abs type x;`$x;x]};()];
- allData:@[allData;`parted_column;{[x;y]$[10h = abs type x;`$x;x]};()];
- allData:@[allData;`partition_column;{[x;y]$[10h = abs type x;`$x;x]};()]; 
- allData:@[allData;`columns;{[x;y]$[0h = abs type x;`$x;x]};()];
- allData[`uid]:.bt.guid1[];
- allData[`time]:.z.P;
- allData[`status]:`init;
- `.backfill.con insert cols[.backfill.con]#allData;
- allData
- }
+/ .bt.putAction `.backfill.schema.exist
+
+/ select from .bt.history where action like ".backfill*"
 
 
 .bt.addIff[`.backfill.schema.exist]{[allData]1=count select from .schemas.con where tname=allData`tname}
 
-.bt.add[`.backfill.createSchedule;`.backfill.schema.exist]{[allData]}
+.bt.add[`.backfill.createSchedule;`.backfill.schema.exist]{[allData]
+ s:first select from .schemas.con where tname = allData`tname,subsys =allData`subsys;
+ allData:allData,`subsys`tname`column`tipe`hattr # @[;`hattr;{[x;y]"*",x };()] @[;`tipe;{[x;y]"d",x };()] @[s;`column;{[x;y]`date,x };()] ;
+ allData[`parted_column] : first where "p"=allData[`column]!allData[`hattr];
+ allData[`partition_column]:`date;
+ allData[`uid]:.bt.guid1[];
+ allData[`time]:.z.P;
+ allData[`status]:`init; 
+ `.backfill.con insert cols[.backfill.con]#allData;	
+ allData[`tname] set flip allData[`column]!allData[`tipe]$\:();
+ allData
+ }
 
 .bt.addIff[`.backfill.schema.nonexist]{[allData]0=count select from .schemas.con where tname=allData`tname}
 
-.bt.add[`.backfill.createSchedule;`.backfill.schema.nonexist]{[tname;tipe;columns]
- tname set flip columns!tipe$\:();
+.bt.add[`.backfill.createSchedule;`.backfill.schema.nonexist]{[allData;tname;tipe;column]
+ allData:@[allData;`subsys;{[x;y]$[10h = abs type x;`$x;x]};()];
+ allData:@[allData;`tname;{[x;y]$[10h = abs type x;`$x;x]};()];
+ allData:@[allData;`parted_column;{[x;y]$[10h = abs type x;`$x;x]};()];
+ allData:@[allData;`partition_column;{[x;y]$[10h = abs type x;`$x;x]};()]; 
+ allData:@[allData;`column;{[x;y]$[0h = abs type x;`$x;x]};()];
+ allData[`uid]:.bt.guid1[];
+ allData[`time]:.z.P;
+ allData[`status]:`init;
+ `.backfill.con insert cols[.backfill.con]#allData;	
+ tname set flip column!tipe$\:();
+ allData
  }
 
-.bt.add[`.backfill.schema.nonexist;`.backfill.twitter.create.logFile]{[allData]
+
+.bt.add[`.backfill.schema.nonexist`.backfill.schema.exist;`.backfill.twitter.create.logFile]{[allData]
  `topic`data!(`.backfill.receive.create.logFile;allData)
  }
 
