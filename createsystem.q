@@ -36,14 +36,14 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 .cs.input:{ -2 x; read0 0}
 
 .cs.process:(!) . flip 2 cut (
-	`bus;`library`arg!("randomSeed,setPort,hopen,bus.server,heartbeat.client";enlist[`setPort]!enlist "%basePort% + 1" );
-	`tick;`library`arg!("randomSeed,setPort,hopen,bus.client,tick.stream,tick.hft,heartbeat.client";enlist[`setPort]!enlist "%basePort% + 2");
-	`replay;`library`arg!("randomSeed,setPort,hopen,bus.client,tick.replay,heartbeat.client";enlist[`setPort]!enlist "%basePort% + 3");
-	`rdb;`library`arg!("randomSeed,setPort,hopen,bus.client,tick.sub,heartbeat.client";enlist[`setPort]!enlist "%basePort% + 4");
-	`cdb;`library`arg!("randomSeed,setPort,hopen,bus.client,tick.cdb,heartbeat.client";enlist[`setPort]!enlist "%basePort% + 5");
-	`gateway;`library`arg!("randomSeed,setPort,hopen,bus.client,gw.server,heartbeat.client,usage.client";enlist[`setPort]!enlist "%basePort% + 6");
-	`ctp;`library`arg!("randomSeed,setPort,hopen,bus.client,tick.sub,tick.ctp,heartbeat.client,usage.client";enlist[`setPort]!enlist "%basePort% + 7");
-	`dynamicHdb;`library`instance`arg!("randomSeed,dynamicPort,hopen,bus.client,gw.client,tick.hdb,heartbeat.client,usage.client";4;enlist[`dynamicPort]!enlist "%basePort% + 20")
+	`bus;`library`arg!("randomSeed,setPort,hopen,bus.server,heartbeat.client,berror.client";enlist[`setPort]!enlist "%basePort% + 1" );
+	`tick;`library`arg!("randomSeed,setPort,hopen,bus.client,tick.stream,tick.hft,heartbeat.client,berror.client";enlist[`setPort]!enlist "%basePort% + 2");
+	`replay;`library`arg!("randomSeed,setPort,hopen,bus.client,tick.replay,heartbeat.client,berror.client";enlist[`setPort]!enlist "%basePort% + 3");
+	`rdb;`library`arg!("randomSeed,setPort,hopen,bus.client,tick.sub,heartbeat.client,berror.client";enlist[`setPort]!enlist "%basePort% + 4");
+	`cdb;`library`arg!("randomSeed,setPort,hopen,bus.client,tick.cdb,heartbeat.client,berror.client";enlist[`setPort]!enlist "%basePort% + 5");
+	`gateway;`library`arg!("randomSeed,setPort,hopen,bus.client,gw.server,heartbeat.client,usage.client,berror.client";enlist[`setPort]!enlist "%basePort% + 6");
+	`ctp;`library`arg!("randomSeed,setPort,hopen,bus.client,tick.sub,tick.cep,tick.ctp,heartbeat.client,usage.client,berror.client";enlist[`setPort]!enlist "%basePort% + 7");
+	`dynamicHdb;`library`instance`arg!("randomSeed,dynamicPort,hopen,bus.client,gw.client,tick.hdb,heartbeat.client,usage.client,berror.client";4;enlist[`dynamicPort]!enlist "%basePort% + 20")
 	)
 
 .cs.schema:(!) . flip 2 cut (

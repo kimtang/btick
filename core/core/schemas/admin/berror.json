@@ -1,5 +1,5 @@
 {
-  "tname": "error",
+  "tname": "berror",
   "column": "time,uid,action,mode,time,etime,seq,eseq,result,arg,error",
   "tipe": "psssppjj**s",
   "rattr": "sg*********",

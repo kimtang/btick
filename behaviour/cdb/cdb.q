@@ -15,14 +15,4 @@
  .cdb.cwd:dbpath;
  }
 
-/ 
-
-
-
-tables[]
-
-select cnt:count i by sym from mnist
-
-select from .bt.history where action = `.backfill.receive.newData
-
-select  by arg from .bt.history where action like ".bus.re*",mode = `behaviour
+/

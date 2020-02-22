@@ -8,7 +8,7 @@
  .tick.u: (enlist[`]!enlist {[x;y]}), exec tname!upd from .tick.schemas;
  .tick.oc: exec tname!ocolumn from .tick.schemas;    
  rsubscribers:exec uid by subsys  from .sys where env = .proc`env,`tick.sub in/:library;
- rsubscribers:rsubscribers,(enlist[`default]!exec uid from .sys where subsys = .proc.subsys,`tick.sub in/:library);
+ rsubscribers:rsubscribers,(enlist[`default]!enlist exec uid from .sys where subsys = .proc.subsys,`tick.sub in/:library);
  t:ungroup select subsys,tname,rsubscriber:{distinct raze x} each rsubscribers rsubscriber from .tick.schemas;
  t:update hdl:0ni from t;
  .tick.con0:t;
