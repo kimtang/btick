@@ -22,6 +22,7 @@ tick
 replay
 rdb
 hdb
+ctp
 
 ## heartbeat
 
@@ -29,7 +30,7 @@ hdb
 
 module to collect .z.pg input
 
-## error
+## berror
 module to capture error from all bt
 
 ## gateway

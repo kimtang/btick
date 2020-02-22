@@ -174,7 +174,7 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 
 
 .bt.add[`.pm.os.status`.pm.os.start`.pm.os.kill`.pm.os.restart;`.pm.show]{[print;result]
- if[print; 1 .Q.s result];   
+ if[print; 1 .Q.s `port xasc result];
  }
 
 .bt.addIff[`.pm.exit]{[debug] not debug}
