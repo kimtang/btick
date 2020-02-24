@@ -3,7 +3,7 @@
 
 
 / 
- q pm.q -folder folder -env env [status|start|kill|stop|restart|debug|sbl] proc[all]
+ q pm.q -folder folder -env env [status|start|kill|stop|restart|debug|sbl|json] proc[all]
  q pm.q -folder plant -env pm status proc[all]
  q pm.q -folder plant -env pm_example -subsys subsys status all  
  q pm.q
@@ -26,7 +26,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 .bt.addCatch[`]{[error] .bt.stdOut0[`error;`pm] .bt.print["Please investigate the following error: %0"] enlist error;'error}
 
 
-.env.libs:1#`util
+.env.libs:`util`action
 .env.behaviours:0#`
 .env.arg:.Q.def[`folder`env`subsys`proc`debug`print!`plant```all,01b] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x
 
@@ -56,36 +56,17 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  {1 .bt.print["%cmd%\n"] x}@'result;
  } 
 
-.pm2.calcPort:()!()
-.pm2.calcPort[`setPort]:{[mergeArg;id] get .bt.print[$[10h=type mergeArg`setPort;::;string]mergeArg`setPort ] mergeArg   }
-.pm2.calcPort[`dynamicPort]:{[mergeArg;id] id + get  .bt.print[$[10h=type mergeArg`dynamicPort;::;string]mergeArg`dynamicPort ] mergeArg }
-.pm2.calcPort[`noPort]:{[mergeArg;id] 0nj}
-
 .bt.addIff[`.pm.parseEnv]{[env] not null env}
-.bt.add[`.pm.init;`.pm.parseEnv]{[allData]
- .cfg : .j.k "c"$read1 `$.bt.print[":%folder%/%env%.json"] .env,allData;
- .core: .j.k "c"$read1 `$ .bt.print["%btsrc%/core/core.json"] .env,.cfg.global;
- .cfg : .cfg,.util.deepMerge[.core].cfg;
- .global: .cfg.global;
- .cfg:delete global from .cfg;
- t:{[allData;x]  ([]folder:allData`folder;env:allData`env;subsys:key x;val:value x)}[allData] .cfg;
- t:update process:key @'val[;`process], library:{value[x]@\:`library}@'val[;`process], arg:{value[x]@\:`arg}@'val[;`process] from t;
- t:update global: {[ksubsys;subsys] (ksubsys _ .global), .global subsys   }[subsys] @'subsys from t;
- t:update global:process{count[x]#enlist y }'global from t;
- t:update local:{ {`library`arg _ x} each value x }@'val[;`process] from t;
- t:ungroup delete val from t;
- t:update instance:global{"j"$ (x,y)`instance }'local from t;
- t:raze {update id:til ins from (ins:x `instance)#enlist x}@'t;
- t:update library:{`$"," vs x}@'library from t; 
- t:update mergeArg:{[arg;global;local] .util.deepMerge[global] .util.deepMerge[local] arg }'[arg;global;local] from t; 
- t:update port:{[library;mergeArg;id] .pm2.calcPort[first `noPort ^ desc (k!k:key .pm2.calcPort) library] [mergeArg;id]}'[library;mergeArg;id] from t;
- t:update proc:.Q.dd'[process;id] from t;
- .bt.md[`result]t
- }
+.bt.add[`.pm.init;`.pm.parseEnv] .action.parseCfg
 
-/ .bt.putAction `.pm.linux.addPid
+.bt.addIff[`.pm.os.json]{[cmd] cmd = `json}
+.bt.add[`.pm.parseEnv;`.pm.os.json]{[result]
+ result:select uid,folder,env,subsys,proc,port from result;
+ 1 .j.j update host:.z.h from result;
+ .bt.md[`result] result 
+ } 
 
-.bt.addIff[`.pm.linux.addPid]{ .env.lin }
+.bt.addIff[`.pm.linux.addPid]{[cmd] .env.lin and not cmd=`json }
 .bt.add[`.pm.parseEnv;`.pm.linux.addPid]{[result;allData]
  result:update cmd:{.bt.print["q %btsrc%/action.q -folder %folder% -env %env% -subsys %subsys% -process %process% -id %id% -p %port%"] .env,x}@'result from result;
  result:update startcmd:.bt.print["nohup %cmd% >nohup.out 2>&1 &"]@'result from result;
@@ -111,7 +92,7 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 
 
 
-.bt.addIff[`.pm.win.addPid]{ .env.win }
+.bt.addIff[`.pm.win.addPid]{[cmd] .env.win and not cmd=`json }
 .bt.add[`.pm.parseEnv;`.pm.win.addPid]{[result;allData]
  result:update cmd:{.bt.print["q %btsrc%/action.q -folder %folder% -env %env% -subsys %subsys% -process %process% -id %id%"] .env,x}@'result from result;
  result:update startcmd:.bt.print["start \"%cmd%\" /MIN %cmd%"]@'result from result;
@@ -119,6 +100,13 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  result:select from result where (proc in allData`proc) or `all=allData`proc,(subsys in allData`subsys) or null allData`subsys;  
  result:update pm2:.bt.print["q pm.q -folder %folder% -env %env% -subsys %subsys% status %proc%"]@'result from result; 
  .bt.md[`result] result  
+ }
+
+.bt.addIff[`.pm.os.no_cmd]{[cmd] not cmd in `status`start`kill`stop`restart`debug`sbl`json`status }
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.no_cmd]{[result;allData]
+ result:select subsys,proc,port,pid,pm2 from result;	
+ 1 .Q.s .bt.print["cmd: %cmd% not implemented"] allData;
+ .bt.md[`result] result 
  }
 
 
@@ -178,7 +166,7 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  }
 
 .bt.addIff[`.pm.exit]{[debug] not debug}
-.bt.add[`.pm.showFolder`.pm.show`.pm.os.sbl;`.pm.exit]{exit 0 }
+.bt.add[`.pm.showFolder`.pm.show`.pm.os.sbl`.pm.os.json`.pm.os.no_cmd;`.pm.exit]{exit 0 }
 
 if[.z.f like "*pm.q";.bt.action[`.pm.init] .env.arg];
 

@@ -1,0 +1,12 @@
+
+{
+  "tname": "error",
+  "column": "time,uid,nsp,error,msg",
+  "tipe": "psss*",
+  "rattr": "sg***",
+  "hattr": "Sp***",
+  "tick": "default",
+  "rsubscriber": "default",
+  "hsubscriber": "default",
+  "addTime": false
+}

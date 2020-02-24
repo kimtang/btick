@@ -1,4 +1,6 @@
 
+.bus.tcon:flip`topic`data!()
+
 .bus.hdl:0ni
 
 .bt.add[`.library.init;`.bus.init]{
@@ -8,6 +10,7 @@
 .bt.add[`;`.bus.handshake]{[data]
  .bus.hdl:.z.w;
  .bus.con:.bus.con lj 1!data;
+ .bt.action[`.bus.sendTweet]@'.bus.tcon;
  `topic`data!(`.bus.whoIsAvail;.proc)
  }
 
@@ -23,7 +26,9 @@
 .bt.add[`;`.bus.sendTweetFlush]{.bt.md[`flush]1b}
 
 .bt.addIff[`.bus.sendTweet.noBus]{null .bus.hdl}
-.bt.add[`.bus.sendTweetFlush`.bus.sendTweet;`.bus.sendTweet.noBus]{[topic;data]}
+.bt.add[`.bus.sendTweetFlush`.bus.sendTweet;`.bus.sendTweet.noBus]{[topic;data]
+ `.bus.tcon insert enlist `topic`data!(topic;data);
+ }
 
 .bt.addIff[`.bus.sendTweet.availBus]{not null .bus.hdl}
 .bt.add[`.bus.sendTweetFlush`.bus.sendTweet;`.bus.sendTweet.availBus]{[allData]

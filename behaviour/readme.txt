@@ -33,6 +33,9 @@ module to collect .z.pg input
 ## berror
 module to capture error from all bt
 
+## error
+module to capture error
+
 ## gateway
 
 gateway

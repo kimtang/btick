@@ -1,5 +1,9 @@
 
-`.cep.con insert `time`uid`fnc!(.z.P;`.tick.ctp;`.u.pub)
+
+.bt.add[`.tick.cep.init;`.tick.ctp.init]{
+ .u.init[];
+ `.cep.con insert `time`uid`upd!(.z.P;`.tick.ctp;`.u.pub) 
+ }
 
 \d .u
 
