@@ -57,7 +57,7 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  } 
 
 .bt.addIff[`.pm.parseEnv]{[env] not null env}
-.bt.add[`.pm.init;`.pm.parseEnv] .action.parseCfg
+.bt.add[`.pm.init;`.pm.parseEnv] {[allData] .bt.md[`result] .action.parseCfg allData } 
 
 .bt.addIff[`.pm.os.json]{[cmd] cmd = `json}
 .bt.add[`.pm.parseEnv;`.pm.os.json]{[result]

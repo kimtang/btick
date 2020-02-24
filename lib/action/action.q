@@ -31,5 +31,6 @@
  t:update lfile: {.bt.print["%folder%/%env%/%subsys%/%process%/%id%"] .global,x}@'t from t;
  t:update gcorefile: { .util.wlin .bt.print["%btsrc%/core/core/%subsys%/%process%/global"] .env,.global,x}@'t from t;
  t:update lcorefile: { .util.wlin .bt.print["%btsrc%/core/core/%subsys%/%process%/%id%"] .env,.global,x}@'t from t;
- .bt.md[`result]t
+ t
+ / .bt.md[`result]t
  }
