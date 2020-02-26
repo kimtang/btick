@@ -35,7 +35,7 @@
 .bt.add[`.hopen.pc;`.bus.pc]{[zw]
  a:select from .bus.con where hdl = zw;
  update hdl:0ni from `.bus.con where hdl = zw;
- .bt.action[`.hopen.add] @' `uid`host`port#a; 
+ / .bt.action[`.hopen.add] @' `uid`host`port#a; / is this needed?
  data:select uid,avail:not null hdl from .bus.con; 
  `topic`data!(`.bus.avail;data) 
  }

@@ -3,7 +3,7 @@
 
 
 / 
- q pm.q -folder folder -env env [status|start|kill|stop|restart|debug|sbl|json] proc[all]
+ q pm.q -folder folder -env env [status|start|kill|stop|restart|debug|sbl|json|heartbeat|error] proc[all]
  q pm.q -folder plant -env pm status proc[all]
  q pm.q -folder plant -env pm_example -subsys subsys status all  
  q pm.q
@@ -33,9 +33,10 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 
 if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 
+.env.loadLib:{{@[system;;()] .bt.print["l %btsrc%/lib/%lib%/%lib%.q"] .env , enlist[`lib]!enlist x}@'x};
+.env.loadBehaviour:{ {@[system;;()] .bt.print["l %btsrc%/behaviour/%behaviour%/%module%.q"] .env , `behaviour`module! (first` vs x),x}@'x };
 
-{@[system;;()] .bt.print["l %btsrc%/lib/%lib%/%lib%.q"] .env , enlist[`lib]!enlist x}@'.env.libs;
-{@[system;;()] .bt.print["l %btsrc%/behaviour/%behaviour%/%behaviour%.q"] .env , enlist[`behaviour]!enlist x}@'.env.behaviours;
+.env.loadLib .env.libs;
 
 / .bt.scheduleIn[.bt.action[`.pm.init];;00:00:01] enlist .env.arg;
 
@@ -57,7 +58,9 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  } 
 
 .bt.addIff[`.pm.parseEnv]{[env] not null env}
-.bt.add[`.pm.init;`.pm.parseEnv] {[allData] .bt.md[`result] .action.parseCfg allData } 
+.bt.add[`.pm.init;`.pm.parseEnv] {[allData] .sys:result:.action.parseCfg allData;
+ .bt.md[`result] result
+ } 
 
 .bt.addIff[`.pm.os.json]{[cmd] cmd = `json}
 .bt.add[`.pm.parseEnv;`.pm.os.json]{[result]
@@ -102,7 +105,7 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  .bt.md[`result] result  
  }
 
-.bt.addIff[`.pm.os.no_cmd]{[cmd] not cmd in `status`start`kill`stop`restart`debug`sbl`json`status }
+.bt.addIff[`.pm.os.no_cmd]{[cmd] not cmd in `status`start`kill`stop`restart`debug`sbl`json`status`heartbeat`error }
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.no_cmd]{[result;allData]
  result:select subsys,proc,port,pid,pm2 from result;	
  1 .Q.s .bt.print["cmd: %cmd% not implemented"] allData;
@@ -154,6 +157,18 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  .env.arg:.Q.def[(1#`folder)!1#`plant] .Q.opt 2_" " vs result`cmd;
  system .bt.print["l %btsrc%/action.q"] .env
  }
+
+.bt.addIff[`.pm.os.heartbeat]{[cmd;result] cmd = `heartbeat}
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.heartbeat]{[result]
+ .env.result:result;
+ system .bt.print["l %btsrc%/lib/pm/pm.heartbeat.q"] .env;
+ } 
+
+.bt.addIff[`.pm.os.error]{[cmd;result] cmd = `error}
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.error]{[result]
+ .env.result:result;
+ system .bt.print["l %btsrc%/lib/pm/pm.error.q"] .env;
+ } 
 
 .bt.addIff[`.pm.os.sbl]{[cmd;result] cmd = `sbl}
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.sbl]{[result]
