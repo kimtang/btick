@@ -2,25 +2,28 @@
 
 .monitor.con:flip`uid`looptime`executetime`tname`nname`init`upd`loop`error`data!()
 
-.monitor.cep.heartbeat.uid:`heartbeat.bin
-.monitor.cep.heartbeat.looptime:`second$5
-.monitor.cep.heartbeat.executetime:0np
-.monitor.cep.heartbeat.tname:`heartbeat
-.monitor.cep.heartbeat.nname:`heartbeatlow
-.monitor.cep.heartbeat.init:{[data]0#heartbeat}
-.monitor.cep.heartbeat.upd:{[odata;ndata] odata,ndata}
-.monitor.cep.heartbeat.loop:{[data] 0!select btime:min time,etime:max time,cnt:count i, used:max used,heap:max heap,peak:max peak,wmax:max wmax,mmap:max mmap,mphy:max mphy,syms:max syms,symw:max symw by uid from data }
-.monitor.cep.heartbeat.error:{}
-.monitor.cep.heartbeat.data:()
+.monitor.cep.tblcnt.uid:`tblcnt.bin
+.monitor.cep.tblcnt.looptime:`second$5
+.monitor.cep.tblcnt.executetime:0np
+.monitor.cep.tblcnt.tname:`all
+.monitor.cep.tblcnt.nname:`tblcnt
+.monitor.cep.tblcnt.init:{ 1!([] tbl:.monitor.cep.tblcnt.tnames;btime:.z.P;cnt:0) }
+.monitor.cep.tblcnt.upd:{[tname;odata;ndata]odata + 1!enlist `tbl`btime`cnt!(tname;0;count ndata) }
+.monitor.cep.tblcnt.loop:{[data] update etime:.z.P from 0!data}
+.monitor.cep.tblcnt.error:{}
+.monitor.cep.tblcnt.data:() / exec tname from .schemas.con where subsys=.proc.subsys
 
-.monitor.upd:{[tname0;ndata]
- update data:upd{[upd;data] upd . data }'flip(data;count[data]#enlist ndata) from `.monitor.con where tname =  tname0;
+
+.monitor.upd:{[tname0;ndata]abc::(tname0;ndata);
+ update data:upd{[upd;data] upd . data }'flip(tname0;data;count[data]#enlist ndata) from `.monitor.con where (tname=`all)or tname =  tname0;
  }
 
 
 .bt.add[`.tick.cep.init;`.monitor.cep.init]{
+ .monitor.cep.tblcnt.tnames:exec tname from .schemas.con where subsys=.proc.subsys;
+
  `.cep.con insert `uid`upd`time!(`.monitor.cep;`.monitor.upd;.z.p);
- `.monitor.con insert cols[.monitor.con]#.monitor.cep.heartbeat;
+ `.monitor.con insert cols[.monitor.con]#.monitor.cep.tblcnt;
  update executetime:.z.p + looptime from `.monitor.con where null executetime;
  update data:init @'data from `.monitor.con;
  }
@@ -42,3 +45,15 @@
  }
 
 / 
+
+tblcnt
+
+.monitor.con . 0,`data
+select by arg[;0] from .bt.history where action = `.bus.sendTweet,mode = `behaviour
+
+select  from .bt.history where action like ".bus.receiveTweet",arg[;0] like ".monitor*"
+
+select  from .bt.history where action = `.monitor.cep.receiveData,mode = `behaviour
+
+
+reverse tblcnt

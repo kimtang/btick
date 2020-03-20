@@ -18,13 +18,11 @@
  	}@'hdls;
  }
 
-.bt.add[`.hopen.pc;`.tick.u.pc]{[zw] .u.del[;zw]each .u.t }
-
 upd:{[tname;data]
  tname:.tick.t tname;
  data:.tick.addCols[tname;data]; / now distribute to the 
  {[tname;data;cep] @[0;(cep`upd;tname;data);]
- 	{[cep;error] .bt.action[`.error.send] `time`uid`nsp`error`msg!(.z.p;.proc.uid;`.tick.cep;`$error;.bt.print["Error in tick.ctp for %uid% and error %error% "] `uid`error!(cep`uid;error)); }[cep];
+ 	{[cep;error] .bt.action[`.info.send] `time`uid`nsp`error`msg!(.z.p;.proc.uid;`.tick.cep;`$error;.bt.print["Error in tick.ctp for %uid% and error %error% "] `uid`error!(cep`uid;error)); }[cep];
  }[tname;data;] each .cep.con;
  }
 

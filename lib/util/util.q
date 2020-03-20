@@ -51,6 +51,13 @@ createSchema:{[tname;subsys;tbl;addTime]
  .Q.dd[path;.Q.dd[tname]`json] 0: enlist .j.j enlist[`] _ json	
  }
 
+sleep0:()!()
+sleep0[1b]:{system .bt.print["timeout %0 /nobreak"] enlist x; }
+sleep0[0b]:{system .bt.print["sleep %0"] enlist x; }
+
+sleep:{[secs] .util.sleep0[.env.win] secs }
+
+
 / ceateSchema[tname;subsys;tbl;addTime]
 
 

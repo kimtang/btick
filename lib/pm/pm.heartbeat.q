@@ -12,7 +12,10 @@
  }
 
 .bt.addIff[`.pm.heartbeat.pc]{[zw] zw=.pm.heartbeat.adminCtp.hdl }
-.bt.add[`.hopen.pc;`.pm.heartbeat.pc]{[zw] .pm.heartbeat.adminCtp.hdl:0ni;}
+.bt.add[`.hopen.pc;`.pm.heartbeat.pc]{[zw]	
+ .pm.heartbeat.adminCtp.hdl:0ni;
+ .pm.heartbeat.heartbeatTime:(.env.result`uid)!count[.env.result]#0nt;	
+ }
 
 .bt.addIff[`.pm.heartbeat.success]{[result] .pm.heartbeat.adminCtp.uid in result`uid }
 .bt.add[`.hopen.success;`.pm.heartbeat.success]{[result] 

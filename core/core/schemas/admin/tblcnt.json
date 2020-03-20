@@ -1,0 +1,10 @@
+{
+  "tname": "tblcnt",
+  "column": "tbl,btime,cnt,etime",
+  "tipe": "spjp",
+  "rattr": "gs**",
+  "hattr": "pS**",
+  "tick": "default",
+  "rsubscriber": "default",
+  "hsubscriber": "default"
+}

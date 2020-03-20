@@ -5,6 +5,8 @@
  `.cep.con insert `time`uid`upd!(.z.P;`.tick.ctp;`.u.pub) 
  }
 
+.bt.add[`.hopen.pc;`.tick.ctp.pc]{[zw] .u.del[;zw]each .u.t }
+
 \d .u
 
 init:{w::t!(count t::tables`.)#()}

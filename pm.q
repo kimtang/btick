@@ -3,7 +3,7 @@
 
 
 / 
- q pm.q -folder folder -env env [status|start|kill|stop|restart|debug|sbl|json|heartbeat|error] proc[all]
+ q pm.q -folder folder -env env [status|start|kill|stop|restart|debug|sbl|json|info|heartbeat|error|tblcnt] proc[all]
  q pm.q -folder plant -env pm status proc[all]
  q pm.q -folder plant -env pm_example -subsys subsys status all  
  q pm.q
@@ -105,7 +105,7 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  .bt.md[`result] result  
  }
 
-.bt.addIff[`.pm.os.no_cmd]{[cmd] not cmd in `status`start`kill`stop`restart`debug`sbl`json`status`heartbeat`error }
+.bt.addIff[`.pm.os.no_cmd]{[cmd] not cmd in `status`start`kill`stop`restart`debug`sbl`json`status`heartbeat`info`tblcnt }
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.no_cmd]{[result;allData]
  result:select subsys,proc,port,pid,pm2 from result;	
  1 .Q.s .bt.print["cmd: %cmd% not implemented"] allData;
@@ -164,11 +164,17 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  system .bt.print["l %btsrc%/lib/pm/pm.heartbeat.q"] .env;
  } 
 
-.bt.addIff[`.pm.os.error]{[cmd;result] cmd = `error}
-.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.error]{[result]
+.bt.addIff[`.pm.os.info]{[cmd;result] cmd = `info}
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.info]{[result]
  .env.result:result;
- system .bt.print["l %btsrc%/lib/pm/pm.error.q"] .env;
- } 
+ system .bt.print["l %btsrc%/lib/pm/pm.info.q"] .env;
+ }
+
+.bt.addIff[`.pm.os.tblcnt]{[cmd;result] cmd = `tblcnt}
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.tblcnt]{[result]
+ .env.result:result;
+ system .bt.print["l %btsrc%/lib/pm/pm.tblcnt.q"] .env;
+ }  
 
 .bt.addIff[`.pm.os.sbl]{[cmd;result] cmd = `sbl}
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.sbl]{[result]

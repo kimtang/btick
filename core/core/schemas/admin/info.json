@@ -1,6 +1,6 @@
 
 {
-  "tname": "error",
+  "tname": "info",
   "column": "time,uid,nsp,error,msg",
   "tipe": "psss*",
   "rattr": "sg***",

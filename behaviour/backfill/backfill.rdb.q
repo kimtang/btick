@@ -20,38 +20,44 @@
 
 / select from .bt.history where action like ".backfill*"
 
+/ .backfill.con
 
-.bt.addIff[`.backfill.schema.exist]{[allData]1=count select from .schemas.con where tname=allData`tname}
+/ select from .bt.history where action like ".backfill.createSchedule"
 
-.bt.add[`.backfill.createSchedule;`.backfill.schema.exist]{[allData]
+
+.bt.add[`;`.backfill.createSchedule]{[allData]
+ if[`subsys in key allData; allData:@[allData;`subsys;{[x;y]$[10h = abs type x;`$x;x]};()];];
+ if[`tname in key allData; allData:@[allData;`tname;{[x;y]$[10h = abs type x;`$x;x]};()];];
+ if[`parted_column in key allData; allData:@[allData;`parted_column;{[x;y]$[10h = abs type x;`$x;x]};()];];
+ if[`partition_column in key allData; allData:@[allData;`partition_column;{[x;y]$[10h = abs type x;`$x;x]};()];]; 
+ if[`column in key allData; allData:@[allData;`column;{[x;y]$[0h = abs type x;`$x;x]};()];];
+
+ allData[`uid]:.bt.guid1[];
+ allData[`time]:.z.P;
+ allData[`status]:`init;  
+
+ allData
+ }
+
+.bt.addIff[`.backfill.schema.exist]{[allData]1=count select from .schemas.con where tname =allData`tname}
+
+.bt.add[`.backfill.createSchedule;`.backfill.schema.exist]{[allData;tname;column;tipe]
  s:first select from .schemas.con where tname = allData`tname,subsys =allData`subsys;
  allData:allData,`subsys`tname`column`tipe`hattr # @[;`hattr;{[x;y]"*",x };()] @[;`tipe;{[x;y]"d",x };()] @[s;`column;{[x;y]`date,x };()] ;
  allData[`parted_column] : first where "p"=allData[`column]!allData[`hattr];
  allData[`partition_column]:`date;
- allData[`uid]:.bt.guid1[];
- allData[`time]:.z.P;
- allData[`status]:`init; 
- `.backfill.con insert cols[.backfill.con]#allData;	
- allData[`tname] set flip allData[`column]!allData[`tipe]$\:();
- allData
- }
-
-.bt.addIff[`.backfill.schema.nonexist]{[allData]0=count select from .schemas.con where tname=allData`tname}
-
-.bt.add[`.backfill.createSchedule;`.backfill.schema.nonexist]{[allData;tname;tipe;column]
- allData:@[allData;`subsys;{[x;y]$[10h = abs type x;`$x;x]};()];
- allData:@[allData;`tname;{[x;y]$[10h = abs type x;`$x;x]};()];
- allData:@[allData;`parted_column;{[x;y]$[10h = abs type x;`$x;x]};()];
- allData:@[allData;`partition_column;{[x;y]$[10h = abs type x;`$x;x]};()]; 
- allData:@[allData;`column;{[x;y]$[0h = abs type x;`$x;x]};()];
- allData[`uid]:.bt.guid1[];
- allData[`time]:.z.P;
- allData[`status]:`init;
  `.backfill.con insert cols[.backfill.con]#allData;	
  tname set flip column!tipe$\:();
  allData
  }
 
+.bt.addIff[`.backfill.schema.nonexist]{[allData]0=count select from .schemas.con where tname =allData`tname}
+
+.bt.add[`.backfill.createSchedule;`.backfill.schema.nonexist]{[allData;tname;column;tipe]
+ `.backfill.con insert cols[.backfill.con]#allData;	
+ tname set flip column!tipe$\:();
+ allData
+ }
 
 .bt.add[`.backfill.schema.nonexist`.backfill.schema.exist;`.backfill.twitter.create.logFile]{[allData]
  `topic`data!(`.backfill.receive.create.logFile;allData)
@@ -90,10 +96,10 @@ upd:{[uid;data] .bt.action[`.backfill.upd] `uid`data!(uid;data); }
 .bt.addOnlyBehaviour[`.backfill.runSchedule]`.bus.sendTweet
 
 
-.bt.add[`;`.backfill.receive.newData]{[data]
- update status:`finished from `.backfill.con where uid = data`uid;
- ![`.;();0b;enlist data`tname];
+.bt.add[`;`.backfill.receive.newData]{[data]schema:data`schema;
+ update status:`finished from `.backfill.con where uid = schema`uid;
+ ![`.;();0b;enlist schema`tname];
  }
 
-
+/
 
