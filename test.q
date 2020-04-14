@@ -2,8 +2,8 @@
 
 
 / 
- q test.q -folder folder -env env [show] all
- q test.q -folder testPlant -env deepData show all
+ q test.q -interactive 1 -folder folder -env env [show] all
+ q test.q -interactive 1 -folder testPlant -env deepData show all
  q test.q
 \
 
@@ -94,6 +94,7 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  }
 
 .bt.addIff[`.test.executeTest.file]{[interactive] not interactive}
+
 
 .bt.add[`.test.executeTest.prepare;`.test.executeTest.file]{[path]
  .bt.stdOut0[`test;`run_file] .bt.print["Run test file: %0"] enlist path;

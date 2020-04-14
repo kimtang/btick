@@ -1,4 +1,6 @@
 
+
+/ admin.q:localhost:8888::
 / 
  * Start the whole plant
  * check all processes are up
@@ -28,7 +30,7 @@ hdls:exec uid!hdl from result;
 
 .test.sleep 5; /sleep for 5 secs to collect heartbeat 
 
-.test.add[`admin;"All tables are created"] min `afterExecution`beforeExecution`error`heartbeat in hdls[ `admin.rdb.0] "tables[]";
+.test.add[`admin;"All tables are created"] min `afterExecution`beforeExecution`berror`heartbeat`info`tblcnt in hdls[ `admin.rdb.0] "tables[]";
 
 .test.sleep 5;
 
