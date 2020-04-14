@@ -79,7 +79,7 @@ hdls[ `admin.tick.0] (".bt.action";`.tick.stream.eod;()!());
 
 .test.add[`admin;"heartbeat in hdb"] 0<count hdls[ `admin.cdb.0] "select from heartbeat";
 
-.test.add[`admin;"error in hdb"] 0=count hdls[ `admin.cdb.0] "select from error";
+.test.add[`admin;"berror in hdb"] 0=count hdls[ `admin.cdb.0] "select from berror";
 
 .test.add[`admin;"afterExecution in hdb"] 0<count hdls[ `admin.cdb.0] "select from afterExecution";
 
