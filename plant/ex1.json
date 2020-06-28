@@ -1,0 +1,73 @@
+{
+    "global": {
+        "admin": {
+            "basePort": 32000
+        },
+        "backfill": {
+            "basePort": 33000
+        },
+        "ex1": {
+            "basePort": 34000
+        }
+    },
+    "ex1": {
+        "process": {
+            "bus": {                
+                "library": "randomSeed,setPort,pm,hopen,bus.server,heartbeat.client,berror.client,daemon",
+                "arg": {
+                    "setPort": "%basePort% + 1"
+                }
+            },
+            "tick": {
+                "library": "randomSeed,setPort,pm,hopen,bus.client,tick.stream,tick.hft,heartbeat.client,berror.client",
+                "arg": {
+                    "setPort": "%basePort% + 2"
+                }
+            },
+            "replay": {
+                "library": "randomSeed,setPort,pm,hopen,bus.client,tick.replay,heartbeat.client,berror.client",
+                "arg": {
+                    "setPort": "%basePort% + 3"
+                }
+            },
+            "rdb": {
+                "library": "randomSeed,setPort,pm,hopen,bus.client,tick.sub,heartbeat.client,berror.client",
+                "arg": {
+                    "setPort": "%basePort% + 4"
+                }
+            },
+            "cdb": {
+                "library": "randomSeed,setPort,pm,hopen,bus.client,tick.cdb,heartbeat.client,berror.client",
+                "arg": {
+                    "setPort": "%basePort% + 5"
+                }
+            },
+            "gateway": {
+                "library": "randomSeed,setPort,pm,hopen,bus.client,gw.server,heartbeat.client,usage.client,berror.client",
+                "arg": {
+                    "setPort": "%basePort% + 6"
+                }
+            },
+            "ctp": {
+                "library": "randomSeed,setPort,pm,hopen,bus.client,tick.sub,tick.cep,tick.ctp,heartbeat.client,usage.client,berror.client",
+                "arg": {
+                    "setPort": "%basePort% + 7"
+                }
+            },
+            "dynamicHdb": {
+                "library": "randomSeed,dynamicPort,pm,hopen,bus.client,gw.client,tick.hdb,heartbeat.client,usage.client,berror.client",
+                "instance": 4,
+                "arg": {
+                    "dynamicPort": "%basePort% + 20"
+                }
+            },
+            "noProc": {
+                "host":["nohost"],
+                "library": "randomSeed,dynamicPort,pm,hopen,bus.client,usage.client,berror.client",
+                "arg": {
+                    "dynamicPort": "%basePort% + 30"
+                }
+            }
+        }
+    }
+}
