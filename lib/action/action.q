@@ -23,6 +23,7 @@
  t:update library:{`$"," vs x}@'library from t; 
  t:update mergeArg:{[arg;global;local] .util.deepMerge[global] .util.deepMerge[local] arg }'[arg;global;local] from t;
  t:update host:{$[any (.z.h,`localhost) in `$x;string .z.h;x 0]}@'mergeArg[;`host],port:{[library;mergeArg;id] .action.calcPort[first `noPort ^ desc (k!k:key .action.calcPort) library] [mergeArg;id]}'[library;mergeArg;id] from t;
+ t:update passwd:mergeArg[;`passwd] from t; 
  / t:update host:{string .z.h}@'mergeArg[;`host],port:{[library;mergeArg;id] .action.calcPort[first `noPort ^ desc (k!k:key .action.calcPort) library] [mergeArg;id]}'[library;mergeArg;id] from t; 
  t:update proc:.Q.dd'[process;id] from t;
  t:update uid:.Q.dd'[folder;flip(env;subsys;process;id)] from t; 
@@ -36,4 +37,4 @@
  t:update lcorefile: { .util.wlin .bt.print["%btsrc%/core/core/%subsys%/%process%/%id%"] .env,.global,x}@'t from t;
  t
  / .bt.md[`result]t
- }
+ } 

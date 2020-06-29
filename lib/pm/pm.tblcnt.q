@@ -8,6 +8,7 @@
  .env.loadBehaviour `hopen;
  .pm.tblcnt.adminCtp:@[;`hdl;:;0n] adminCtp;
  .pm.tblcnt.counter:0;
+ .bt.action[`.hopen.init] ()!();
  .bt.action[`.hopen.add] `uid`host`port#.pm.tblcnt.adminCtp;
  }
 

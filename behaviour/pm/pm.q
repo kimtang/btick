@@ -2,7 +2,7 @@
 
 
 / 
- q pm.q -folder folder -env env [status|start|kill|stop|restart|debug|sbl|json|info|heartbeat|error|tblcnt] -library library proc[all]
+ q pm.q -folder folder -env env [status|start|kill|stop|restart|debug|sbl|json|info|heartbeat|tblcnt] -library library proc[all]
  q pm.q -folder plant -env pm -library library status proc[all]
  q pm.q -folder plant -env pm -library library status proc[all] 
  q pm.q -folder plant -env pm_example -subsys subsys -library library status all  
@@ -22,8 +22,6 @@ if[""~getenv`BTSRC;
 if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 
 \c 1000 1000
-
-.bt.addCatch[`]{[error] .bt.stdOut0[`error;`pm] .bt.print["Please investigate the following error: %0"] enlist error;'error}
 
 / .bt.scheduleIn[.bt.action[`.pm.init];;00:00:01] enlist .env.arg;
 
@@ -184,6 +182,7 @@ if[(.z.f like "*pm.q") and not `.env.debug ~ key `.env.debug;
 	.env.loadLib:{{@[system;;()] .bt.print["l %btsrc%/lib/%lib%/%lib%.q"] .env , enlist[`lib]!enlist x}@'x};
 	.env.loadBehaviour:{ {@[system;;()] .bt.print["l %btsrc%/behaviour/%behaviour%/%module%.q"] .env , `behaviour`module! (first` vs x),x}@'x };
 	.env.loadLib .env.libs;
+	.bt.addCatch[`]{[error] .bt.stdOut0[`error;`pm] .bt.print["Please investigate the following error: %0"] enlist error;'error};
 	.bt.add[`.pm.os.status`.pm.os.start`.pm.os.kill`.pm.os.restart;`.pm.show]{[print;result]
 	  if[print; 1 .Q.s `port xasc result];
 	 };
@@ -202,6 +201,7 @@ if[(.z.f like "*pm.q") and not `.env.debug ~ key `.env.debug;
 
 
 
-/
+/ 
 
 
+select from .bt.history where not null error

@@ -8,6 +8,7 @@
  .env.loadBehaviour `hopen;
  .pm.heartbeat.adminCtp:@[;`hdl;:;0n] adminCtp;
  .pm.heartbeat.counter:0;
+ .bt.action[`.hopen.init] ()!();
  .bt.action[`.hopen.add] `uid`host`port#.pm.heartbeat.adminCtp;
  }
 
@@ -29,10 +30,17 @@
  1(10b!("not_connected";"connected")) null .pm.heartbeat.adminCtp.hdl;	
  1"\n";
  .pm.heartbeat.counter:(.pm.heartbeat.counter + 1) mod 4; 
- show {([]beat:@[````;;:;`$"*"]@'(.pm.heartbeat.counter + til count x) mod 4 ;uid:key x;time:?[00:00:03>.z.T - value x;0nt;.z.T - value x ];heartbeat:?[00:00:03>.z.T - value x ;`;`$"no heartbeat"] )} .env.result.uid#.pm.heartbeat.heartbeatTime	
+ show {([]beat:@[````;;:;`$"*"]@'(.pm.heartbeat.counter + til count x) mod 4 ;uid:key x;time:?[00:00:03>23:59:59^.z.T - value x;0nt;.z.T - value x ];heartbeat:?[00:00:03>23:59:59^.z.T - value x ;`;`$"no heartbeat"] )} .env.result.uid#.pm.heartbeat.heartbeatTime	
  }
 
-upd:{[tname;data]
+upd:{[tname;data] 
  .pm.heartbeat.heartbeatTime ,: exec uid!time from select time:"t"$max time by uid from data where uid in .env.result`uid;
  }
 
+/
+
+{([]k:key x;v:value x)} .pm.heartbeat.heartbeatTime
+
+.tmp.data
+
+select from .bt.history where not null error

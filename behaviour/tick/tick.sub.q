@@ -17,6 +17,9 @@ upd:{[tname;data]
  .bt.action[`.hopen.add] @'`uid`host`port#.tick.con;
  }
 
+
+
+.bt.addIff[`.tick.success]{[result] 0< count select from result where uid in .tick.con`uid  }
 .bt.add[`.hopen.success;`.tick.success]{[result] 
  result:select from result where uid in .tick.con`uid;
  .tick.con:.tick.con lj 1!result:select uid,hdl from result;

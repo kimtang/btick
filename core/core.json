@@ -3,7 +3,9 @@
     "data": "data",
     "audit": "audit",
     "instance": 1,
-    "host": ["localhost"]
+    "host": ["localhost"],
+    "passwd":"btpasswd",
+    "daemon":false
   },
 
   "admin": {
@@ -36,7 +38,8 @@
       "cdb": {
         "library": "randomSeed,setPort,pm,hopen,bus.client,tick.cdb,heartbeat.client,berror.client",
         "arg": {
-          "setPort": "%basePort% + 6"
+          "setPort": "%basePort% + 6",
+          "daemon": true
         }
       },
       "ctp":{

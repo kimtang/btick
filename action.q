@@ -33,6 +33,7 @@ if[ not`env in key `;
 .bt.addIff[`.action.set.cfg]{[result] 1=count result}
 .bt.add[`.action.parse.cfg;`.action.set.cfg]{[result]
  .proc:result 0;
+ .proc.za:.Q.host .z.a;
  .env.loadBehaviour .proc.library;
  }
 
