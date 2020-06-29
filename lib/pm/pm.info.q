@@ -7,6 +7,7 @@
  .env.loadBehaviour `hopen;
  .pm.info.adminCtp:@[;`hdl;:;0n] adminCtp;
  .pm.info.counter:0;
+ .bt.action[`.hopen.init] ()!();
  .bt.action[`.hopen.add] `uid`host`port#.pm.info.adminCtp;
  }
 
@@ -42,3 +43,7 @@ upd:{[tname;data] upd0[tname][tname] data}
 /
 
 select from .bt.history where not null error
+
+select from .bt.history where not null error
+
+berror

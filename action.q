@@ -23,20 +23,17 @@ if[ not`env in key `;
 .env.loadLib .env.libs;
 .env.loadBehaviour .env.behaviours;
 
-/ {@[system;;()] .bt.print["l %btsrc%/lib/%lib%/%lib%.q"] .env , enlist[`lib]!enlist x}@'.env.libs;
-/ {@[system;;()] .bt.print["l %btsrc%/behaviour/%behaviour%/%behaviour%.q"] .env , enlist[`behaviour]!enlist x}@'.env.behaviours;
-
 .bt.scheduleIn[.bt.action[`.action.init];;00:00:01] enlist .env.arg;
 
 .bt.add[`.action.init;`.action.parse.cfg]{[allData]
- t:.action.parseCfg allData;
- .sys:t;
+ .sys:t:.action.parseCfg allData;
  .bt.md[`result] select from t where subsys=allData`subsys,process=allData`process,id="J"$string allData`id
  }
 
 .bt.addIff[`.action.set.cfg]{[result] 1=count result}
 .bt.add[`.action.parse.cfg;`.action.set.cfg]{[result]
  .proc:result 0;
+ .proc.za:.Q.host .z.a;
  .env.loadBehaviour .proc.library;
  }
 
@@ -88,5 +85,11 @@ if[ not`env in key `;
  }
 
 
-
 .bt.add[`.action.load.file;`.library.init]{.proc`mergeArg}
+
+/
+
+.bt.tme
+select from .bt.history
+
+.z.ts[]

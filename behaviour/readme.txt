@@ -41,3 +41,7 @@ module to capture error
 gateway
 
 ## backfill
+
+## daemon
+
+daemon module is to restart process

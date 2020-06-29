@@ -1,41 +1,26 @@
 
 .bt.add[`.library.init;`.bus.init]{[allData]
  t:select from .sys where (`bus.server in/:library ) or subsys = allData`subsys;
- t:select uid,host:`$host,port,mode:(`bus.server {`inside`outside x in y}/:library) from t;
+ t:select uid,host:`$host,user:.proc.uid,port,passwd,mode:(`bus.server {`inside`outside x in y}/:library) from t;
  t:delete from t where uid=.proc`uid;
  .bus.con:t:update hdl:0ni from t;
  }
 
-
-.bt.add[`.bus.init;`.bus.connect]{ .bt.action[`.hopen.add] @' `uid`host`port#.bus.con; }
-
+.bt.add[`.bus.init;`.bus.connect]{ .bt.action[`.hopen.add] @' `uid`host`port`user`passwd#.bus.con; }
 
 .bt.add[`.hopen.success;`.bus.success]{[result]
- result:result lj 1!select uid,mode,ohdl:hdl from .bus.con;
- result:select from result where uid in .bus.con`uid, (not (not null ohdl) and mode=`outside) ;
+ result:result lj 1!select uid,mode from .bus.con;
  .bus.con:.bus.con lj 1!select uid,hdl from result;
- / result:result lj 1!`uid`mode#.bus.con;
  data:select uid,avail:not null hdl from .bus.con;
- select neg[hdl]@\:(`.bt.action;`.bus.handshake;.proc) from result where mode=`outside;
  select neg[hdl]@\:(`.bt.action;`.bus.handshake;.bt.md[`data] data) from result where mode=`inside; 
  `topic`data!(`.bus.avail;data)
  }
 
 .bt.add[`;`.bus.whoIsAvail]{[data]  `topic`data!(`.bus.avail;select uid,avail:not null hdl  from .bus.con)}
 
-/ handshake from outer
-.bt.add[`;`.bus.handshake]{[allData]
- .bt.action[`.hopen.remove.uid] ``uid#allData;
- update hdl:.z.w from `.bus.con where uid = allData`uid;
- }
-
-
-
 .bt.addIff[`.bus.pc]{[zw] zw in .bus.con[;`hdl]}
 .bt.add[`.hopen.pc;`.bus.pc]{[zw]
- a:select from .bus.con where hdl = zw;
  update hdl:0ni from `.bus.con where hdl = zw;
- / .bt.action[`.hopen.add] @' `uid`host`port#a; / is this needed?
  data:select uid,avail:not null hdl from .bus.con; 
  `topic`data!(`.bus.avail;data) 
  }
@@ -61,3 +46,5 @@
 
 
 /
+
+select from .bt.history where not null error

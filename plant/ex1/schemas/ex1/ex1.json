@@ -1,0 +1,1 @@
+{"tname":"ex1","column":"time,uid,used,heap,peak,wmax,mmap,mphy,syms,symw,symw0","tipe":"psjjjjjjjjj","rattr":"sg*********","hattr":"Sp*********","tick":"default","rsubscriber":"default","hsubscriber":"default","addTime":true,"ocolumn":"time,uid,used,heap,peak,wmax,mmap,mphy,syms,symw","upd":"{update symw0:symw from x}"}
