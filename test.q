@@ -18,14 +18,13 @@ if[""~getenv`BTSRC;
 
 
 if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
-if[ not`pm in key `;system "l ",.env.btsrc,"/pm.q"];
 
 \c 1000 1000
 
 .bt.addCatch[`]{[error] .bt.stdOut0[`error;`test] .bt.print["Please investigate the following error: %0"] enlist error;'error}
 
-.env.libs:`util`test
-.env.behaviours:0#`
+.env.libs:`util`action`test
+.env.behaviours:1#`pm
 .env.arg:.Q.def[`folder`testFile`mode`debug`interactive!`test``,00b] .Q.opt .z.x
 
 if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
