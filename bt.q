@@ -132,7 +132,7 @@ action:{[sym;allData]
  h:.bt.hist sym;  
  allData0:{x,(`$string[key x],\:"0")!value x} allData,enlist[`allData]!enlist allData;
  f:.bt.eiff[sym]allData0;
- if[not (f`iff) and null f`error;:allData]; 
+ if[not (f`iff) and null f`error;:()!()]; 
  r:@[{[fnc;arg] `result`error!(fnc . arg;`) }[b`fnc];;.bt.ecatch[sym;allData0] ] arg:allData0(b:.bt.sel[sym]`behaviour)`arg;
  allData:allData,$[99h=type r`result;r`result;()!()];
  allData:allData,$[null r`error;.bt.trigger[sym;allData];()!()];
