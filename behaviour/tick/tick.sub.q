@@ -12,9 +12,9 @@ upd:{[tname;data]
  .tick.u: (enlist[`]!enlist {[x;y]}), exec tname!upd from .tick.schemas;
  .tick.oc: exec tname!ocolumn from .tick.schemas;   
  .tick.a:exec tname!rattr from .tick.schemas;
- .tick.con:select uid,subsys,host:`$host,port,hdl:0ni from .sys where subsys in (distinct .tick.schemas`subsys),`tick.batch`tick.hft {max x in y}/:library;
+ .tick.con:select uid,subsys,host:`$host,user:.proc.uid,port,passwd,hdl:0ni from .sys where subsys in (distinct .tick.schemas`subsys),`tick.batch`tick.hft {max x in y}/:library;
  .bt.execute[{[tname;column;tipe] tname set `date xcols update date:.z.D from flip column!tipe$\:()}]@'.tick.schemas;  
- .bt.action[`.hopen.add] @'`uid`host`port#.tick.con;
+ .bt.action[`.hopen.add] @'`uid`host`port`user`passwd#.tick.con;
  }
 
 
