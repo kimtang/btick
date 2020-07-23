@@ -103,7 +103,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 .bt.addIff[`.pm.os.status]{[cmd] cmd = `status}
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.status]{[result]
  result:select from result where .z.h = `$host;
- result:select subsys,proc,port,pid,pm2 from result;
+ result:select subsys,proc,uid,port,pid,pm2 from result;
  .bt.md[`result] result 
  / 1 .Q.s result
  }
