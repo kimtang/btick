@@ -1,0 +1,11 @@
+{
+  "tname": "afterExecution",
+  "column": "time,uid,ftime,guid,error",
+  "tipe": "pspgs",
+  "rattr": "sg***",
+  "hattr": "Sp***",
+  "tick": "default",
+  "rsubscriber": "default",
+  "hsubscriber": "default",
+  "addTime": true
+}

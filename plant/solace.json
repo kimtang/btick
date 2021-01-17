@@ -1,7 +1,7 @@
 {
     "global": {
         "core":"solaceCore",
-        "plantName":"ex1",
+        "plantName":"solace",
         "deploymentEnvironment":"dev",
         "admin": {
             "basePort": 32000

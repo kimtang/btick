@@ -8,7 +8,7 @@
 
 .action.parseCfg:{[allData]
  .cfg : .j.k "c"$read1 `$ .bt.print[":%folder%/%env%.json"] .env,allData;
- .core: .j.k "c"$read1 `$ .bt.print[":%btsrc%/core/core.json"] .env,.cfg.global;
+ .core: .j.k "c"$read1 `$ .bt.print[":%btsrc%/%core%/core.json"] .env,.cfg.global;
  .cfg : .cfg,.util.deepMerge[.core].cfg;
  .global: .cfg.global;
  .cfg:delete global from .cfg;

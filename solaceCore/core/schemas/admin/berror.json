@@ -1,0 +1,11 @@
+{
+  "tname": "berror",
+  "column": "time,uid,action,mode,time,etime,seq,eseq,result,arg,error",
+  "tipe": "psssppjj**s",
+  "rattr": "sg*********",
+  "hattr": "Sp*********",
+  "tick": "default",
+  "rsubscriber": "default",
+  "hsubscriber": "default",
+  "addTime": true
+}
