@@ -184,7 +184,7 @@ if[(.z.f like "*pm.q") and not `.env.debug ~ key `.env.debug;
 	.env.loadLib .env.libs;
 	.bt.addCatch[`]{[error] .bt.stdOut0[`error;`pm] .bt.print["Please investigate the following error: %0"] enlist error;'error};
 	.bt.add[`.pm.os.status`.pm.os.start`.pm.os.kill`.pm.os.restart;`.pm.show]{[print;result]
-	  if[print; 1 .Q.s `port xasc result];
+	  if[print; 1 .Q.s update `$pm2 from `port xasc result];
 	 };
 
 	.bt.addIff[`.pm.exit]{[debug] not debug};
