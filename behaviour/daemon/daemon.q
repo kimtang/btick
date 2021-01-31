@@ -21,7 +21,7 @@
  a:select from .daemon.con where null pid, restart < 4; / dont restart all, only hdbs and gws but no replay or 
  r:raze {
  	uid:`$"." sv -2#"." vs string x`uid;
- 	select uid,pid,pTime:.z.P,nrestart:1 from (.bt.action[`.pm.init] (`cmd`debug`print`proc!`start,00b,uid),`folder`env`subsys#.proc)`result
+ 	select uid,pid,pTime:.z.P,nrestart:1 from (.bt.action[`.pm.init] (`cmd`debug`print`proc!`start,00b,uid),`folder`cfg`subsys#.proc)`result
  	}@'a;
  .daemon.con:cols[.daemon.con]# update restart:restart + 0^nrestart from (.daemon.con) lj 1!r;
  }

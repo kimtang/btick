@@ -42,7 +42,7 @@
 .bt.addDelay[`.hopen.loop]{`tipe`time!(`in;first 00:00:07+1?7)}
 
 .bt.add[`.hopen.init`.hopen.loop;`.hopen.loop]{
- procs:(.bt.action[`.pm.init] (`subsys`cmd`proc`debug`print!``status`all,10b),`folder`env#$[()~key `.proc;.env.arg;.proc])`result;
+ procs:(.bt.action[`.pm.init] (`subsys`cmd`proc`debug`print!``status`all,10b),`folder`cfg#$[()~key `.proc;.env.arg;.proc])`result;
  a:.hopen.con lj 1!select uid,pid from procs;
  a:select from a where null hdl, not null uid;
  a:select from a where not (host=.z.h) and null pid; 

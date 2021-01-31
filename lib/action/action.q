@@ -7,12 +7,13 @@
 / .bt.putAction `.action.parse.cfg
 
 .action.parseCfg:{[allData]
- .cfg : .j.k "c"$read1 `$ .bt.print[":%folder%/%env%.json"] .env,allData;
+ .cfg : .j.k "c"$read1 `$ .bt.print[":%folder%/%cfg%.json"] .env,allData;
  .core: .j.k "c"$read1 `$ .bt.print[":%btsrc%/core/core.json"] .env,.cfg.global;
  .cfg : .cfg,.util.deepMerge[.core].cfg;
  .global: .cfg.global;
  .cfg:delete global from .cfg;
- t:{[allData;x]  ([]folder:allData`folder;env:allData`env;subsys:key x;val:value x)}[allData] .cfg;
+ t:{[allData;x]  ([]folder:allData`folder;env:`$.global`env;subsys:key x;val:value x)}[allData] .cfg;
+ t:update cfg:allData`cfg from t;
  t:update process:key @'val[;`process], library:{value[x]@\:`library}@'val[;`process], arg:{value[x]@\:`arg}@'val[;`process] from t;
  t:update global: {[ksubsys;subsys] (ksubsys _ .global), .global subsys   }[subsys] @'subsys from t;
  t:update global:process{count[x]#enlist y }'global from t;
@@ -26,7 +27,7 @@
  t:update passwd:mergeArg[;`passwd] from t; 
  / t:update host:{string .z.h}@'mergeArg[;`host],port:{[library;mergeArg;id] .action.calcPort[first `noPort ^ desc (k!k:key .action.calcPort) library] [mergeArg;id]}'[library;mergeArg;id] from t; 
  t:update proc:.Q.dd'[process;id] from t;
- t:update uid:.Q.dd'[folder;flip(env;subsys;process;id)] from t; 
+ t:update uid:.Q.dd'[env;flip(subsys;process;id)] from t; 
  t:update hdb: {.bt.print["%data%/%folder%/%env%/%subsys%/hdb"] .global,x}@'t from t; 
  t:update audit: {.bt.print["%audit%/%folder%/%env%/%subsys%/%process%/%id%"] .global,x}@'t from t;
  t:update gData: {.bt.print["%data%/%folder%/%env%/%subsys%/%process%"] .global,x}@'t from t;   

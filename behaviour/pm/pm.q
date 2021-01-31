@@ -2,10 +2,10 @@
 
 
 / 
- q pm.q -folder folder -env env [status|start|kill|stop|restart|debug|sbl|json|info|heartbeat|tblcnt] -library library proc[all]
- q pm.q -folder plant -env pm -library library status proc[all]
- q pm.q -folder plant -env pm -library library status proc[all] 
- q pm.q -folder plant -env pm_example -subsys subsys -library library status all  
+ q pm.q -folder folder -cfg cfg_file [status|start|kill|stop|restart|debug|sbl|json|info|heartbeat|tblcnt] -library library proc[all]
+ q pm.q -folder plant -cfg cfg_file -library library status proc[all]
+ q pm.q -folder plant -cfg cfg_file -library library status proc[all] 
+ q pm.q -folder plant -cfg cfg_file -subsys subsys -library library status all  
  q pm.q
 \
 
@@ -26,14 +26,14 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 / .bt.scheduleIn[.bt.action[`.pm.init];;00:00:01] enlist .env.arg;
 
 
-.bt.addIff[`.pm.parseFolder]{[env] null env}
+.bt.addIff[`.pm.parseFolder]{[cfg] null cfg}
 .bt.add[`.pm.init;`.pm.parseFolder]{[allData]
  t:([]root:enlist `$.bt.print[":%folder%"] allData); 
  t:update sroot:`${1_string x}@'root from t;
  t:ungroup update file:key@'root from t;
  t:select from t where file like "*.json"; 
- t:update env:{`$ -5_/:string x}@file from t;
- t:update cmd:.bt.print["q pm.q -folder %sroot% -env %env% status all"]@'t from t;
+ t:update cfg:{`$ -5_/:string x}@file from t;
+ t:update cmd:.bt.print["q pm.q -folder %sroot% -cfg %cfg% status all"]@'t from t;
  enlist[`result]!enlist t 
  }
 
@@ -42,25 +42,29 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
  {1 .bt.print["%cmd%\n"] x}@'result;
  } 
 
-.bt.addIff[`.pm.parseEnv]{[env] not null env}
+.bt.addIff[`.pm.parseEnv]{[cfg] not null cfg}
 .bt.add[`.pm.init;`.pm.parseEnv] {[allData] .sys:result:.action.parseCfg allData;
  .bt.md[`result] result
  } 
 
 .bt.addIff[`.pm.os.json]{[cmd] cmd = `json}
 .bt.add[`.pm.parseEnv;`.pm.os.json]{[result]
- result:select uid,folder,env,subsys,proc,port from result;
+ result:select uid,folder,cfg,subsys,proc,port from result;
  1 .j.j update host:.z.h from result;
  .bt.md[`result] result 
  } 
 
 .bt.addIff[`.pm.linux.addPid]{[cmd] .env.lin and not cmd=`json }
 .bt.add[`.pm.parseEnv;`.pm.linux.addPid]{[result;allData]
- result:update cmd:{.bt.print["q %btsrc%/action.q -folder %folder% -env %env% -subsys %subsys% -process %process% -id %id% -p %port%"] .env,x}@'result from result;
+ result:update cmd:{.bt.print["q %btsrc%/action.q -folder %folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id% -p %port%"] .env,x}@'result from result;
  result:update startcmd:.bt.print["nohup %cmd% >nohup.out 2>&1 &"]@'result from result;
- result:result lj 1!select cmd,pid from .pm2.getLinStatus[];
+ pids:.pm2.getLinStatus[];
+ pids:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""),  .Q.opt " " vs x}@'cmd from pids;
+ result:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""), .Q.opt " " vs x}@'cmd from result; 
+ result:result lj 1!select args,pid from pids;
+ // result:result lj 1!select cmd,pid from .pm2.getLinStatus[];
  result:select from result where (proc in allData`proc) or `all=allData`proc,(subsys in allData`subsys) or null allData`subsys;  
- result:update pm2:.bt.print["q pm.q -folder %folder% -env %env% -subsys %subsys% status %proc%"]@'result from result; 
+ result:update pm2:.bt.print["q pm.q -folder %folder% -cfg %cfg% -subsys %subsys% status %proc%"]@'result from result; 
  .bt.md[`result] result  	
  }
 
@@ -79,14 +83,18 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 
 
 / .bt.putAction `.pm.win.addPid
+/ .bt.putAction `.pm.win.addPid
 
 .bt.addIff[`.pm.win.addPid]{[cmd] .env.win and not cmd=`json }
 .bt.add[`.pm.parseEnv;`.pm.win.addPid]{[result;allData]
- result:update cmd:{.bt.print["q %btsrc%/action.q -folder %folder% -env %env% -subsys %subsys% -process %process% -id %id%"] .env,x}@'result from result;
+ result:update cmd:{.bt.print["q %btsrc%/action.q -folder %folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id%"] .env,x}@'result from result;
  result:update startcmd:.bt.print["start \"%cmd%\" /MIN %cmd%"]@'result from result;
- result:result lj 1!select cmd,pid from .pm2.getWinStatus[];
+ pids:.pm2.getWinStatus[];
+ pids:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""),  .Q.opt " " vs x}@'cmd from pids;
+ result:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""), .Q.opt " " vs x}@'cmd from result; 
+ result:result lj 1!select args,pid from pids;
  result:select from result where (proc in allData`proc) or `all=allData`proc,(subsys in allData`subsys) or null allData`subsys,(library {any x in y}\: allData`library) or null allData`library;  
- result:update pm2:.bt.print["q pm.q -folder %folder% -env %env% -subsys %subsys% status %proc%"]@'result from result; 
+ result:update pm2:.bt.print["q pm.q -folder %folder% -cfg %cfg% -subsys %subsys% status %proc%"]@'result from result; 
  / result:select from result where .z.h = `$host;
  .bt.md[`result] result  
  }
@@ -177,7 +185,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 if[(.z.f like "*pm.q") and not `.env.debug ~ key `.env.debug;
 	.env.libs:`util`action;
 	.env.behaviours:0#`;
-	.env.arg:.Q.def[`folder`env`subsys`library`proc`debug`print!`plant````all,01b] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x;
+	.env.arg:.Q.def[`folder`cfg`subsys`library`proc`debug`print!`plant````all,01b] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x;
 	if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 	.env.loadLib:{{@[system;;()] .bt.print["l %btsrc%/lib/%lib%/%lib%.q"] .env , enlist[`lib]!enlist x}@'x};
 	.env.loadBehaviour:{ {@[system;;()] .bt.print["l %btsrc%/behaviour/%behaviour%/%module%.q"] .env , `behaviour`module! (first` vs x),x}@'x };
@@ -198,10 +206,3 @@ if[(.z.f like "*pm.q") and not `.env.debug ~ key `.env.debug;
 	 delete from `.bt.behaviours where (sym in `.pm.exit`.pm.show) or trigger in `.pm.exit`.pm.show;
 	 ];
 	];
-
-
-
-/ 
-
-
-select from .bt.history where not null error
