@@ -17,7 +17,7 @@ r:.bt.action[`.pm.init] (`folder`env`subsys`proc`cmd`debug`print!(`testPlant```a
 
 .test.sleep 10; /give processes time to come up
 
-result:update hdl:{@[hopen;x;0ni] }@'hp from select uid:.Q.dd'[subsys;flip (process;id)],hp:{enlist[;2000] `$ .bt.print[":localhost:%0::"] enlist x }@'port,pid,library from r`result;
+result:update hdl:{@[hopen;x;0ni] }@'hp from select uid,hp:{enlist[;2000] `$ .bt.print[":localhost:%0::"] enlist x }@'port,pid from r`result
 
 result:update hdl:{@[hopen;x;0ni] }@'hp from result where null hdl;
 

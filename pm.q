@@ -1,1 +1,2 @@
-\l behaviour/pm/pm.q
+
+system"l ",getenv[`btsrc],"/behaviour/pm/pm.q"

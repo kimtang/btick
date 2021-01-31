@@ -48,7 +48,7 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 .bt.addIff[`.test.show]{[mode;testFile] (null testFile) and null mode}
 .bt.add[`.test.parseFolder;`.test.show]{[result]
   1 "We found these tests\n";
-  1 .Q.s select mode,testFile,cmd from result;
+  1 .Q.s select mode,testFile,`$cmd from result;
  }
 
 .bt.addIff[`.test.selectTest]{[mode;testFile] not (null testFile) and null mode}
