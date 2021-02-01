@@ -11,7 +11,7 @@
 
 .bt.addDelay[`.daemon.loop]{`tipe`time!(`in;first 00:00:07+1?7)}
 .bt.add[`.daemon.placeholder`.daemon.loop;`.daemon.loop]{
- procs:1!select uid,pid,pTime:.z.P from (.bt.action[`.pm.init] (`cmd`proc`debug`print!`status`all,00b),`folder`env`subsys#.proc)`result;
+ procs:1!select uid,pid,pTime:.z.P from (.bt.action[`.pm.init] (`cmd`proc`debug`print!`status`all,00b),`folder`cfg`subsys#.proc)`result;
  .daemon.con:.daemon.con lj procs;
  }
 
@@ -27,9 +27,3 @@
  }
 
 /
-
-
-
-berror
-
-.tick.replay.logFiles

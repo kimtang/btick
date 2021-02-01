@@ -94,9 +94,9 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  .bt.md[`global] ([]subsystem:subsystems; baseport:baseports)  
  }
 
-.bt.add[`.createsystem.getBaseport;`.createsystem.createJson]{[allData]
+.bt.add[`.createsystem.getBaseport;`.createsystem.createJson]{[allData;subsystems]
  -2"Now we will create the json file";
- system0:``global!enlist[{};] enlist[`] _ raze enlist[enlist[`]!enlist{}],{(enlist x`subsystem)!enlist enlist[`basePort]!enlist x`baseport}@' allData`global;
+ system0:``global!enlist[{};] enlist[`] _ (.bt.md[`env]subsystems),raze enlist[enlist[`]!enlist{}],{(enlist x`subsystem)!enlist enlist[`basePort]!enlist x`baseport}@' allData`global;
  system0:enlist[`] _ system0,raze {enlist[x]!enlist enlist[`process]!enlist .cs.process}@'allData`subsystems;
  (`$.bt.print[":plant/%systemName%.json"] allData) 0: enlist .j.j system0;
  }

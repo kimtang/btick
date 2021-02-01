@@ -38,8 +38,7 @@
       "cdb": {
         "library": "randomSeed,setPort,pm,hopen,bus.client,tick.cdb,heartbeat.client,berror.client",
         "arg": {
-          "setPort": "%basePort% + 6",
-          "daemon": true
+          "setPort": "%basePort% + 6"
         }
       },
       "ctp":{
