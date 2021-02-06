@@ -29,8 +29,11 @@
  }
 
 .bt.add[`.bus.success`.bus.whoIsAvail`.bus.pc;`.bus.sendTweet]{[allData]
- (neg exec hdl from .bus.con where not null hdl)@\: (`.bt.action;`.bus.receiveTweet;`topic`data#allData);
+ a:select from .bus.con where (allData[`topic] in/:topic) or 0=count each topic;	
+ hdls:neg exec hdl from a where not null hdl;	
+ hdls@\: (`.bt.action;`.bus.receiveTweet;`topic`data#allData);
  }
+
 
 .bt.add[`;`.bus.receiveTweet]{[topic;data] .bt.action[topic] .bt.md[`data]data; }
 
@@ -49,11 +52,7 @@
  }  
  
 
-
 /
 
-allData:.bt.md[`topic] `.heartbeat.receiveHeartBeat
+count .bt.history
 
-ungroup update `$passwd from select from .bus.con where uid = `oura.oura.rdb.0
-
-select from .bt.history where not null error

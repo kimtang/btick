@@ -41,8 +41,3 @@
 .bt.addIff[`.bus.receiveTweet]{[topic] topic in (exec sym from .bt.repository) ,exec distinct (trigger,sym) from .bt.behaviours }
 .bt.add[`;`.bus.receiveTweet]{[topic;data] .bt.action[topic] .bt.md[`data]data }
 
-/
-
-.poc.con
-
-.bt.repository

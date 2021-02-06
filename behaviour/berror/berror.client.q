@@ -1,5 +1,5 @@
 
-.berror.sendTime:`second$1
+.berror.sendTime:`second$2
 .berror.seq:-1
 
 .bt.add[`.library.init;`.berror.init]{} / nothing to init

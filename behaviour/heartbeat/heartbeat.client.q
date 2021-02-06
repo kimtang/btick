@@ -1,5 +1,5 @@
 
-.heartbeat.sendTime:`second$1
+.heartbeat.sendTime:`second$2
 
 .bt.add[`.library.init;`.heartbeat.init]{}
 
@@ -8,9 +8,4 @@
  `topic`data!enlist[`.heartbeat.receiveHeartBeat;] (`time`uid!(.z.P;.proc.uid)),.Q.w[]
  }
 
-.bt.addOnlyBehaviour[`.heartbeat.sendHeartbeat]`.bus.sendTweet
-
-/ 
-
-select from .bt.history where action = `.heartbeat.sendHeartbeat
- 
+.bt.addOnlyBehaviour[`.heartbeat.sendHeartbeat]`.bus.sendTweet 
