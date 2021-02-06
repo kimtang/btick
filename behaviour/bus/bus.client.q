@@ -11,7 +11,7 @@
  .bus.hdl:.z.w;
  .bus.con:.bus.con lj 1!data;
  .bt.action[`.bus.sendTweet]@'.bus.tcon;
- `topic`data!(`.bus.whoIsAvail;.proc)
+ `topic`data!(`.bus.whoIsAvail;.proc, .bt.md[`topic] distinct (exec sym from .bt.repository) ,exec distinct (trigger,sym) from .bt.behaviours )
  }
 
 .bt.add[`;`.bus.avail]{[data] .bus.con:.bus.con lj 1!data;}
@@ -42,5 +42,7 @@
 .bt.add[`;`.bus.receiveTweet]{[topic;data] .bt.action[topic] .bt.md[`data]data }
 
 /
+
+.poc.con
 
 .bt.repository

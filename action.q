@@ -24,7 +24,7 @@ if[ not`env in key `;
 .env.btsrc:getenv`BTSRC;
 .env.libs:`util`action`tick;
 / .env.yml2json:"yaml2json"
-.env.behaviours:0#`;
+.env.behaviours:1#`pm;
 
 .env.win:"w"=first string .z.o;
 .env.lin:not .env.win;

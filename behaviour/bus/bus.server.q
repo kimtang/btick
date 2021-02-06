@@ -3,7 +3,7 @@
  t:select from .sys where (`bus.server in/:library ) or subsys = allData`subsys;
  t:select uid,host:`$host,user:.proc.uid,port,passwd,mode:(`bus.server {`inside`outside x in y}/:library) from t;
  t:delete from t where uid=.proc`uid;
- .bus.con:t:update hdl:0ni from t;
+ .bus.con:t:update hdl:0ni,topic:count[i]#enlist`$() from t;
  }
 
 .bt.add[`.bus.init;`.bus.connect]{ .bt.action[`.hopen.add] @' `uid`host`port`user`passwd#.bus.con; }
@@ -16,7 +16,10 @@
  `topic`data!(`.bus.avail;data)
  }
 
-.bt.add[`;`.bus.whoIsAvail]{[data]  `topic`data!(`.bus.avail;select uid,avail:not null hdl  from .bus.con)}
+.bt.add[`;`.bus.whoIsAvail]{[data]
+ update topic:count[i]#enlist data`topic from `.bus.con where uid = data`uid;
+ `topic`data!(`.bus.avail;select uid,avail:not null hdl from .bus.con)
+ }
 
 .bt.addIff[`.bus.pc]{[zw] zw in .bus.con[;`hdl]}
 .bt.add[`.hopen.pc;`.bus.pc]{[zw]
@@ -33,18 +36,24 @@
 
 .bt.addIff[`.bus.receiveTweet.fromInside]{.z.w in exec hdl from .bus.con where mode=`inside}
 .bt.add[`.bus.receiveTweet;`.bus.receiveTweet.fromInside]{[allData]
- hdls:neg exec hdl from .bus.con where not hdl= .z.w,not null hdl;
+ a:select from .bus.con where (allData[`topic] in/:topic) or 0=count each topic;	
+ hdls:neg exec hdl from a where not hdl= .z.w,not null hdl;
  hdls@\: (`.bt.action;`.bus.receiveTweet;`topic`data#allData);
  } 
 
 .bt.addIff[`.bus.receiveTweet.fromOutside]{.z.w in exec hdl from .bus.con where mode=`outside}
 .bt.add[`.bus.receiveTweet;`.bus.receiveTweet.fromOutside]{[allData]
- hdls:neg exec hdl from .bus.con where mode=`inside,not null hdl;
+ a:select from .bus.con where (allData[`topic] in/:topic) or 0=count each topic;
+ hdls:neg exec hdl from a where mode=`inside,not null hdl;
  hdls@\: (`.bt.action;`.bus.receiveTweet;`topic`data#allData);	
  }  
  
 
 
 /
+
+allData:.bt.md[`topic] `.heartbeat.receiveHeartBeat
+
+ungroup update `$passwd from select from .bus.con where uid = `oura.oura.rdb.0
 
 select from .bt.history where not null error

@@ -99,7 +99,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
  .bt.md[`result] result  
  }
 
-.bt.addIff[`.pm.os.no_cmd]{[cmd] not cmd in `status`start`kill`stop`restart`debug`sbl`json`status`heartbeat`info`tblcnt }
+.bt.addIff[`.pm.os.no_cmd]{[cmd] not cmd in `status`start`kill`stop`restart`debug`sbl`json`status`heartbeat`info`tblcnt`sblh }
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.no_cmd]{[result;allData]
  result:select from result where .z.h = `$host;	
  result:select subsys,proc,port,pid,pm2 from result;	
@@ -179,7 +179,14 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 .bt.addIff[`.pm.os.sbl]{[cmd;result] cmd = `sbl}
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.sbl]{[result]
  1 "We will create ../cfg/system.sbl";
- `:../cfg/system.sbl 0: .bt.print["/ %uid%:%host%:%port%::"] @'select uid:.Q.dd'[env;flip (subsys;process;id)],host:`localhost,port from result where not null port} 
+ `:../cfg/system.sbl 0: .bt.print["/ %uid%:%host%:%port%::"] @'select uid:.Q.dd'[env;flip (subsys;process;id)],host:`localhost,port from result where not null port
+ } 
+
+.bt.addIff[`.pm.os.sblh]{[cmd;result] cmd = `sblh}
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.sblh]{[result]
+ 1 "We will create cfg/system.sbl";
+ `:cfg/system.sbl 0: .bt.print["/ %uid%:%host%:%port%::"] @'select uid:.Q.dd'[env;flip (subsys;process;id)],host:`localhost,port from result where not null port
+ }  
 
 
 if[(.z.f like "*pm.q") and not `.env.debug ~ key `.env.debug;
@@ -203,7 +210,7 @@ if[(.z.f like "*pm.q") and not `.env.debug ~ key `.env.debug;
 	 };
 
 	.bt.addIff[`.pm.exit]{[debug] not debug};
-	.bt.add[`.pm.showFolder`.pm.show`.pm.os.sbl`.pm.os.json`.pm.os.no_cmd;`.pm.exit]{exit 0};
+	.bt.add[`.pm.showFolder`.pm.show`.pm.os.sbl`.pm.os.sblh`.pm.os.json`.pm.os.no_cmd;`.pm.exit]{exit 0};
 
 	.bt.action[`.pm.init] .env.arg;
 	if[`.env.debug ~ key `.env.debug;
