@@ -100,7 +100,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
  .bt.md[`result] result  
  }
 
-.bt.addIff[`.pm.os.no_cmd]{[cmd] not cmd in `status`start`kill`stop`restart`debug`sbl`json`status`heartbeat`info`tblcnt`sblh }
+.bt.addIff[`.pm.os.no_cmd]{[cmd] not cmd in `status`start`kill`stop`restart`debug`sbl`json`status`heartbeat`info`tblcnt`sblh`statusAll }
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.no_cmd]{[result;allData]
  result:select from result where .z.h = `$host;	
  result:select subsys,proc,port,pid,pm2 from result;	
@@ -116,6 +116,13 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
  .bt.md[`result] result 
  / 1 .Q.s result
  }
+
+.bt.addIff[`.pm.os.statusAll]{[cmd] cmd = `statusAll}
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.statusAll]{[result]
+ result:select from result where .z.h = `$host;
+ .bt.md[`result] result 
+ / 1 .Q.s result
+ } 
 
 .bt.addIff[`.pm.os.start]{[cmd] cmd = `start}
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.start]{[result]
