@@ -28,12 +28,12 @@
  / t:update host:{string .z.h}@'mergeArg[;`host],port:{[library;mergeArg;id] .action.calcPort[first `noPort ^ desc (k!k:key .action.calcPort) library] [mergeArg;id]}'[library;mergeArg;id] from t; 
  t:update proc:.Q.dd'[process;id] from t;
  t:update uid:.Q.dd'[env;flip(subsys;process;id)] from t; 
- t:update hdb: {.bt.print["%data%/%folder%/%env%/%subsys%/hdb"] .global,x}@'t from t; 
- t:update audit: {.bt.print["%audit%/%folder%/%env%/%subsys%/%process%/%id%"] .global,x}@'t from t;
- t:update gData: {.bt.print["%data%/%folder%/%env%/%subsys%/%process%"] .global,x}@'t from t;   
- t:update data: {.bt.print["%data%/%folder%/%env%/%subsys%/%process%/%id%"] .global,x}@'t from t;
- t:update gfile: {.bt.print["%folder%/%env%/%subsys%/%process%/global"] .global,x}@'t from t;
- t:update lfile: {.bt.print["%folder%/%env%/%subsys%/%process%/%id%"] .global,x}@'t from t;
+ t:update hdb: {.bt.print["%plantsrc%/%data%/%env%/%subsys%/hdb"] .env,.global,x}@'t from t; 
+ t:update audit: {.bt.print["%plantsrc%/%audit%/%env%/%subsys%/%process%/%id%"] .env,.global,x}@'t from t;
+ t:update gData: {.bt.print["%plantsrc%/%data%/%env%/%subsys%/%process%"] .env,.global,x}@'t from t;   
+ t:update data: {.bt.print["%plantsrc%/%data%/%env%/%subsys%/%process%/%id%"] .env,.global,x}@'t from t;
+ t:update gfile: {.bt.print["%folder%/%env%/%subsys%/%process%/global"] .env,.global,x}@'t from t;
+ t:update lfile: {.bt.print["%folder%/%env%/%subsys%/%process%/%id%"] .env,.global,x}@'t from t;
  t:update gcorefile: { .util.wlin .bt.print["%btsrc%/core/core/%subsys%/%process%/global"] .env,.global,x}@'t from t;
  t:update lcorefile: { .util.wlin .bt.print["%btsrc%/core/core/%subsys%/%process%/%id%"] .env,.global,x}@'t from t;
  t

@@ -9,7 +9,7 @@ if[ not`env in key `;
  ];
 
 
-.env.plantsrc:{x:`$"/"sv 1_"/"vs string x;$[null x;`.;x]}  .env.arg`folder
+.env.plantsrc:{x:`$"/"sv -1_"/"vs string x;$[null x;`.;x]}  .env.arg`folder
 
 .env.loadLib:{{@[system;;()] .bt.print["l %btsrc%/lib/%lib%/%lib%.q"] .env , enlist[`lib]!enlist x}@'x};
 .env.loadBehaviour:{{
@@ -44,12 +44,14 @@ if[ not`env in key `;
  .proc:result 0;
  .proc.za:.Q.host .z.a;
  .env.loadBehaviour .proc.library;
+ .proc
  }
 
+/ .bt.putAction `.action.parse.schema
 
 .bt.add[`.action.set.cfg;`.action.parse.schema]{[allData]
  .schemas.core:`$.bt.print[":%btsrc%/core/core/schemas"] .env,.global;
- .schemas.plant:`$.bt.print[":%folder%/%env%/schemas"] .env,allData;
+ .schemas.plant:`$.bt.print[":%folder%/%env%/schemas"] .env,.proc;
  t:([]plant:`core`plant; path: .schemas `core`plant );
  t:ungroup update subsys: key@'path from t;
  t:update path:path .Q.dd'subsys  from t;

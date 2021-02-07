@@ -57,6 +57,13 @@ sleep0[0b]:{system .bt.print["sleep %0"] enlist x; }
 
 sleep:{[secs] .util.sleep0[.env.win] secs }
 
+pwd0:()!()
+pwd0[1b]:{`$system"cd" }
+pwd0[0b]:{`$system"pwd" }
+
+pwd:{ .util.pwd0[.env.win][] }
+
+
 
 / ceateSchema[tname;subsys;tbl;addTime]
 

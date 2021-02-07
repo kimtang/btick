@@ -43,7 +43,8 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
  } 
 
 .bt.addIff[`.pm.parseEnv]{[cfg] not null cfg}
-.bt.add[`.pm.init;`.pm.parseEnv] {[allData] .sys:result:.action.parseCfg allData;
+.bt.add[`.pm.init;`.pm.parseEnv] {[allData] 
+ .sys:result:update pwd:.util.pwd[] from .action.parseCfg allData;
  .bt.md[`result] result
  } 
 
@@ -56,7 +57,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 
 .bt.addIff[`.pm.linux.addPid]{[cmd] .env.lin and not cmd=`json }
 .bt.add[`.pm.parseEnv;`.pm.linux.addPid]{[result;allData]
- result:update cmd:{.bt.print["q %btsrc%/action.q -folder %folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id% -p %port%"] .env,x}@'result from result;
+ result:update cmd:{.bt.print["q %btsrc%/action.q -folder %pwd%/%folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id% -p %port%"] .env,x}@'result from result;
  result:update startcmd:.bt.print["nohup %cmd% >nohup.out 2>&1 &"]@'result from result;
  pids:.pm2.getLinStatus[];
  pids:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""),  .Q.opt " " vs x}@'cmd from pids;
@@ -87,7 +88,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 
 .bt.addIff[`.pm.win.addPid]{[cmd] .env.win and not cmd=`json }
 .bt.add[`.pm.parseEnv;`.pm.win.addPid]{[result;allData]
- result:update cmd:{.bt.print["q %btsrc%/action.q -folder %folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id%"] .env,x}@'result from result;
+ result:update cmd:{.bt.print["q %btsrc%/action.q -folder %pwd%/%folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id%"] .env,x}@'result from result;
  result:update startcmd:.bt.print["start \"%cmd%\" /MIN %cmd%"]@'result from result;
  pids:.pm2.getWinStatus[];
  pids:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""),  .Q.opt " " vs x}@'cmd from pids;
