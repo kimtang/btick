@@ -17,7 +17,7 @@
         }
       },
       "tick": {
-        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.stream,tick.hft,monitor.cep.server,heartbeat.server,usage.server,berror.server,info.server",
+        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.stream,tick.hft,monitor.cep.server,heartbeat.server,usage.server,berror.server,info.server,check.server",
         "arg": {
           "tick": "hft",
           "setPort": "%basePort% + 3"
@@ -52,13 +52,13 @@
         "arg": {
           "setPort": "%basePort% + 8"
         }        
+      },
+      "checker":{
+        "library": "randomSeed,setPort,pm,hopen,bus.client,check.client",
+        "arg": {
+          "setPort": "%basePort% + 9"
+        }        
       }      
-    },
-    "checker":{
-      "library": "randomSeed,setPort,pm,hopen,bus.client,check.server",
-      "arg": {
-        "setPort": "%basePort% + 9"
-      }        
     }      
   },
 
