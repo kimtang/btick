@@ -1,0 +1,11 @@
+{
+  "tname": "ps",
+  "column": "time,uid,port,pid,cpu,npm,pm,ws,vm,starttime",
+  "tipe": "psjjfjjjjp",
+  "rattr": "sg********",
+  "hattr": "Sp********",
+  "tick": "default",
+  "rsubscriber": "default",
+  "hsubscriber": "default",
+  "addTime": false  
+}
