@@ -44,16 +44,4 @@
  update data:init @'data from `.monitor.con where uid in uids;
  }
 
-/ 
-
-tblcnt
-
-.monitor.con . 0,`data
-select by arg[;0] from .bt.history where action = `.bus.sendTweet,mode = `behaviour
-
-select  from .bt.history where action like ".bus.receiveTweet",arg[;0] like ".monitor*"
-
-select  from .bt.history where action = `.monitor.cep.receiveData,mode = `behaviour
-
-
-reverse tblcnt
+/
