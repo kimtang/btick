@@ -1,13 +1,13 @@
 
 if[ not`bt in key `;system "l ",getenv[`BTSRC],"/bt.q"];
 
-.bt.outputTrace:.bt.outputTrace1
-.bt.trace:.bt.trace1
-
 if[ not`env in key `;
  .env.arg:.Q.def[(1#`folder)!1#`plant] .Q.opt .z.x;
  ];
 
+.bt.outputTrace:.bt.outputTrace1
+
+.bt.trace:(`notrace`trace!(.bt.trace0;.bt.trace2)) .env.arg`trace
 
 .env.plantsrc:{x:`$"/"sv -1_"/"vs string x;$[null x;`.;x]}  .env.arg`folder
 
