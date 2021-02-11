@@ -7,7 +7,7 @@ if[ not`env in key `;
 
 .bt.outputTrace:.bt.outputTrace1
 
-.bt.trace:(`notrace`trace!(.bt.trace0;.bt.trace2)) .env.arg`trace
+.bt.trace:(`notrace`trace!(.bt.trace2;.bt.trace0)) .env.arg`trace
 
 .env.plantsrc:{x:`$"/"sv -1_"/"vs string x;$[null x;`.;x]}  .env.arg`folder
 
