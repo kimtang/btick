@@ -28,9 +28,11 @@
 .bt.addOnlyBehaviour[`.tick.waitForTick]`.bus.sendTweet
 
 
-.bt.addIff[`.tick.logFiles]{[data] (1<=count data`logFiles) and .tick.con[`uid] = data`uid }
+
+.bt.addIff[`.tick.logFiles]{[data] 0<count raze exec logFiles from data where uid in .tick.con`uid }
 .bt.add[`;`.tick.logFiles]{[data]
- t:update date:data`d from ([]file:data`logFiles);
+ logFiles:raze exec logFiles from data where uid in .tick.con`uid;
+ t:update date:data`d from ([]file:logFiles);
  t:update num:{"J"$last "." vs x}@'string file,replay:0b from t;
  .tick.files : `date`num xasc  0!(2!t) uj 2!.tick.files; 
  }

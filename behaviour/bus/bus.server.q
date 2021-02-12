@@ -19,14 +19,15 @@
  tcon:select from .bus.tcon where not null topic ;
  delete from `.bus.tcon where not null topic;
  chooser:group exec hdl!topic from ungroup select hdl,topic from .bus.con where mode=`inside,not null hdl;
- inside:update shdl:(chooser[`all],/:chooser[ topic]) except' zw from tcon;
+ inside:update shdl:(chooser[`all],/:chooser topic ) except' zw from tcon;
  inside:ungroup update data:{[shdl;data] count[shdl]#enlist data}'[shdl;data] from inside;
  inside:0!select data:{$[0=type x;raze x;x]} data by topic,shdl from inside;
  .bt.execute[{[topic;shdl;data] neg[shdl] (".bt.action";`.bus.receiveTweet;`topic`data!(topic;data)); }]@'select from inside where not shdl=0;
  .bt.execute[{[topic;data] @[.bt.action[topic];.bt.md[`data]data;{}];}]@'select from inside where shdl=0;
 
- chooser:group exec hdl!topic from ungroup select hdl,topic from .bus.con where mode=`outside,not null hdl;
- outside:update shdl:(chooser[`all],/:chooser[ topic]) except' zw from tcon;
+ chooser:exec hdl from .bus.con where mode=`outside,not null hdl;
+ outside:select from tcon where not zw in chooser ;
+ outside:update shdl:count[i]#enlist chooser from outside;
  outside:ungroup update data:{[shdl;data] count[shdl]#enlist data}'[shdl;data] from outside;
  outside:0!select tcon:([]topic;data) by shdl from outside;
  .bt.execute[{[shdl;tcon] neg[shdl] (".bt.action";`.bus.receiveBulk;.bt.md[`tcon]tcon); }]@'outside; 
