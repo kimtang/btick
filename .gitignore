@@ -2,3 +2,5 @@ data
 testPlant
 testResult
 .history
+cfg
+plant/~*

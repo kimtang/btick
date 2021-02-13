@@ -1,5 +1,6 @@
 {
     "global": {
+        "env":"ex1",
         "admin": {
             "basePort": 32000
         },

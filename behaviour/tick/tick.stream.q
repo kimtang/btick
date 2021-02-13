@@ -67,7 +67,7 @@
 
 upd:{[tname;data] .bt.action[`.tick.upd] `tname`data!( $[10h = type tname;`$;(::)] tname;data); }
 
-.bt.addIff[`.tick.askForLogs]{[data] .proc.uid = data`uid}
+.bt.addIff[`.tick.askForLogs]{[data] .proc.uid in data`uid}
 .bt.add[`;`.tick.askForLogs]{ `topic`data!(`.tick.logFiles;`uid`logFiles`d # .tick,.proc)}
 
 .bt.addOnlyBehaviour[`.tick.askForLogs]`.bus.sendTweet

@@ -2,10 +2,10 @@
 
 
 / 
- q pm.q -folder folder -cfg cfg_file [status|start|kill|stop|restart|debug|sbl|json|info|heartbeat|tblcnt] -library library proc[all]
- q pm.q -folder plant -cfg cfg_file -library library status proc[all]
- q pm.q -folder plant -cfg cfg_file -library library status proc[all] 
- q pm.q -folder plant -cfg cfg_file -subsys subsys -library library status all  
+ q pm.q -folder folder -cfg cfg_file -library library -trace 2 [status|start|kill|stop|restart|debug|sbl|json|info|heartbeat|tblcnt] proc[all]
+ q pm.q -folder  plant -cfg cfg_file -library library -trace 2 status proc[all]
+ q pm.q -folder  plant -cfg cfg_file -library library -trace 2 status proc[all] 
+ q pm.q -folder  plant -cfg cfg_file -subsys subsys -library library -trace 2 status all  
  q pm.q
 \
 
@@ -57,7 +57,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 
 .bt.addIff[`.pm.linux.addPid]{[cmd] .env.lin and not cmd=`json }
 .bt.add[`.pm.parseEnv;`.pm.linux.addPid]{[result;allData]
- result:update cmd:{.bt.print["q %btsrc%/action.q -folder %pwd%/%folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id% -p %port%"] .env,x}@'result from result;
+ result:update cmd:{.bt.print["q %btsrc%/action.q -folder %pwd%/%folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id% -trace %trace% -p %port%"] .env.arg,.env,x}@'result from result;
  result:update startcmd:.bt.print["nohup %cmd% >nohup.out 2>&1 &"]@'result from result;
  pids:.pm2.getLinStatus[];
  pids:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""),  .Q.opt " " vs x}@'cmd from pids;
@@ -88,7 +88,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 
 .bt.addIff[`.pm.win.addPid]{[cmd] .env.win and not cmd=`json }
 .bt.add[`.pm.parseEnv;`.pm.win.addPid]{[result;allData]
- result:update cmd:{.bt.print["q %btsrc%/action.q -folder %pwd%/%folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id%"] .env,x}@'result from result;
+ result:update cmd:{.bt.print["q %btsrc%/action.q -folder %pwd%/%folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id% -trace %trace%"] .env.arg,.env,x}@'result from result;
  result:update startcmd:.bt.print["start \"%cmd%\" /MIN %cmd%"]@'result from result;
  pids:.pm2.getWinStatus[];
  pids:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""),  .Q.opt " " vs x}@'cmd from pids;
@@ -100,7 +100,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
  .bt.md[`result] result  
  }
 
-.bt.addIff[`.pm.os.no_cmd]{[cmd] not cmd in `status`start`kill`stop`restart`debug`sbl`json`status`heartbeat`info`tblcnt`sblh }
+.bt.addIff[`.pm.os.no_cmd]{[cmd] not cmd in `status`start`kill`stop`restart`debug`sbl`json`status`heartbeat`info`tblcnt`sblh`statusAll }
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.no_cmd]{[result;allData]
  result:select from result where .z.h = `$host;	
  result:select subsys,proc,port,pid,pm2 from result;	
@@ -116,6 +116,13 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
  .bt.md[`result] result 
  / 1 .Q.s result
  }
+
+.bt.addIff[`.pm.os.statusAll]{[cmd] cmd = `statusAll}
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.statusAll]{[result]
+ result:select from result where .z.h = `$host;
+ .bt.md[`result] result 
+ / 1 .Q.s result
+ } 
 
 .bt.addIff[`.pm.os.start]{[cmd] cmd = `start}
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.start]{[result]
@@ -193,7 +200,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 if[(.z.f like "*pm.q") and not `.env.debug ~ key `.env.debug;
 	.env.libs:`util`action;
 	.env.behaviours:0#`;
-	.env.arg:.Q.def[`folder`cfg`subsys`library`proc`debug`print!`plant````all,01b] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x;
+	.env.arg:.Q.def[`folder`cfg`subsys`library`proc`debug`print`trace!`plant````all,01b,`notrace] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x;
 	if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 	.env.plantsrc:{x:`$"/"sv 1_"/"vs string x;$[null x;`.;x]}  .env.arg`folder;
 	.env.loadLib:{{@[system;;()] .bt.print["l %btsrc%/lib/%lib%/%lib%.q"] .env , enlist[`lib]!enlist x}@'x};
