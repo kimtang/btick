@@ -1,0 +1,14 @@
+{
+    "tblcnt": {
+        "uid": "tblcnt.bin",
+        "looptime": "00:00:05",
+        "executetime": "0np",
+        "tname": "all",
+        "nname": "tblcnt",
+        "init": "{ 1!([] tbl:.monitor.cep.tblcnt.tnames;btime:.z.P;cnt:0) }",
+        "upd": "{[tname;odata;ndata]odata + 1!enlist `tbl`btime`cnt!(tname;0;count ndata) }",
+        "loop": "{[data] update etime:.z.P from 0!data}",
+        "error": "{}",
+        "data": "()"
+    }
+}

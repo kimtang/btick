@@ -120,6 +120,7 @@ ecatch:{[sym;allData;error]
 edelay:{[sym;allData]
  h:hist sym;
  delay:.bt.sel[sym;`delay];
+ if[`.bt.no_delay ~ delay`fnc;:`result`error!(`tipe`time!(`noDelay;0np);`) ];
  r: @[{[fnc;arg] `result`error!(fnc . arg;`) }delay`fnc;arg:allData delay`arg;{`result`error!(()!();`$x)}];
  / if[(not `noDelay=r . `result`tipe) or not null r`error ;trace[h;`delay; (enlist[`arg]!enlist arg), r]];
  trace[h;`delay; (enlist[`arg]!enlist arg), r];

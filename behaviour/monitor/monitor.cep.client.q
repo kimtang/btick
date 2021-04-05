@@ -43,8 +43,8 @@
 
 .bt.addDelay[`.monitor.cep.loop]{`tipe`time!(`at;min exec executetime from .monitor.con)}
 .bt.add[`.monitor.cep.init`.monitor.cep.loop;`.monitor.cep.loop]{
- uids:exec uid from .monitor.con where executetime<=.z.p;
- update executetime:.z.p + looptime from `.monitor.con where uid in uids;
+ uids:exec uid from .monitor.con where executetime<=.z.P;
+ update executetime:.z.P + looptime from `.monitor.con where uid in uids;
  .bt.md[`uids] uids
  }
 
@@ -54,5 +54,3 @@
  {.bt.action[`.bus.sendTweet] `topic`data!(`.monitor.cep.receiveData;x) }@'flip exec nname,ndata:loop@'data from .monitor.con where uid in uids;
  update data:init @'data from `.monitor.con where uid in uids;
  }
-
-/ 
