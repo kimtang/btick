@@ -11,50 +11,50 @@
   "admin": {
     "process": {
       "bus": {
-        "library": "randomSeed,pm,setPort,hopen,bus.server,heartbeat.client,berror.client,pm,daemon",
+        "library": "randomSeed,pm,setPort,hopen,bus.server,heartbeat.client,berror.client,pm,daemon,qxl",
         "arg": {
           "setPort": "%basePort% + 2"
         }
       },
       "tick": {
-        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.stream,tick.hft,monitor.cep.server,heartbeat.server,usage.server,berror.server,info.server,check.server",
+        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.stream,tick.hft,monitor.cep.server,heartbeat.server,usage.server,berror.server,info.server,check.server,qxl",
         "arg": {
           "tick": "hft",
           "setPort": "%basePort% + 3"
         }
       },
       "replay": {
-        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.replay,heartbeat.client,berror.client",
+        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.replay,heartbeat.client,berror.client,qxl",
         "arg": {
           "setPort": "%basePort% + 4"
         }
       },
       "rdb": {
-        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.sub,heartbeat.client,berror.client",
+        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.sub,heartbeat.client,berror.client,qxl",
         "arg": {
           "setPort": "%basePort% + 5"
         }
       },
       "cdb": {
-        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.cdb,heartbeat.client,berror.client",
+        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.cdb,heartbeat.client,berror.client,qxl",
         "arg": {
           "setPort": "%basePort% + 6"
         }
       },
       "ctp":{
-        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.sub,tick.cep,tick.ctp,websocket,heartbeat.client,berror.client,info.client",
+        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.sub,tick.cep,tick.ctp,websocket,heartbeat.client,berror.client,info.client,qxl",
         "arg": {
           "setPort": "%basePort% + 7"
         }        
       },
       "monitorCep":{
-        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.sub,tick.cep,monitor.cep.client,heartbeat.client,berror.client,info.client",
+        "library": "randomSeed,setPort,pm,hopen,bus.client,tick.sub,tick.cep,monitor.cep.client,heartbeat.client,berror.client,info.client,qxl",
         "arg": {
           "setPort": "%basePort% + 8"
         }        
       },
       "checker":{
-        "library": "randomSeed,setPort,pm,hopen,bus.client,check.client",
+        "library": "randomSeed,setPort,pm,hopen,bus.client,check.client,qxl",
         "arg": {
           "setPort": "%basePort% + 9"
         }        
@@ -66,28 +66,28 @@
     "process": {
 
       "bus": {
-        "library": "randomSeed,setPort,pm,hopen,bus.server,heartbeat.client,berror.client,pm,daemon",
+        "library": "randomSeed,setPort,pm,hopen,bus.server,heartbeat.client,berror.client,pm,daemon,qxl",
         "arg": {
           "setPort": "%basePort% + 1"
         }
       },
 
       "rdb": {
-        "library": "randomSeed,setPort,pm,hopen,bus.client,heartbeat.client,backfill.rdb,berror.client",
+        "library": "randomSeed,setPort,pm,hopen,bus.client,heartbeat.client,backfill.rdb,berror.client,qxl",
         "arg": {
           "setPort": "%basePort% + 2"
         }
       },
 
       "tick": {
-        "library": "randomSeed,setPort,pm,hopen,bus.client,heartbeat.client,backfill.tick,berror.client",
+        "library": "randomSeed,setPort,pm,hopen,bus.client,heartbeat.client,backfill.tick,berror.client,qxl",
         "arg": {
           "setPort": "%basePort% + 3"
         }
       },
 
       "replay": {
-        "library": "randomSeed,setPort,pm,hopen,bus.client,heartbeat.client,backfill.replay,berror.client",
+        "library": "randomSeed,setPort,pm,hopen,bus.client,heartbeat.client,backfill.replay,berror.client,qxl",
         "arg": {
           "setPort": "%basePort% + 4"
         }

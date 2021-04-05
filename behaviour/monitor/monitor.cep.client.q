@@ -7,23 +7,34 @@
 .monitor.cep.tblcnt.executetime:0np
 .monitor.cep.tblcnt.tname:`all
 .monitor.cep.tblcnt.nname:`tblcnt
-.monitor.cep.tblcnt.init:{ 1!([] tbl:.monitor.cep.tblcnt.tnames;btime:.z.P;cnt:0) }
+.monitor.cep.tblcnt.init:{ 1!([] tbl:exec tname from .schemas.con;btime:.z.P;cnt:0) }
 .monitor.cep.tblcnt.upd:{[tname;odata;ndata]odata + 1!enlist `tbl`btime`cnt!(tname;0;count ndata) }
 .monitor.cep.tblcnt.loop:{[data] update etime:.z.P from 0!data}
 .monitor.cep.tblcnt.error:{}
 .monitor.cep.tblcnt.data:() / exec tname from .schemas.con where subsys=.proc.subsys
 
+.monitor.cep.aheartbeat.uid:`aheartbeat
+.monitor.cep.aheartbeat.looptime:`second$5
+.monitor.cep.aheartbeat.executetime:0np
+.monitor.cep.aheartbeat.tname:`heartbeat
+.monitor.cep.aheartbeat.nname:`aheartbeat
+.monitor.cep.aheartbeat.init:{[data] if[not()~data;:data]; t:`uid xkey exec 0#schema 0 from .schemas.con where subsys=`admin,tname=`heartbeat; t upsert select uid from .sys  }
+.monitor.cep.aheartbeat.upd:{[tname;odata;ndata]odata upsert ndata }
+.monitor.cep.aheartbeat.loop:{[data] 0!data}
+.monitor.cep.aheartbeat.error:{}
+.monitor.cep.aheartbeat.data:() / exec tname from .schemas.con where subsys=.proc.subsys
 
-.monitor.upd:{[tname0;ndata]abc::(tname0;ndata);
+
+
+.monitor.upd:{[tname0;ndata]
  update data:upd{[upd;data] upd . data }'flip(tname0;data;count[data]#enlist ndata) from `.monitor.con where (tname=`all)or tname =  tname0;
  }
 
 
 .bt.add[`.tick.cep.init;`.monitor.cep.init]{
- .monitor.cep.tblcnt.tnames:exec tname from .schemas.con where subsys=.proc.subsys;
-
  `.cep.con insert `uid`upd`time!(`.monitor.cep;`.monitor.upd;.z.p);
  `.monitor.con insert cols[.monitor.con]#.monitor.cep.tblcnt;
+ `.monitor.con insert cols[.monitor.con]#.monitor.cep.aheartbeat; 
  update executetime:.z.p + looptime from `.monitor.con where null executetime;
  update data:init @'data from `.monitor.con;
  }
@@ -45,15 +56,3 @@
  }
 
 / 
-
-tblcnt
-
-.monitor.con . 0,`data
-select by arg[;0] from .bt.history where action = `.bus.sendTweet,mode = `behaviour
-
-select  from .bt.history where action like ".bus.receiveTweet",arg[;0] like ".monitor*"
-
-select  from .bt.history where action = `.monitor.cep.receiveData,mode = `behaviour
-
-
-reverse tblcnt
