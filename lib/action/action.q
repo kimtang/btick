@@ -8,9 +8,9 @@
 
 .action.parseCfg:{[allData]
  .cfg : .j.k "c"$read1 `$ .bt.print[":%folder%/%cfg%.json"] .env,allData;
- .cfg:.util.deepMerge[ .bt.md[`global] .bt.md[`core]1b ].cfg;
  .core: .j.k "c"$read1 `$ .bt.print[":%btsrc%/core/core.json"] .env;
- .core:$[.cfg.global.core;.core;(enlist`global)#.core];
+ ik:key[.cfg.global] inter key .core; 
+ .core:(`global,ik)#.core;
  .cfg:.util.deepMerge[.core].cfg;
  .global: .cfg.global;
  .cfg:``global _ .cfg;

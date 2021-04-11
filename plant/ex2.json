@@ -1,8 +1,6 @@
 {
     "global": {
         "env":"ex2",
-        "admin":false,
-        "backfill":false,
         "admin": {
             "basePort": 33000
         },        
@@ -12,23 +10,6 @@
         "ex2": {
             "basePort": 35000
         }        
-    },
-    "admin": {
-        "process": {
-          "bus": {
-            "library": "randomSeed,pm,setPort,hopen,bus.server,heartbeat.client,berror.client,pm,daemon,qxl",
-            "arg": {
-              "setPort": "%basePort% + 2"
-            }
-          },
-          "tick": {
-            "library": "randomSeed,setPort,pm,hopen,bus.client,monitor.cep.server,heartbeat.server,usage.server,berror.server,info.server,check.server,qxl",
-            "arg": {
-              "tick": "hft",
-              "setPort": "%basePort% + 3"
-            }
-          }
-        }
     },    
     "ex1": {
         "process": {
