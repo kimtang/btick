@@ -70,6 +70,8 @@
 
 /
 
+count .bus.tcon
+
 select from  .bt.history where action=`.bus.loop.tcon
 
 select from .bt.tme where null runAt

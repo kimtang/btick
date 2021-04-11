@@ -3,6 +3,7 @@
     "data": "data",
     "audit": "audit",
     "instance": 1,
+    "core":true,
     "host": ["localhost"],
     "passwd":"btpasswd",
     "daemon":false
@@ -64,7 +65,6 @@
 
   "backfill": {
     "process": {
-
       "bus": {
         "library": "randomSeed,setPort,pm,hopen,bus.server,heartbeat.client,berror.client,pm,daemon,qxl",
         "arg": {

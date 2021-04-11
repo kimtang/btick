@@ -99,8 +99,3 @@ if[ not`env in key `;
 .bt.add[`.action.load.file;`.library.init]{.proc`mergeArg}
 
 /
-
-.bt.tme
-select from .bt.history
-
-.z.ts[]

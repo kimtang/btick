@@ -8,10 +8,12 @@
 
 .action.parseCfg:{[allData]
  .cfg : .j.k "c"$read1 `$ .bt.print[":%folder%/%cfg%.json"] .env,allData;
- .core: .j.k "c"$read1 `$ .bt.print[":%btsrc%/core/core.json"] .env,.cfg.global;
- .cfg : .cfg,.util.deepMerge[.core].cfg;
+ .cfg:.util.deepMerge[ .bt.md[`global] .bt.md[`core]1b ].cfg;
+ .core: .j.k "c"$read1 `$ .bt.print[":%btsrc%/core/core.json"] .env;
+ .core:$[.cfg.global.core;.core;(enlist`global)#.core];
+ .cfg:.util.deepMerge[.core].cfg;
  .global: .cfg.global;
- .cfg:delete global from .cfg;
+ .cfg:``global _ .cfg;
  t:{[allData;x]  ([]folder:allData`folder;env:`$.global`env;subsys:key x;val:value x)}[allData] .cfg;
  t:update cfg:allData`cfg from t;
  t:update process:key @'val[;`process], library:{value[x]@\:`library}@'val[;`process], arg:{value[x]@\:`arg}@'val[;`process] from t;
@@ -37,5 +39,4 @@
  t:update gcorefile: { .util.wlin .bt.print["%btsrc%/core/core/%subsys%/%process%/global"] .env,.global,x}@'t from t;
  t:update lcorefile: { .util.wlin .bt.print["%btsrc%/core/core/%subsys%/%process%/%id%"] .env,.global,x}@'t from t;
  t
- / .bt.md[`result]t
  } 

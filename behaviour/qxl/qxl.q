@@ -6,6 +6,7 @@
 .qxl.parse0[`h]:{"H"$string x }
 .qxl.parse0[`i]:{"I"$string x }
 .qxl.parse0[`j]:{"J"$string x }
+.qxl.parse0[`J]:{"J"$ " " vs string x }
 .qxl.parse0[`e]:{"E"$string x }
 .qxl.parse0[`f]:{"F"$string x }
 .qxl.parse0[`c]:{first @'string x }
@@ -33,3 +34,46 @@
  } 
 
 .qxl.p:{ ((`d`t!(.qxl.t2d;.qxl.t2t)) first x 0 ) 1_x} 
+
+.qxl.pc:{first parse["select from t where ",x]2}
+.qxl.pb:{parse["select by ",x," from t"]3}
+.qxl.pa:{parse["select ",x," from t"]4}
+
+.qxl.s:{
+ .kmp:x;
+ x:.qxl.t2d x;
+ x:(``s`d`c`b`a!({};();();();0b;())),x;
+ if[-11h=type x`c;x:@[x;`c;string]];
+ if[-11h=type x`b;x:@[x;`b;string]];
+ if[-11h=type x`a;x:@[x;`a;string]];
+ if[-11h=type x`s;x:@[x;`s;string]];
+ if[-11h=type x`d;x:@[x;`d;string]];  
+ if[10h=abs type x`c;x:@[x;`c;.qxl.pc]];
+ if[10h=abs type x`b;x:@[x;`b;.qxl.pb]];
+ if[10h=abs type x`a;x:@[x;`a;.qxl.pa]];
+ if[10h=abs type x`s;x:@[x;`s;{key .qxl.pa
+  x }]]; 
+ if[10h=abs type x`d;x:@[x;`d;get]];  
+ r:?[x`t;x`c;x`b;x`a];
+ if[(()~x`d) or ()~x`s;:r];
+ x[`d][x[`s];0!r]
+ }
+
+.qxl.u:{
+ x:.qxl.t2d x;	
+ x:(``s`d`c`b`a!({};();();();0b;())),x;
+ if[-11h=type x`c;x:@[x;`c;string]];
+ if[-11h=type x`b;x:@[x;`b;string]];
+ if[-11h=type x`a;x:@[x;`a;string]];
+ if[-11h=type x`s;x:@[x;`s;string]];
+ if[-11h=type x`d;x:@[x;`d;string]];  
+ if[10h=abs type x`c;x:@[x;`c;.qxl.pc]];
+ if[10h=abs type x`b;x:@[x;`b;.qxl.pb]];
+ if[10h=abs type x`a;x:@[x;`a;.qxl.pa]];
+ if[10h=abs type x`s;x:@[x;`s;{key .qxl.pa x }]]; 
+ if[10h=abs type x`d;x:@[x;`d;get]];  
+
+ r:![x`t;x`c;x`b;x`a];
+ if[(()~x`d) or ()~x`s;:r];
+ x[`d][x[`s];r]
+ } 
