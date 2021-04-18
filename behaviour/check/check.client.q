@@ -7,8 +7,10 @@
 
 .checker.ps.win:{
  tbl:system .checker.ps.wstring;
- `cmd`pid`cpu`npm`pm`ws`vm`starttime xcol("*jfjjjjp";", ") 0: tbl
-
+ tbl:update { "P"$ ("."sv reverse "/"vs first x),"D",last x:" " vs x}@'starttime from `cmd`pid`cpu`npm`pm`ws`vm`starttime xcol("*jfjjjj*";", ") 0: tbl;
+ wmic:system"wmic path win32_perfformatteddata_perfproc_process get Name, Caption, PercentProcessorTime, IDProcess /format:csv";
+ wmic:select pid,cpu from flip`host`nouse`pid`name`cpu !("**J*F";",") 0: 2_ {ssr[x ;"c"$ 0x00;""] }@'wmic;
+ tbl lj 1!wmic
  }
 
 
