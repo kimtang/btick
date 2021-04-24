@@ -2,12 +2,14 @@
 if[ not`bt in key `;system "l ",getenv[`BTSRC],"/bt.q"];
 
 if[ not`env in key `;
- .env.arg:.Q.def[(1#`folder)!1#`plant] .Q.opt .z.x;
+ .env.arg:.Q.def[`folder`cfg`subsys`process`id`trace!(`plant;`;`;`;0nj;0) ] .Q.opt .z.x;
  ];
+
+
 
 .bt.outputTrace:.bt.outputTrace1
 
-.bt.trace:(`notrace`trace!(.bt.trace2;.bt.trace0)) .env.arg`trace
+.bt.trace:(.bt.trace2;.bt.trace0) .env.arg`trace
 
 .env.plantsrc:{x:`$"/"sv -1_"/"vs string x;$[null x;`.;x]}  .env.arg`folder
 

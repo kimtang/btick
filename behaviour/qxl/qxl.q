@@ -40,7 +40,6 @@
 .qxl.pa:{parse["select ",x," from t"]4}
 
 .qxl.s:{
- .kmp:x;
  x:.qxl.t2d x;
  x:(``s`d`c`b`a!({};();();();0b;())),x;
  if[-11h=type x`c;x:@[x;`c;string]];

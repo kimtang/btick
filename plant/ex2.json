@@ -24,6 +24,18 @@
                 "arg": {
                     "setPort": "%basePort% + 2"
                 }
+            },
+            "dontcare": {
+                "library": "randomSeed,setPort,qxl",
+                "arg": {
+                    "setPort": "%basePort% + 3"
+                }
+            },
+            "dontcare1": {
+                "library": "randomSeed,setPort,qxl",
+                "arg": {
+                    "setPort": "%basePort% + 4"
+                }
             }
         }
     }    

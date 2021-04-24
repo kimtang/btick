@@ -30,17 +30,3 @@
 
 
 /
-
-delete from `.bt.history where i>2;.Q.gc[]
-delete from `.bt.tme where not null runAt;.Q.gc[]
-
-`cnt xdesc select cnt:count i by action,mode from .bt.history
-
-flip select from .bus.con where uid = `oura.admin.tick.0
-
-reverse select by arg[;`topic] from .bt.history where action =`.bus.sendTweet,mode=`behaviour 
-
-reverse select from .bt.history where action =`.bus.receiveTweet
-
-.fromInside,mode=`behaviour 
-

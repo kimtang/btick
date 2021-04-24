@@ -2,10 +2,10 @@
 
 
 / 
- q pm.q -folder folder -cfg cfg_file -library library -trace 2 [status|start|kill|stop|restart|debug|sbl|json|info|heartbeat|tblcnt] proc[all]
- q pm.q -folder  plant -cfg cfg_file -library library -trace 2 status proc[all]
- q pm.q -folder  plant -cfg cfg_file -library library -trace 2 status proc[all] 
- q pm.q -folder  plant -cfg cfg_file -subsys subsys -library library -trace 2 status all  
+ q pm.q -folder folder -cfg cfg_file -library library -trace 1 [status|start|kill|stop|restart|debug|sbl|json|info|heartbeat|tblcnt] proc[all]
+ q pm.q -folder  plant -cfg cfg_file -library library -trace 1 status proc[all]
+ q pm.q -folder  plant -cfg cfg_file -library library -trace 1 status proc[all] 
+ q pm.q -folder  plant -cfg cfg_file -subsys subsys -library library -trace 1 status all  
  q pm.q
 \
 
@@ -161,7 +161,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
  if[not 1=count result;1 "Only one process is allowed in debug mode";:()];
  result:result 0;
  if[not null result`pid;{@[system ;x;()]} .bt.print[.pm2.killstr] result];
- .env.arg:.Q.def[(1#`folder)!1#`plant] .Q.opt 2_" " vs result`cmd;
+ .env.arg:.Q.def[`folder`cfg`subsys`process`id`trace!(`plant;`;`;`;0nj;0) ] .Q.opt 2_" " vs result`cmd;
  .env.debug:1b;
  system .bt.print["l %btsrc%/action.q"] .env
  }
@@ -200,7 +200,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 if[(.z.f like "*pm.q") and not `.env.debug ~ key `.env.debug;
 	.env.libs:`util`action;
 	.env.behaviours:0#`;
-	.env.arg:.Q.def[`folder`cfg`subsys`library`proc`debug`print`trace!`plant````all,01b,`notrace] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x;
+	.env.arg:.Q.def[`folder`cfg`subsys`library`proc`debug`print`trace!`plant````all,01b,0] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x;
 	if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 	.env.plantsrc:{x:`$"/"sv 1_"/"vs string x;$[null x;`.;x]}  .env.arg`folder;
 	.env.loadLib:{{@[system;;()] .bt.print["l %btsrc%/lib/%lib%/%lib%.q"] .env , enlist[`lib]!enlist x}@'x};
