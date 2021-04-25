@@ -25,7 +25,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 
 .env.libs:`util`action`test
 .env.behaviours:1#`pm
-.env.arg:.Q.def[`folder`testFile`mode`debug`interactive!`test``,00b] .Q.opt .z.x
+.env.arg:.Q.def[`folder`testFile`mode`debug`interactive`trace!`test``,00b,0] .Q.opt .z.x
 
 if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 
@@ -83,9 +83,9 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  }
 
 
-.bt.add[`.test.executeTest.win;`.test.executeTest.prepare1]{[path]
+.bt.add[`.test.executeTest.win;`.test.executeTest.prepare]{[path]
  .bt.stdOut0[`test;`run_file] .bt.print["Prepare test file: %0"] enlist path:1_string path;	
- opt:(`folder`cfg`subsys`proc`debug`print!(`testPlant```all,10b) ), (``cfg#.test.env);
+ opt:(`folder`cfg`subsys`proc`debug`print!(`testPlant```all,10b) ),(``trace#.env.arg), (``cfg#.test.env);
  .bt.stdOut0[`test;`prepare] "Stop all processes";
  .bt.action[`.pm.init] opt,.bt.md[`cmd] `stop;
  .bt.stdOut0[`test;`prepare] "Start all processes"; 
@@ -95,7 +95,6 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  }
 
 .bt.addIff[`.test.executeTest.file]{[interactive] not interactive}
-
 
 .bt.add[`.test.executeTest.prepare;`.test.executeTest.file]{[path]
  .bt.stdOut0[`test;`run_file] .bt.print["Run test file: %0"] enlist path;

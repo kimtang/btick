@@ -12,22 +12,21 @@
 
 .test.sleep 10;
 
-/ r:.bt.action[`.pm.init] (`folder`env`subsys`proc`cmd`debug`print!(`testPlant```all`status,10b) ), (``env#.test.env); 
-
-/
+r:.bt.action[`.pm.init] (`folder`env`subsys`proc`cmd`debug`print!(`testPlant```all`status,10b) ), (``cfg#.test.env); 
 
 .test.sleep 20; /give processes time to come up
 
-result:update hdl:{@[hopen;x;0ni] }@'hp from select uid:.Q.dd'[subsys;flip (process;id)],hp:{enlist[;2000] `$ .bt.print[":localhost:%0::"] enlist x }@'port,pid,library from r`result;
+result:update hdl:{@[hopen;x;0ni] }@'hp from select uid,hp:{enlist[;2000] `$ .bt.print[":localhost:%0::"] enlist x }@'port,pid from r`result;
 
-result:update hdl:{@[hopen;x;0ni] }@'hp from result where null hdl;
+.test.add[`bus1;"All processes are available in 2 secs"] not any null result`hdl; 
 
-.test.add[`backfill;"All processes are up"] not any null result`pid;
-.test.add[`backfill;"All processes are connectable"] not any null result`hdl;
+result:update library:{x ".proc.library"}@'hdl from result;
 
 / raze exec {`uid xcols update uid:x from y "select from .bt.history where not null error"}'[uid;hdl] from deepData where not null hdl
 
-.test.add[`backfill;"Bus available"]  not max null exec hdl@\:".bus.hdl" from select uid,hdl from result where not uid like "*bus*";
+.test.add[`bus;"Bus available in client"]  not max null exec hdl@\:".bus.hdl" from 
+select uid,hdl from result where `bus.client in\:library
+;
 
 hdls:exec uid!hdl from result;
 
