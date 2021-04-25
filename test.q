@@ -2,8 +2,8 @@
 
 
 / 
- q test.q -interactive 1 -folder folder -env env [show] all
- q test.q -interactive 1 -folder testPlant -env deepData show all
+ q test.q -interactive 1 -folder folder -cfg cfg [show] all
+ q test.q -interactive 1 -folder testPlant -cfg deepData show all
  q test.q
 \
 
@@ -36,7 +36,7 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 .pm.parseEnv:first .bt.repository[enlist `.pm.parseEnv`behaviour]`fnc
 
 
-.bt.addIff[`.test.parseFolder]{[env] null env}
+.bt.addIff[`.test.parseFolder]{[cfg] not null cfg}
 .bt.add[`.test.init;`.test.parseFolder]{[allData]
  root:hsym[ allData`folder],`$.bt.print[":%btsrc%/test"] .env;
  t:ungroup update testFile:key each root  from t:([]mode:`local`btsrc;root);
@@ -50,6 +50,7 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
   1 "We found these tests\n";
   1 .Q.s select mode,testFile,`$cmd from result;
  }
+
 
 .bt.addIff[`.test.selectTest]{[mode;testFile] not (null testFile) and null mode}
 .bt.add[`.test.parseFolder;`.test.selectTest]{[allData;mode0;testFile0;result]
@@ -67,13 +68,13 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 
  system "cp -r --no-preserve=mode,ownership plant testPlant"; /copy whole plant folder 
 
- allData:`folder`env`subsys`proc`debug`cmd!(`testPlant```all,0b,`status);
- env:first .pm.parseFolder[ allData]`result;
+ allData0:(``cfg#allData),`folder`subsys`proc`debug`cmd!(`testPlant``all,0b,`status);
+ env:(``cfg#allData),first .pm.parseFolder[allData0]`result;
  .test.env:env;
- allData:allData,env;
+ allData0:allData0,env;
 
- file:`$.bt.print[":testPlant/%file%"] allData;
- subsys:exec distinct subsys from .pm.parseEnv[allData]`result;
+ file:`$.bt.print[":testPlant/%file%"] allData0;
+ subsys:exec distinct subsys from .pm.parseEnv[allData0]`result;
 
  cfg:.j.k "c"$read1 file;
  cfg:{[x;y] .[x;`global,y[0],`basePort;:;y 1] } over enlist[cfg], flip (subsys;"f"$ 10000 + 1000*til count subsys); 
@@ -82,14 +83,15 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  }
 
 
-.bt.add[`.test.executeTest.win;`.test.executeTest.prepare]{[path]
+.bt.add[`.test.executeTest.win;`.test.executeTest.prepare1]{[path]
  .bt.stdOut0[`test;`run_file] .bt.print["Prepare test file: %0"] enlist path:1_string path;	
- opt:(`folder`env`subsys`proc`debug`print!(`testPlant```all,10b) ), (``env#.test.env);
+ opt:(`folder`cfg`subsys`proc`debug`print!(`testPlant```all,10b) ), (``cfg#.test.env);
  .bt.stdOut0[`test;`prepare] "Stop all processes";
  .bt.action[`.pm.init] opt,.bt.md[`cmd] `stop;
  .bt.stdOut0[`test;`prepare] "Start all processes"; 
  .bt.action[`.pm.init] opt,.bt.md[`cmd] `start;
- `path`opt!(path;opt)
+ .env.ex:{x`opt}tmp:`path`opt!(path;opt);
+ tmp
  }
 
 .bt.addIff[`.test.executeTest.file]{[interactive] not interactive}
@@ -123,6 +125,11 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 .bt.addIff[`.test.stop]{[interactive;debug](not interactive) and not debug}
 .bt.add[`.test.show`.test.executeTest.show;`.test.stop]{[allData] exit 0;}
 
+.z.exit:{
+ if[not `ex in key `.env;:()];
+ .bt.action[`.pm.init] .env.ex,.bt.md[`cmd] `stop;	
+ }
+
 
 .bt.action[`.test.init] .env.arg;
 
@@ -130,3 +137,13 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
 
 
 /
+
+
+select from .bt.history
+
+
+
+
+
+
+

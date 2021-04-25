@@ -1,0 +1,55 @@
+{
+    "global": {
+        "env":"bus1",
+        "ex1": {
+            "basePort": 34000
+        },
+        "ex2": {
+            "basePort": 35000
+        }        
+    },    
+    "ex1": {
+        "process": {
+            "bus": {                
+                "library": "randomSeed,setPort,pm,hopen,bus.server",
+                "arg": {
+                    "setPort": "%basePort% + 1"
+                }
+            },
+            "publish1": {
+                "library": "randomSeed,setPort,bus.client,qxl",
+                "arg": {
+                    "setPort": "%basePort% + 4"
+                }
+            },
+            "receive3": {
+                "library": "randomSeed,setPort,bus.client,qxl",
+                "arg": {
+                    "setPort": "%basePort% + 5"
+                }
+            }
+        }
+    },
+    "ex2": {
+        "process": {
+            "bus": {                
+                "library": "randomSeed,setPort,pm,hopen,bus.server",
+                "arg": {
+                    "setPort": "%basePort% + 1"
+                }
+            },
+            "publish2": {
+                "library": "randomSeed,setPort,bus.client,qxl",
+                "arg": {
+                    "setPort": "%basePort% + 4"
+                }
+            },
+            "receive4": {
+                "library": "randomSeed,setPort,bus.client,qxl",
+                "arg": {
+                    "setPort": "%basePort% + 5"
+                }
+            }
+        }
+    }        
+}
