@@ -1,0 +1,23 @@
+{
+    "global": {
+        "env": [
+            "qlib"
+        ],
+        "admin1": {
+            "basePort": 5600
+        },
+        "backfill1": {
+            "basePort": 5700
+        },
+        "qlib": {
+            "basePort": 5800
+        }
+    },
+    "qlib": {
+        "process": {
+            "qlib": {
+                "library": "randomSeed,hopen"
+            }
+        }
+    }
+}
