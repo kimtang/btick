@@ -6,7 +6,6 @@ d) module
 
 .os.tree0:{[t]
  s:update ksym:key each fullPath,kparent:child from t;
- 
  s:select from s where not fullPath ~' ksym;
  s:update knum:count@'ksym,kfullPath:fullPath{.Q.dd[x]@/:y}'ksym from s;
  s:update kchild:knum{y + til x}'(1+max[child] + 0^prev sums knum ) from s;
@@ -24,5 +23,6 @@ d) function
  os
  .os.tree
  return all available files & folders in the root directory
- q) .os.tree `:.
+ q) .os.tree `:. / show all files and folder in the current directory
+ q) .os.tree `:anyFolder
 
