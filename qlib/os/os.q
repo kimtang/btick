@@ -26,3 +26,16 @@ d) function
  q) .os.tree `:. / show all files and folder in the current directory
  q) .os.tree `:anyFolder
 
+
+.os.treen:{[n;x]
+ if[10h =  abs type x;x:`$x];
+ t:enlist `sym`parent`child`fullPath!(x;0;0;x);
+ raze .os.tree0\[n;t]
+ }
+
+d) function
+ os
+ .os.treen
+ return all available files & folders up to level n
+ q) .os.treen[2]`:. / show all files and folder in the current directory
+ q) .os.treen[2]`:anyFolder
