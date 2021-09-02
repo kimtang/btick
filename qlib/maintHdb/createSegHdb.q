@@ -10,6 +10,9 @@ mainRoot:`:segDB
 (:)T:([]sym:m 0;B:m 1;C:m 2;D:c?.z.D + til 3;E:c?til 6;v:c?1000;w:c#`x`y`z`w)
 (:)T:update vecc:string count[i]?0ng  from T
 (:)T:update vecj:count[i]?{10 cut neg[n]?til n:10*count T } T  from T
+(:)T:update vecS1:`$string count[i]?0ng  from T
+(:)T:update vecS2:`$string count[i]?0ng  from T
+(:)T:update vecD:{enlist[`a]!enlist x}@'count[i]?0ng  from T
 
 T:.Q.en[.Q.dd[mainRoot]`db] T
 
