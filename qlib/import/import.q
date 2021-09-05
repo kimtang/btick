@@ -20,14 +20,36 @@ d) module
  Library to import module into kdb+
  q) .import.module / Autmatically loaded on startup
 
+
+.import.repositories:flip`name`path!();
+
+`.import.repositories insert (`btsrc;getenv `btsrc);
+
+.import.repository:{[x]
+ if[max x~/:(`;::);:.import.repositories];
+ `.import.repositories insert cols[.import.repositories]#x ;
+ .import.repositories:distinct .import.repositories ;
+ .import.repositories
+  }
+
+d) function
+ import
+ .import.repository
+ Function to add new repository. This repository is used to search for libraries
+ q) .import.repository[] / show all repositories
+ q) .import.repository` / show all repositories
+ q) .import.repository `name`path!(`yourname;"path_to_repository")
+
 .import.summary0:{[t]
  b:enlist[" "]~/:1#/:src:read0 t`fullPath;
  b:{x[;0]!x}value group sums neg[b] + 1+ a:"d)"~/:2#/:src;
  {get "\n" sv x}@'src b where a;	
  }
 
-.import.summary:{ 
- t:.os.tree .bt.print[":%btsrc%/qlib"] .env;
+.import.summary:{  
+ repositories:.import.repository[];
+ t:raze { .os.tree .bt.print[":%path%/qlib"] x}@'repositories;
+ / t:.os.tree .bt.print[":%btsrc%/qlib"] .env;
  t:select from t where {x ~ key x}@'fullPath;
  .import.summary0@'t;
  if[max x~/:(`;::);:.d.conMod];
