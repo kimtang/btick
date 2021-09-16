@@ -1,0 +1,18 @@
+{
+    "contents" : "library(Rcpp)\n\ncppFunction('\n            NumericVector convolveCpp(NumericVector a, NumericVector b) {\n            \n            int na = a.size(), nb = b.size();\n            int nab = na + nb - 1;\n            NumericVector xab(nab);\n            \n            for (int i = 0; i < na; i++)\n            for (int j = 0; j < nb; j++)\n            xab[i + j] += a[i] * b[j];\n            \n            return xab;\n            }            \n            ')",
+    "created" : 1456338383033.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3006722295",
+    "id" : "FF8A523B",
+    "lastKnownWriteTime" : 1456338410,
+    "path" : "C:/q/r/qserver/r/cpp.r",
+    "project_path" : "cpp.r",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

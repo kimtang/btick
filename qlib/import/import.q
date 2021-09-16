@@ -122,6 +122,20 @@ d) function
  q) .import.module `tree/util/util.q / this will load tree/util/util.q
  q) .import.module `tree/util/ / this will load tree/util/*.q
 
+.import.ljson:{
+ .import.arg:.bt.md[`qhome] getenv`QHOME;
+ .import.json:`$.bt.print[":%qhome%/bt.json"] .import.arg;
+ if[not .import.json~key .import.json;:()];
+ .import.config: .j.k "c"$ read1 .import.json;
+ .import.config
+ }
 
+
+d) function
+ import
+ .import.ljson
+ Function to load local config json file.
+ q) .import.ljson[]
+ 
 .import.module `os
 

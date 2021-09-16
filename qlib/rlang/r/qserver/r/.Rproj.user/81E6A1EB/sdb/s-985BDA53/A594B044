@@ -1,0 +1,18 @@
+{
+    "contents" : "\n\nlibrary('ggplot2')\n\nlibrary('igraph')\n\nupdate.packages('igraph')\n\nsource('C:/q/r/qserver/qserver.R')\n\nkdb <- open_connection('localhost',19010)\n\nbot <-execute(kdb,'bot')\n\ng <- graph.data.frame(bot, directed=TRUE)\n\nclique.number(g)\n\ncliques(g)\n\n\nl = largest.independent.vertex.sets(g)\n\nind <- induced.subgraph(g, largest.independent.vertex.sets(g)[[1]])\n\nplot(ind)\n\ni <-independent.vertex.sets(g, min=NULL, max=NULL)\n\nmaximal.independent.vertex.sets(graph)\nindependence.number(graph)",
+    "created" : 1453653647431.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1006113960",
+    "id" : "A594B044",
+    "lastKnownWriteTime" : 1453660784,
+    "path" : "C:/q/r/qserver/r/igraph.R",
+    "project_path" : "igraph.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_source"
+}
