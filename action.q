@@ -1,7 +1,7 @@
 
 if[ not`bt in key `;system "l ",getenv[`BTSRC],"/bt.q"];
 
-if[ not`env in key `;
+if[ () ~ key `.env.arg;
  .env.arg:.Q.def[`folder`cfg`subsys`process`id`trace!(`plant;`;`;`;0nj;0) ] .Q.opt .z.x;
  ];
 

@@ -163,6 +163,10 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
  if[not null result`pid;{@[system ;x;()]} .bt.print[.pm2.killstr] result];
  .env.arg:.Q.def[`folder`cfg`subsys`process`id`trace!(`plant;`;`;`;0nj;0) ] .Q.opt 2_" " vs result`cmd;
  .env.debug:1b;
+ .bt.history:1#.bt.history;
+ .bt.seq:0;
+ delete from `.bt.repository where sym in `.pm.exit`.pm.show;
+ delete from `.bt.behaviours where (sym in `.pm.exit`.pm.show) or trigger in `.pm.exit`.pm.show; 
  system .bt.print["l %btsrc%/action.q"] .env
  }
 
@@ -197,7 +201,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
  }  
 
 
-if[(.z.f like "*pm.q") and not `.env.debug ~ key `.env.debug;
+if[(.z.f like "*pm.q") and not`.env.debug ~ key`.env.debug;
 	.env.libs:`util`action;
 	.env.behaviours:0#`;
 	.env.arg:.Q.def[`folder`cfg`subsys`library`proc`debug`print`trace!`plant````all,01b,0] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x;
@@ -219,12 +223,5 @@ if[(.z.f like "*pm.q") and not `.env.debug ~ key `.env.debug;
 
 	.bt.addIff[`.pm.exit]{[debug] not debug};
 	.bt.add[`.pm.showFolder`.pm.show`.pm.os.sbl`.pm.os.sblh`.pm.os.json`.pm.os.no_cmd;`.pm.exit]{exit 0};
-
 	.bt.action[`.pm.init] .env.arg;
-	if[`.env.debug ~ key `.env.debug;
-	 .bt.history:1#.bt.history;
-	 .bt.seq:0;
-	 delete from `.bt.repository where sym in `.pm.exit`.pm.show;
-	 delete from `.bt.behaviours where (sym in `.pm.exit`.pm.show) or trigger in `.pm.exit`.pm.show;
-	 ];
 	];
