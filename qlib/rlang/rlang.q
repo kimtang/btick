@@ -1,3 +1,6 @@
+
+.rlang.repository:`btsrc
+
 d) module
  rlang
  Library for transforming table to tree and back
@@ -12,6 +15,7 @@ d) module
 .rlang.summary:{ raze { ([]env:x;val:";"vs  getenv x) } @'`PATH`R_HOME}
 
 d) function
+ rlang
  .rlang.summary
  Function to give a sumnmary of the rlang module
  q) .rlang.summary[]
@@ -44,6 +48,7 @@ d) function
  }
 
 d) function
+ rlang
  .rlang.init
  Function to init r
  q) .rlang.init[]
@@ -58,11 +63,14 @@ d) function
 .rlang.Rset_[1b] : { t:@[value;x;()];t:$[100h=type t ;();t];if[0<count t; .rlang.rset0[string x;t] ]; :x} / for symbol
 .rlang.Rset_[0b] : { .rlang.rset0[n:.rlang.nsc,string .rlang.i;x];.rlang.i+:1; :`$n } / for non-symbol
 
-.rlang.rset: { :{ .rlang.Rset_[-11h=type x] x}each x }
+
+
+.rlang.Rset: {x:$[10h=abs type x;`$x;x];:{ .rlang.Rset_[-11h=type x] x}each x }
+.rlang.Rset0: {[x;y] .rlang.rset0[x;y] }
 
 .rlang.con:{distinct `$ ssr[;"`";""] each res where {x like "`*"} res:{raze y vs/:x} over enlist[enlist x]," $(,~=<-)"}
 
-.r.e:{ if[not .rlang.calc;:0N!"R turned off"]; .rlang.rset t:.rlang.con x;.rlang.rcmd str:ssr[;"`";""] x;"r)",1_str; }
+.r.e:{ if[not .rlang.calc;:0N!"R turned off"]; .rlang.Rset t:.rlang.con x;.rlang.rcmd str:ssr[;"`";""] x;"r)",1_str; }
 .p.e:{  .r.e "print(",x,")" }
 
 .rlang.conv:()!()
@@ -78,13 +86,33 @@ d) function
 
 .rlang.Rts:{@[.rlang.rcmd;"try(system('dir', intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE))";()]};
 
-.rlang.Rget:{ .rlang.rset t:.rlang.con x:$[10h=abs type x;x;string x];.rlang.rget0 ssr[;"`";""] x }
+.rlang.Rget:{x:(),x; .rlang.Rset t:.rlang.con x:$[10h=abs type x;x;string x];.rlang.rget0 ssr[;"`";""] x }
 
-.rlang.Rframe:{ t:.rlang.Rget x; nme:`$t . 0 0;rns:t . 0 2;
-		 mat:{ .rlang.frame_[0h=type x]  x } each t[1];
-		 rns:$[count[rns]=count first mat; @[(`$);rns;rns];til count first mat];
-		 /(nme;rns;mat)
-		 flip ((`$"row_names"),nme)!enlist[rns],mat }
+.rlang.Rframe:{ 
+    t:.rlang.Rget x;
+    arg:{y!x} . flip 2 cut t 0;
+    nme:`$arg`names;
+    rns:arg`row.names;
+    mat:{ .rlang.frame_[0h=type x]  x } each t[1];
+    rns:$[count[rns]=count first mat; @[(`$);rns;rns];til count first mat];
+     /(nme;rns;mat)
+     flip ((`$"row_names"),nme)!enlist[rns],mat 
+ }
 
+/ file:"rlang/ggplot2_formatter.r"
+/ repo:`btsrc
 
-.rlang.init[]		 
+.rlang.source:{[file;repo]
+ repositories:exec name!path from .import.repository[];
+ arg:`file`repo!(file;repositories repo);
+ cmd:.bt.md[`path] ssr[;"\\";"/"] .bt.print["%repo%/qlib/%file%"] arg;
+ "r" ssr[;"\\";"/"] .bt.print["source('%path%')"] cmd;    
+ }
+
+d) function
+ rlang
+ .rlang.source
+ Function to source a file
+ q) .rlang.source["rlang/ggplot2_formatter.r";`btsrc]
+
+.rlang.init[]

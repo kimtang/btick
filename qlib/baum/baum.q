@@ -119,7 +119,7 @@ valid:{[p;g]
  1!(0!p)i}
 
 
-parsec:{ parse["select from t where ", x]2}
+parsec:{first parse["select from t where ", x]2}
 parseb:{ parse["select by ",x," from t"]3}
 parsea:{ parse["select ",x," from t"]4}
 

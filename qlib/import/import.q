@@ -1,25 +1,7 @@
-
-.d.conFunc:2!flip`module`func`desc`example`body!()
-.d.conMod:1!flip`module`desc`example!()
-
-.d.e0:()!()
-.d.e0[`function]:{[x]
- `.d.conFunc upsert enlist `module`func`desc`example`body!(`$x 0;`$x 1;x 2;"\n"sv 3_x ; @[get;`$x 1;{`notavail}] );
- }
-
-.d.e0[`module]:{[x]
- `.d.conMod upsert enlist `module`desc`example!(`$x 0;x 1;"\n" sv 2_x);
- }
-
-.d.e:{
- .d.e0[`$first a] 1_a:"\n" vs x 
- }
-
 d) module
  import
  Library to import module into kdb+
  q) .import.module / Autmatically loaded on startup
-
 
 .import.repositories:flip`name`path!();
 
@@ -51,7 +33,9 @@ d) function
  t:raze { .os.tree .bt.print[":%path%/qlib"] x}@'repositories;
  / t:.os.tree .bt.print[":%btsrc%/qlib"] .env;
  t:select from t where {x ~ key x}@'fullPath;
+ .d.isSummary:1b;
  .import.summary0@'t;
+ .d.isSummary:0b;
  if[max x~/:(`;::);:.d.conMod];
  r:0!$[-11h = type x;select from .d.conFunc where (func=x) or module = x;select from .d.conFunc where body ~' x];
  r
@@ -69,7 +53,7 @@ d) function
  q) .import.summary .import.module
  q) .import.summary .import.summary
 
-.import.ex:{ 
+.import.doc:{ 
   r:.import.summary x;
   if[not 1=count r;:r ];
   first exec example from r
@@ -77,35 +61,52 @@ d) function
 
 d) function
  import
- .import.ex
+ .import.doc
  Function to show all available modules
- q) .import.ex[] / show all modules
- q) .import.ex` / show all modules
- q) .import.ex`os / show all function in module os
- q) .import.ex`import
- q) .import.ex`.import.module
- q) .import.ex .import.module
- q) .import.ex .import.summary
+ q) .import.doc[] / show all modules
+ q) .import.doc` / show all modules
+ q) .import.doc`os / show all function in module os
+ q) .import.doc`import
+ q) .import.doc`.import.module
+ q) .import.doc .import.module
+ q) .import.doc .import.summary
 
 
 .import.module0:flip`uid`module`file`stime`etime`error!()
 
+.import.module1:{[x;y]
+  x:y,(.bt.md[`uid] first .bt.guid0 1),.bt.md[`module] x;
+  stime:.z.P;
+  error:@[{system x`cmd;`};x;{`$x}];
+  etime:.z.P;
+  `.import.module0 insert r:cols[.import.module0]#x,`stime`etime`error!(stime;etime;error);    
+ }
+
 .import.module:{
- if[10h = abs type x;x:`$x];
+ if[11h = type x;:.import.module@'x ];
  if[max x~/:(`;::);:select by module from .import.module0];
- x: (.bt.md[`uid] first .bt.guid0 1),$[99h = type x;x;.bt.md[`module] x];
+ if[-11h = type x;x:string x];
+ repositories:.import.repository[];
+ t:raze { .os.tree .bt.print[":%path%/qlib"] x}@'repositories;
+ / t:.os.tree .bt.print[":%btsrc%/qlib"] .env;
+ t:select from t where {x ~ key x}@'fullPath;
+ fileToLoad:();
+ if[".q" ~ -2#x;
+   fileToLoad:select from t where max fullPath like/:{ .bt.print[":%path%/qlib/%module%"] x,y}[.bt.md[`module] x]@'repositories;
+   ];
 
- if[`file in key x;:{
- 	stime:.z.P;
- 	error:@[{system .bt.print["l %btsrc%/qlib/%file%"] .env,x;`};x;{`$x}];
- 	etime:.z.P;
- 	`.import.module0 insert r:cols[.import.module0]#x,`stime`etime`error!(stime;etime;error);
- 	enlist r
- 	}x
- ];
+ if["/" ~ last x;
+   fileToLoad:select from t where max fullPath like/:{ .bt.print[":%path%/qlib/%module%*.q"] x,y}[.bt.md[`module] x]@'repositories;
+   ]; 
+ 
+ if[not (".q" ~ -2#x) or ("/" ~ last x);
+   fileToLoad:select from t where max fullPath like/:{ .bt.print[":%path%/qlib/%module%/%module%.q"] x,y}[.bt.md[`module] x]@'repositories;
+   ];
 
- if[mfile~key mfile:`$.bt.print[":%btsrc%/qlib/%module%/%module%.q"] .env,x;:.import.module x,.bt.md[`file] `$.bt.print["%module%/%module%.q"] x ];
- if[mfile~key mfile:`$.bt.print[":%btsrc%/qlib/%module%"] .env,x;:.import.module x,bt.md[`file] `$.bt.print["%module%"] x ];
+ / if[fileToLoad~();:'`module_not_found];
+ fileToLoad:update sPath:1_/:string fullPath from fileToLoad;
+ fileToLoad:update cmd:.bt.print["l %sPath%"]@'fileToLoad,file:fullPath from fileToLoad;
+ :raze .import.module1[`$x]@'fileToLoad
  }
 
 
@@ -122,20 +123,52 @@ d) function
  q) .import.module `tree/util/util.q / this will load tree/util/util.q
  q) .import.module `tree/util/ / this will load tree/util/*.q
 
+
+
+
+.import.require:{
+ if[11h = type x;:.import.require@'x ];
+ if[max x~/:(`;::);:select by module from .import.module0];
+ if[0<count select from .import.module0 where module =x;:select by module from .import.module0];
+ :.import.module x
+ }
+
+
+d) function
+ import
+ .import.require
+ Function to load a library if it is not loaded.
+ q) .import.require[] / this will show loaded libraries and files 
+ q) .import.require` / this will show loaded libraries and files 
+ q) .import.require `tree / this will load tree/tree.q
+ q) .import.require `tree/tree.q / this will load tree/tree.q
+ q) .import.require `tree/ / this will load tree/*.q
+ q) .import.require `tree/util / this will load tree/util/util.q
+ q) .import.require `tree/util/util.q / this will load tree/util/util.q
+ q) .import.require `tree/util/ / this will load tree/util/*.q
+
+
+
 .import.ljson:{
- .import.arg:.bt.md[`qhome] getenv`QHOME;
- .import.json:`$.bt.print[":%qhome%/bt.json"] .import.arg;
+ .import.json:`$":qlib.json";
  if[not .import.json~key .import.json;:()];
  .import.config: .j.k "c"$ read1 .import.json;
  .import.config
  }
 
 
-d) function
+d) variable
  import
- .import.ljson
- Function to load local config json file.
- q) .import.ljson[]
- 
-.import.module `os
+ .import.config
+ Configuration loaded from qlib.json 
+ q) .import.ljson[] / this trigger to reload the configuration file
+ q) .import.config
 
+
+.import.init:{
+ .import.ljson[];
+ if[not `repositories in key .import.config;:()];
+ @[.import.repository;;()] @'update name:`$name from .import.config`repositories;
+ }
+
+.import.init[]

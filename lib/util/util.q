@@ -34,7 +34,7 @@ wlin:{$[.env.win;ssr[;"/";"\\"];(::)]}[]
 getFiles:{ $[()~key x;0#`;x ~ key x;x;raze .z.s@'.Q.dd'[x;key x]] }
 
 createSchema:{[tname;subsys;tbl;addTime] 
- path:.Q.dd[hsym .env.arg `folder] .env.arg[ `env],`schemas,subsys;
+ path:.Q.dd[hsym .proc `folder] .proc[ `env],`schemas,subsys;
  m:0!meta tbl;
  m:update t:"*" from m where t = upper t ;
  json:.bt.md[`tname]tname;
