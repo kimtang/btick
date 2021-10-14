@@ -202,20 +202,13 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 
 
 if[(.z.f like "*pm.q") and not`.env.debug ~ key`.env.debug;
-	.env.libs:`util`action;
-	.env.behaviours:0#`;
 	.env.arg:.Q.def[`folder`cfg`subsys`library`proc`debug`print`trace!`plant````all,01b,0] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x;
 	if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
-	.env.plantsrc:{x:`$"/"sv 1_"/"vs string x;$[null x;`.;x]}  .env.arg`folder;
-	.env.loadLib:{{@[system;;()] .bt.print["l %btsrc%/lib/%lib%/%lib%.q"] .env , enlist[`lib]!enlist x}@'x};
-	.env.loadBehaviour:{{
- 		arg:.env , `behaviour`module! (first` vs x),x;
- 		files:.bt.md[`bfile] .bt.print["%btsrc%/behaviour/%behaviour%/%module%.q"]arg;
- 		files:files,.bt.md[`ofile] .bt.print["%plantsrc%/behaviour/%behaviour%/%module%.q"]arg;
- 		if[f~key f:`$.bt.print[":%ofile%"]files;:@[system;;()] .bt.print["l %ofile%"]files];
- 		if[f~key f:`$.bt.print[":%bfile%"]files;:@[system;;()] .bt.print["l %bfile%"]files];
- 		}@'x};
+  system "l ",getenv[`BTSRC],"/env.q";
+	.env.libs:`util`action;
+	.env.behaviours:0#`;
 	.env.loadLib .env.libs;
+
 	.bt.addCatch[`]{[error] .bt.stdOut0[`error;`pm] .bt.print["Please investigate the following error: %0"] enlist error;'error};
 	.bt.add[`.pm.os.status`.pm.os.start`.pm.os.kill`.pm.os.restart;`.pm.show]{[print;result]
 	  if[print; 1 .Q.s update `$pm2 from `port xasc result];
