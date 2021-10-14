@@ -14,7 +14,7 @@
 
 
 .env.btsrc:getenv`BTSRC;
-.env.libs:`util`action`tick`qxl;
+.env.libs:`tick`qxl;
 / .env.yml2json:"yaml2json"
 .env.behaviours:1#`pm;
 

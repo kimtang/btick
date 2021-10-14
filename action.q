@@ -12,6 +12,7 @@ system "l ",getenv[`BTSRC],"/env.q";
 
 if[ not `d in key `;system"l ",getenv[`BTSRC],"/qlib/qlib.q" ];
 
+.import.module`action`util;
 
 .bt.outputTrace:.bt.outputTrace1
 .bt.trace:(.bt.trace2;.bt.trace0) .env.arg`trace

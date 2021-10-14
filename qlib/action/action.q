@@ -1,3 +1,8 @@
+d) module
+ action
+ action provides a set of functions that help you to read the config file. 
+ q).import.module`action
+
 
 .action.calcPort:()!()
 .action.calcPort[`setPort]:{[mergeArg;id] get .bt.print[$[10h=type mergeArg`setPort;::;string]mergeArg`setPort ] mergeArg   }
@@ -40,3 +45,14 @@
  t:update lcorefile: { .util.wlin .bt.print["%btsrc%/core/core/%subsys%/%process%/%id%"] .env,.global,x}@'t from t;
  t
  } 
+
+
+d) function
+ action
+ .action.parsec
+ return the parsed config file
+ q) .action.parseCfg `folder`cfg`subsys`process`id`trace!(`pathTo/plant;`horseracing;`scrapeData;`dev;0j;0j)
+ q) .action.parseCfg `folder`cfg`subsys`process`id`trace!(`$getenv[ `btsrc],"/plant";`ex1;`scrapeData;`dev;0j;0j)
+
+
+

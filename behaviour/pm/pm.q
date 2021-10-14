@@ -204,10 +204,8 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 if[(.z.f like "*pm.q") and not`.env.debug ~ key`.env.debug;
 	.env.arg:.Q.def[`folder`cfg`subsys`library`proc`debug`print`trace!`plant````all,01b,0] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x;
 	if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
-  system "l ",getenv[`BTSRC],"/env.q";
-	.env.libs:`util`action;
-	.env.behaviours:0#`;
-	.env.loadLib .env.libs;
+  system"l ",getenv[`BTSRC],"/qlib/qlib.q";
+  .import.module`action`util;
 
 	.bt.addCatch[`]{[error] .bt.stdOut0[`error;`pm] .bt.print["Please investigate the following error: %0"] enlist error;'error};
 	.bt.add[`.pm.os.status`.pm.os.start`.pm.os.kill`.pm.os.restart;`.pm.show]{[print;result]
