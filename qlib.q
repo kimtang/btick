@@ -6,6 +6,7 @@ if[ () ~ key `.env.arg;
 
 if[ not `bt in  key `;
  system"l ",getenv[`BTSRC],"/bt.q";
+ .bt.outputTrace:.bt.outputTrace1
  ]
 
 
