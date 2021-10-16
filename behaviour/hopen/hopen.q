@@ -41,7 +41,7 @@
 
 .bt.addDelay[`.hopen.loop]{`tipe`time!(`in;first 00:00:07+1?7)}
 
-.bt.add[`.hopen.init`.hopen.loop;`.hopen.loop]{
+.bt.add[`.hopen.init`.hopen.loop;`.hopen.loop.old]{
  procs:(.bt.action[`.pm.init] (`subsys`cmd`proc`debug`print!``status`all,10b),`folder`cfg#$[()~key `.proc;.env.arg;.proc])`result;
  a:.hopen.con lj 1!select uid,pid from procs;
  a:select from a where null hdl, not null uid;
@@ -51,6 +51,18 @@
  .hopen.con:.hopen.con lj 1!result;
  .bt.md[`result]select from result where not null hdl	
  }
+
+.bt.add[`.hopen.init`.hopen.loop;`.hopen.loop]{
+ / procs:(.bt.action[`.pm.init] (`subsys`cmd`proc`debug`print!``status`all,10b),`folder`cfg#$[()~key `.proc;.env.arg;.proc])`result;
+ / a:.hopen.con lj 1!select uid,pid from procs;
+ a:select from .hopen.con where null hdl, not null uid;
+ / a:select from a where not (host=.z.h) and null pid; 
+ result:{@[.hopen.connect;x;x] }@'0!a:delete pid from a;
+ if[0=count result;:.bt.md[`result] 0#a];
+ .hopen.con:.hopen.con lj 1!result;
+ .bt.md[`result]select from result where not null hdl 
+ }
+
 
 .bt.addIff[`.hopen.success]{[result] not 0=count result }
 .bt.add[`.hopen.loop`.hopen.po.internal;`.hopen.success]{} / signal other library
@@ -69,5 +81,11 @@
 
 
 / 
+
+
+
+
+
+
 
 select from .bt.history where action = `.hopen.loop
