@@ -166,6 +166,7 @@ d) variable
 
 
 .import.init:{
+ .import.config:()!();
  .import.ljson[];
  if[not `repositories in key .import.config;:()];
  @[.import.repository;;()] @'update name:`$name from .import.config`repositories;
