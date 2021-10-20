@@ -39,11 +39,3 @@ upd0[`berror]:{[tname;data]tname insert data}
 upd0[`info]:{[tname;data]tname insert select from data where not null error}
 
 upd:{[tname;data] upd0[tname][tname] data}
-
-/
-
-select from .bt.history where not null error
-
-select from .bt.history where not null error
-
-berror
