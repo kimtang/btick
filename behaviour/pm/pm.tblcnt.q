@@ -36,13 +36,3 @@
 upd:{[tname;data]
  .pm.tblcnt.tblcntTime +: exec tbl!cnt from select cnt:sum cnt by tbl from data;
  }
-
-/
-
-.u.t
-
-.pm.tblcnt.adminCtp.hdl (".u.sub";`cnttbl;`)
-
-select from .bt.history where not null error
-
-

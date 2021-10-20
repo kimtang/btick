@@ -173,19 +173,19 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 .bt.addIff[`.pm.os.heartbeat]{[cmd;result] cmd = `heartbeat}
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.heartbeat]{[result]
  .env.result:result;
- system .bt.print["l %btsrc%/lib/pm/pm.heartbeat.q"] .env;
+ system .bt.print["l %btsrc%/behaviour/pm/pm.heartbeat.q"] .env;
  } 
 
 .bt.addIff[`.pm.os.info]{[cmd;result] cmd = `info}
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.info]{[result]
  .env.result:result;
- system .bt.print["l %btsrc%/lib/pm/pm.info.q"] .env;
+ system .bt.print["l %btsrc%/behaviour/pm/pm.info.q"] .env;
  }
 
 .bt.addIff[`.pm.os.tblcnt]{[cmd;result] cmd = `tblcnt}
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.tblcnt]{[result]
  .env.result:result;
- system .bt.print["l %btsrc%/lib/pm/pm.tblcnt.q"] .env;
+ system .bt.print["l %btsrc%/behaviour/pm/pm.tblcnt.q"] .env;
  }  
 
 .bt.addIff[`.pm.os.sbl]{[cmd;result] cmd = `sbl}
@@ -203,9 +203,16 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 
 if[(.z.f like "*pm.q") and not`.env.debug ~ key`.env.debug;
 	.env.arg:.Q.def[`folder`cfg`subsys`library`proc`debug`print`trace!`plant````all,01b,0] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x;
+  .env.loadBehaviour:{{
+    arg:.env , `behaviour`module! (first` vs x),x;
+    files:.bt.md[`bfile] .bt.print["%btsrc%/behaviour/%behaviour%/%module%.q"]arg;
+    files:files,.bt.md[`ofile] .bt.print["%plantsrc%/behaviour/%behaviour%/%module%.q"]arg;
+    if[f~key f:`$.bt.print[":%ofile%"]files;:@[system;;()] .bt.print["l %ofile%"]files];
+    if[f~key f:`$.bt.print[":%bfile%"]files;:@[system;;()] .bt.print["l %bfile%"]files];
+    }@'x};
 	if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
   system"l ",getenv[`BTSRC],"/qlib/qlib.q";
-  .import.module`action`util;
+  .import.module`tick`action`util;
 
 	.bt.addCatch[`]{[error] .bt.stdOut0[`error;`pm] .bt.print["Please investigate the following error: %0"] enlist error;'error};
 	.bt.add[`.pm.os.status`.pm.os.start`.pm.os.kill`.pm.os.restart;`.pm.show]{[print;result]

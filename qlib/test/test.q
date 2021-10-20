@@ -1,7 +1,11 @@
 
+d) module
+ test
+ test provides a set of functions to implement tests
+ q).import.module`test
+
+
 .test.t:flip`time`nsp`msg`result!()
-
-
 
 .test.add:{[nsp;msg;result] `.test.t insert r:(.z.p;nsp;msg;result); .bt.stdOut0[`test;nsp] .bt.print["%0| %2 |%3"] r}
 

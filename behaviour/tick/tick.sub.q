@@ -68,12 +68,3 @@ upd:{[tname;data]
  tnames:exec tname from .tick.schemas where subsys=subsys0;
  {delete from x}@'tnames;
  }
-
-
-/
-
--10#heartbeat
-
-select from .bt.history where action = `.tick.init.logFiles
-select from .bt.history where action = `.tick.sub
-select from .bt.history where not null error

@@ -3,7 +3,7 @@
 
 .env.plantsrc:{x:`$"/"sv -1_"/"vs string x;$[null x;`.;x]}  .env.arg`folder
 
-.env.loadLib:{{@[system;;()] .bt.print["l %btsrc%/lib/%lib%/%lib%.q"] .env , enlist[`lib]!enlist x}@'x};
+/ .env.loadLib:{{@[system;;()] .bt.print["l %btsrc%/lib/%lib%/%lib%.q"] .env , enlist[`lib]!enlist x}@'x};
 .env.loadBehaviour:{{
  arg:.env , `behaviour`module! (first` vs x),x;
  files:.bt.md[`bfile] .bt.print["%btsrc%/behaviour/%behaviour%/%module%.q"]arg;
@@ -14,12 +14,8 @@
 
 
 .env.btsrc:getenv`BTSRC;
-.env.libs:`tick`qxl;
 / .env.yml2json:"yaml2json"
 .env.behaviours:1#`pm;
 
 .env.win:"w"=first string .z.o;
 .env.lin:not .env.win;
-
-/ .env.loadLib .env.libs;
-/ .env.loadBehaviour .env.behaviours;

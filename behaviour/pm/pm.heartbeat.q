@@ -4,7 +4,9 @@
 
 .bt.add[`.pm.heartbeat.init;`.pm.heartbeat.parse.cfg]{
  .pm.heartbeat.heartbeatTime:(.env.result`uid)!count[.env.result]#0nt;	
- adminCtp:first update hp:`$.bt.print[":%host%:%port%"]@'r from r:select uid,`$host,port from .sys where subsys = `admin, process = `ctp;
+ r:select uid,`$host,port from .sys where subsys = `admin, process = `ctp;
+ if[0=count r;'`.pm.heartbeat.no_admin_ctp_configured];
+ adminCtp:first update hp:`$.bt.print[":%host%:%port%"]@'r from r;
  .env.loadBehaviour `hopen;
  .pm.heartbeat.adminCtp:@[;`hdl;:;0n] adminCtp;
  .pm.heartbeat.counter:0;
@@ -36,11 +38,3 @@
 upd:{[tname;data] 
  .pm.heartbeat.heartbeatTime ,: exec uid!time from select time:"t"$max time by uid from data where uid in .env.result`uid;
  }
-
-/
-
-{([]k:key x;v:value x)} .pm.heartbeat.heartbeatTime
-
-.tmp.data
-
-select from .bt.history where not null error

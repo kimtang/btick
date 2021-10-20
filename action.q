@@ -7,12 +7,11 @@ if[ () ~ key `.env.arg;
 
 system "l ",getenv[`BTSRC],"/env.q";
 
-.env.loadLib .env.libs;
 .env.loadBehaviour .env.behaviours;
 
 if[ not `d in key `;system"l ",getenv[`BTSRC],"/qlib/qlib.q" ];
 
-.import.module`action`util;
+.import.module`action`util`tick;
 
 .bt.outputTrace:.bt.outputTrace1
 .bt.trace:(.bt.trace2;.bt.trace0) .env.arg`trace

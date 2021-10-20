@@ -1,3 +1,7 @@
+d) module
+ tick
+ tick provides a set of functions for the tick processes
+ q).import.module`tick
 
 
 .tick.addTime0:()!()
