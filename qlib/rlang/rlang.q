@@ -27,6 +27,7 @@ d) function
  }
 
 d) function
+ rlang
  .rlang.setv
  Function to setup path to PATH and R_HOME
  q) variable:.rlang.summary[];variable:update val:enlist["C:\\Program Files\\R\\R-4.1.1\\bin\\i386"] from variable where val like"*R-4.1.1\\bin\\x64*"  ;.rlang.setv variable;
@@ -66,7 +67,23 @@ d) function
 
 
 .rlang.Rset: {x:$[10h=abs type x;`$x;x];:{ .rlang.Rset_[-11h=type x] x}each x }
+
+d) function
+ rlang
+ .rlang.Rset
+ Function to set the variable
+ q)tmp:([]a:1 2 3 4; b: 5 6 7 8); .rlang.Rset `tmp 
+ r) View(tmp)
+
 .rlang.Rset0: {[x;y] .rlang.rset0[x;y] }
+
+
+d) function
+ rlang
+ .rlang.Rset0
+ Function to set the variable
+ q).rlang.Rset0 [`tmp ] ([]a:1 2 3 4; b: 5 6 7 8)
+ r) View(tmp)
 
 .rlang.con:{distinct `$ ssr[;"`";""] each res where {x like "`*"} res:{raze y vs/:x} over enlist[enlist x]," $(,~=<-)"}
 

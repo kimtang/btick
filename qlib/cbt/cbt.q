@@ -5,7 +5,9 @@ d) module
  q).import.module`cbt
 
 .cbt.init:{[x]
- .import.require`util`action;
+ .import.require`util`action`rlang;
+  "r" "library(igraph)";
+  "r" "library(RColorBrewer)";
  if[not `hopen in key `;
    system .bt.print["l %btsrc%/behaviour/hopen/hopen.q"] .env;
    .bt.action[`.hopen.init] ()!();
@@ -15,6 +17,7 @@ d) module
 
 
 .cbt.summary:{[x]
+ if[99h = type x; x:$[0>type x`repository;enlist x;flip x] ]; 
  if[not any 98 99h in type x ;:{select repository,env:`${first "."vs x}@'string env from x where env like "*.json"}ungroup select repository:name,env:key @'`$.bt.print[":%path%/plant"]@'.import.repositories from .import.repositories]; 
  x:update file:`$.bt.print["%env%.json"]@'x from x;
  repo:select repository:name,root:`$path from .import.repositories where name in x`repository;
@@ -23,9 +26,9 @@ d) module
  repo:update path:path .Q.dd'file from repo;
  repo:select from repo where ([]repository;file) in `repository`file#x ;
  repo:update folder:`$.bt.print["%root%/plant"]@'repo,cfg:`${first "."vs x}@'string file from repo;
- / tmp:.action.parseCfg `folder`cfg!(`$"C:\\dev\\gambling\\horseracing\\src\\plant";`horseracing);
  tmp:raze .action.parseCfg @'repo;
- select repository,uid:`$.bt.print["%repository%.%uid%"]@'tmp,`$host,port,user:.z.u,passwd from tmp:tmp lj 1!select folder,repository from repo
+ cfg0:(`user`passwd!("yourname";"yourpasswd") ),.import.config`cbt; 
+ select repository,uid:`$.bt.print["%repository%.%uid%"]@'tmp,`$host,port,user:count[i]#enlist cfg0`user ,passwd:count[i]#enlist cfg0`passwd from tmp:tmp lj 1!select folder,repository from repo
  }
 
 d) function
@@ -33,6 +36,7 @@ d) function
  .cbt.summary
  Function to give a summary of available connection
  q) .cbt.summary[]  / show all available repository
+ q) .cbt.summary `repository`env!`btsrc`ex1
  q) .cbt.summary enlist `repository`env!`btsrc`ex1
 
 
@@ -72,6 +76,44 @@ d) function
 .cbt.proc:`
 .f.e:{ .f.r:.cbt.query[.cbt.proc] x;.f.r }
 .s.e:{ .s.r:.cbt.query[.cbt.proc] (system;{$[" "= x 0;1_x;x] } over x);.s.r }
+
+
+.cbt.sbl:{[x]
+ summary:.cbt.summary x;
+ cfg:(.bt.md[`path] "../cfg"),.import.config`cbt;
+ (`$.bt.print[":%path%/system.sbl"] cfg) 0:  .bt.print["/ %uid%:%host%:%port%:%user%:%passwd%:"]@'summary
+ }
+
+d) function
+ cbt
+ .cbt.sbl
+ Function to write a config file for sbl. Path can be config in the qlib.json. "cbt":{"path": "../cfg","user":"yourname","passwd":"yourpasswd"}
+ q) .cbt.sbl `repository`env!`btsrc`ex1
+ 
+.cbt.igraph:{[x]
+ if[max x~/:(::;`);x:.bt.behaviours];
+ nodes:select name:distinct (trigger,sym)from x;
+ nodes:update module:{last 2#` vs x}@'name from nodes;
+ colors:`$.rlang.rget0 .bt.print[" brewer.pal(%0, \"Set3\") "] 1#count select by module from nodes;
+ colors:([]module:distinct nodes`module;color:colors);
+ nodes:update color:(exec module!color from colors) module from nodes; 
+ .rlang.Rset0[`behaviours] x;
+ .rlang.Rset0[`nodes] nodes;
+ .rlang.Rset0[`colors] colors; 
+ "r" "net <- graph_from_data_frame(d=behaviours, vertices=nodes ,directed=T) ";
+ "r" "v1 <- subcomponent(net, which(V(net)$name=='.action.init'), 'all')";
+ "r" "net1 <- subgraph(net, v1)";
+ "p" "plot(net1, vertex.size=4, edge.arrow.size=.5, vertex.label.color='black', vertex.label.dist=1.5)";
+ "p" "legend('topleft',bty = 'n',legend=colors$module,fill=colors$color, border=NA)";
+ }
+
+d) function
+ cbt
+ .cbt.igraph
+ Function to plot the behaviour of the bt process
+ q) .cbt.igraph[]  / plot own behaviour
+ q) .cbt.igraph .bt.behaviours / plot the behaviours
+
 
 .cbt.init[]
 
