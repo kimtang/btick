@@ -19,7 +19,7 @@ if[ not `d in key `;system"l ",getenv[`BTSRC],"/qlib/qlib.q" ];
 .bt.scheduleIn[.bt.action[`.action.init];;00:00:01] enlist .env.arg;
 
 .bt.add[`.action.init;`.action.parse.cfg]{[allData]
- .sys:t:.action.parseCfg allData;
+ .sys:t:.action.parseCfg[.env] allData;
  .bt.md[`result] select from t where subsys=allData`subsys,process=allData`process,id="J"$string allData`id
  }
 
@@ -77,9 +77,12 @@ if[ not `d in key `;system"l ",getenv[`BTSRC],"/qlib/qlib.q" ];
  t:update error:{@[{system x;`};x;{`$x}] }@'cmd from t where suffix=`q;
  t:update error:{[name;file] .[{[name;file] name set get file;`};(`$name;hsym`$file);{`$x}] }'[name;file] from t where suffix=`;
  .proc.pfile:t;
+ .proc.pfile
  }
 
 
 .bt.add[`.action.load.file;`.library.init]{.proc`mergeArg}
+
+.bt.add[`.action.load.file;`.action.load.qlib]{ .import.module@'.proc[`qlib] except `;}
 
 /

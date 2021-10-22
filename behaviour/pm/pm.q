@@ -44,7 +44,7 @@ if[ not`bt in key `;system "l ",.env.btsrc,"/bt.q"];
 
 .bt.addIff[`.pm.parseEnv]{[cfg] not null cfg}
 .bt.add[`.pm.init;`.pm.parseEnv] {[allData] 
- .sys:result:update pwd:.util.pwd[] from .action.parseCfg allData;
+ .sys:result:update pwd:.util.pwd[] from .action.parseCfg[.env] allData;
  .bt.md[`result] result
  } 
 

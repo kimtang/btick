@@ -113,6 +113,19 @@ d) function
  q) .util.createSchema
 
 
+.util.lfile:{[x]
+ if[(not -11h=type x)or  max x~/:(::;`);: .proc ];
+ .Q.dd[`$.bt.print[":%lfile%"] .proc;x] 0: enlist ""
+ }
+
+d) function
+ util
+ .util.lfile
+ Function to create local q file
+ q) .util.lfile[] \ shows the local folder
+ q) .util.lfile `main.q \ create the local file in the local folder
+
+
 .util.sleep0:()!()
 .util.sleep0[1b]:{system .bt.print["timeout %0 /nobreak"] enlist x; }
 .util.sleep0[0b]:{system .bt.print["sleep %0"] enlist x; }
