@@ -193,3 +193,6 @@ addBehaviour[`]`.bt.do_nothing
 addIff[`]`.bt.always_true
 addCatch[`]`.bt.throw_error
 addDelay[`]`.bt.no_delay
+
+
+errors:{select from .bt.history where not null error}
