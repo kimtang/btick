@@ -7,8 +7,6 @@ d) module
  q).import.module`tidyq
 
 
-
-
 .tidyq.dcast0:{[t;k;p;v]
  f:{[v;P]`${{x,"_",y} over x}@'flip {if[10h = type x;:x]; string x}each flip raze v ,/:\:P};   
  v:(),v;
@@ -55,4 +53,42 @@ d) function
  q) quote:([]date;sym;time;side;level;price;size)
  q) q:select from quote where sym=first sym
  q) book:.tidyq.dcast[q;"date,sym,time";"side,level~~price,size"]
+
+
+.tidyq.melt:{[t;ids;formula]
+ k:key .util.parsea ids;
+ P:key .util.parsea first formula:"~~" vs formula;
+ v:key .util.parsea last formula;
+ tcols:([]cls:cols[ t]);
+ tcols:select from tcols where not cls in k;
+ tcols:update cls0:`${"_"vs x}@'string cls from tcols ;
+ tcols:update cls1:cls0[;0] from tcols;
+ tcols:select from tcols where cls1 in P,count[v]=-1+count@'cls0 ;
+ 0!(uj) over {[t;k;v;x] (k,v) xkey ?[t;enlist({not null x};x`cls);0b;(k!k),(v,x`cls1)!( (enlist@'1_x`cls0),x`cls)]}[t;k;v]@'tcols
+ }
+
+d) function
+ tidyq
+ .tidyq.melt
+ This is a function to pivot a table
+ q) .tidyq.melt[book;"date,sym,time";"price,size~~side,level"]
+ q) qpd:5*2*4*"i"$16:00-09:30
+ q) date:raze(100*qpd)#'2009.01.05+til 5
+ q) sym:(raze/)5#enlist qpd#'100?`4
+ q) sym:(neg count sym)?sym
+ q) time:"t"$raze 500#enlist 09:30:00+15*til qpd
+ q) time+:(count time)?1000
+ q) side:raze 500#enlist raze(qpd div 2)#enlist"BA"
+ q) level:raze 500#enlist raze(qpd div 5)#enlist 0 1 2 3 4
+ q) level:(neg count level)?level
+ q) price:(500*qpd)?100f
+ q) size:(500*qpd)?100
+ q) quote:([]date;sym;time;side;level;price;size)
+ q) q:select from quote where sym=first sym
+ q) book:.tidyq.dcast[q;"date,sym,time";"side,level~~price,size"]
+ q) .tidyq.melt[book;"date,sym,time";"price,size~~side,level"]
+
+
+
+
 
