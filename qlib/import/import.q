@@ -30,7 +30,14 @@ d) function
 
 .import.summary:{  
  repositories:.import.repository[];
- t:raze { .os.tree .bt.print[":%path%/qlib"] x}@'repositories;
+ t:raze {
+  ignore:{
+  ignorePath:`$.bt.print[":%path%/qlib/.dignore"] x;
+  if[not {x~key x}ignorePath ;:()];
+  {[x;v]`$ .bt.print[":%path%/qlib/%val%"]x,.bt.md[`val]v }[x]@'read0 ignorePath
+  } x;  
+  .os.treeIgnore[ignore] .bt.print[":%path%/qlib"] x
+  }@'repositories;
  / t:.os.tree .bt.print[":%btsrc%/qlib"] .env;
  t:select from t where {x ~ key x}@'fullPath;
  .d.isSummary:1b;
@@ -86,8 +93,15 @@ d) function
  if[11h = type x;:.import.module@'x ];
  if[max x~/:(`;::);:select by module from .import.module0];
  if[-11h = type x;x:string x];
- repositories:.import.repository[];
- t:raze { .os.tree .bt.print[":%path%/qlib"] x}@'repositories;
+ repositories:.import.repository[]; 
+ t:raze {
+  ignore:{
+  ignorePath:`$.bt.print[":%path%/qlib/.dignore"] x;
+  if[not {x~key x}ignorePath ;:()];
+  {[x;v]`$ .bt.print[":%path%/qlib/%val%"]x,.bt.md[`val]v }[x]@'read0 ignorePath
+  } x;  
+  .os.treeIgnore[ignore] .bt.print[":%path%/qlib"] x
+  }@'repositories;
  / t:.os.tree .bt.print[":%btsrc%/qlib"] .env;
  t:select from t where {x ~ key x}@'fullPath;
  fileToLoad:();
@@ -97,8 +111,8 @@ d) function
 
  if["/" ~ last x;
    fileToLoad:select from t where max fullPath like/:{ .bt.print[":%path%/qlib/%module%*.q"] x,y}[.bt.md[`module] x]@'repositories;
-   ]; 
- 
+   ];
+
  if[not (".q" ~ -2#x) or ("/" ~ last x);
    fileToLoad:select from t where max fullPath like/:{ .bt.print[":%path%/qlib/%module%/%module%.q"] x,y}[.bt.md[`module] x]@'repositories;
    ];
@@ -108,6 +122,7 @@ d) function
  fileToLoad:update cmd:.bt.print["l %sPath%"]@'fileToLoad,file:fullPath from fileToLoad;
  :raze .import.module1[`$x]@'fileToLoad
  }
+
 
 
 d) function
