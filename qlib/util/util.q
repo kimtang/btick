@@ -22,7 +22,7 @@ d) function
  return the by column from a select statement
  q) .util.parseb "not null a, tmp:b=`h"
 
-.util.parsea:{ if[not 10h=type x;:x]; parse["select ",x," from t"]4}
+.util.parsea:{ if[not 10h=type x;:x];if[""~x;:()!()];; parse["select ",x," from t"]4}
 
 d) function
  util
