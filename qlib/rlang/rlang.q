@@ -45,7 +45,9 @@ d) function
  .rlang.i:0; / index to store the anonymous variable
  .rlang.s:.z.o;
  .rlang.calc:1b;
- if[not `.rlang.ts in  exec arg[;0] from .bt.tme where null runAt,-11h = type@'arg[;0];.bt.action[`.rlang.ts] ()!();]; 
+ if[not `.rlang.ts in  exec arg[;0] from .bt.tme where null runAt,-11h = type@'arg[;0];.bt.action[`.rlang.ts] ()!();];
+ "r" "library(ggplot2)";
+ "r" .bt.print["source('%BTSRC%/qlib/rlang/ggplot2_formatter.r')"] `zo`BTSRC! (.z.o;ssr [getenv `BTSRC;"\\";"/"]);
  }
 
 d) function

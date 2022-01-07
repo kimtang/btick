@@ -1,4 +1,6 @@
 
+.import.require`action;
+
 d) module
  cbt
  cbt provides connections to your bt plant
@@ -73,6 +75,17 @@ d) function
  q) .cbt.proc:`btsrc.ex1.admin.bus.0
  f) 1+3
 
+
+.cbt.q:.cbt.query[.cbt.proc]
+
+d) function
+ cbt
+ .cbt.q
+ Function to give a query of available connection
+ q) .cbt.proc:`btsrc.ex1.admin.bus.0
+ q) .cbt.q "1+3"
+ f) 1+3
+
 .cbt.proc:`
 .f.e:{ .f.r:.cbt.query[.cbt.proc] x;.f.r }
 .s.e:{ .s.r:.cbt.query[.cbt.proc] (system;{$[" "= x 0;1_x;x] } over x);.s.r }
@@ -114,6 +127,49 @@ d) function
  q) .cbt.igraph[]  / plot own behaviour
  q) .cbt.igraph .bt.behaviours / plot the behaviours
 
+.cbt.duplicate0:()!()
+.cbt.duplicate0[1]:{[fnc;arg0] .cbt.q (fnc;arg0)}
+.cbt.duplicate0[2]:{[fnc;arg0;arg1] .cbt.q (fnc;arg0;arg1)}
+.cbt.duplicate0[3]:{[fnc;arg0;arg1;arg2] .cbt.q (fnc;arg0;arg1;arg2)}
+.cbt.duplicate0[4]:{[fnc;arg0;arg1;arg2;arg3] .cbt.q (fnc;arg0;arg1;arg2;arg3)}
+.cbt.duplicate0[5]:{[fnc;arg0;arg1;arg2;arg3;arg4] .cbt.q (fnc;arg0;arg1;arg2;arg3;arg4)}
+.cbt.duplicate0[6]:{[fnc;arg0;arg1;arg2;arg3;arg4;arg5] .cbt.q (fnc;arg0;arg1;arg2;arg3;arg4;arg5)}
+.cbt.duplicate0[7]:{[fnc;arg0;arg1;arg2;arg3;arg4;arg5;arg6] .cbt.q (fnc;arg0;arg1;arg2;arg3;arg4;arg5;arg6)}
+
+.cbt.duplicate:{[x]
+ if[(not type[x] in 10 -11h) or max x~/:(`;::);:.import.doc`.cbt.duplicate];
+ if[10h=abs type x;x:`$x];
+ result:.cbt.q x;
+ if[not 100h = type result;x set result;:x ];
+ l:count get[ result]1;
+ x set .cbt.duplicate0[l][string x]
+ }
+
+
+d) function
+ cbt
+ .cbt.duplicate
+ Function to duplicate the fnc
+ q) .cbt.duplicate[]  / show this doc
+ q) .cbt.duplicate `.bt.action
+
+.cbt.deepDuplicate:{[x]
+ if[(not type[x] in 10 -11h) or max x~/:(`;::);:.import.doc`.cbt.duplicate];
+ if[10h=abs type x;x:`$x];
+ result:.cbt.q x;
+ if[not 100h = type result;x set result;:x ];
+ l:(get[ result]3) except `;
+ (x set result),.cbt.duplicate@'l
+ }
+
+d) function
+ cbt
+ .cbt.deepDuplicate
+ Function to deepDuplicate the fnc
+ q) .cbt.deepDuplicate[]  / show this doc
+ q) .cbt.q "`thisFunc1 set {[a;b] a + thisFunc2 b }"
+ q) .cbt.q "`thisFunc2 set {[b] exp b }"
+ q) .cbt.deepDuplicate `thisFunc2
 
 .cbt.init[]
 

@@ -7,38 +7,23 @@ d) module
  q).import.module`tidyq
 
 
-.tidyq.dcast0:{[t;k;p;v]
- f:{[v;P]`${{x,"_",y} over x}@'flip {if[10h = type x;:x]; string x}each flip raze v ,/:\:P};   
- v:(),v;
- G:group flip k!(t:.Q.v t)k;
- F:group flip p!t p;
- count[k]! 0!key[G]!(asc cols[tmp])xcols tmp:flip(C:f[v]P:flip value flip key F)!raze
-  {[i;j;k;x;y]
-   a:count[x]#x 0N;
-   if[0h=type x;a:a,{}];
-   a[y]:x y;
-   if[0h=type x;a:-1_a];   
-   b:count[x]#0b;
-   b[y]:1b;
-   c:a i;
-   if[0h=type x;c:c,{}];
-   c[k]:first'[a[j]@'where'[b j]];
-   if[0h=type x;c:-1_c];
-   c}[I[;0];I J;J:where 1<>count'[I:value G]]/:\:[t v;value F]
- }
+.tidyq.dcast1:{[k;p0;t0] a:((),`$.bt.print[p0`cls] t0)!value p0`afunc;k xkey ?[;();1b;(k!k),a] flip (cols[t0] except p0`acls)#t0 }
+
+.tidyq.dcast0:{[t;k;p0] (uj) over .tidyq.dcast1[k;p0;]@'p0[`acls] xasc 0!p0[`acls] xgroup t}
 
 .tidyq.dcast:{[t;ids;formula]
  k:key .util.parsea ids;
- p:key .util.parsea first formula:"~~" vs formula;
- v:key .util.parsea last formula;   
- .tidyq.dcast0[t;k;p;v]
+ p:(`cls`func!"~~" vs) @'"||" vs formula;
+ p:update acls:{`$s where 1=til[ count s:"%"vs x] mod 2 }@'cls from p;
+ p:update afunc:.util.parsea@'func from p;
+ (key k xkey t) lj (uj) over .tidyq.dcast0[t;k;]@'p
  }
 
 d) function
  tidyq
  .tidyq.dcast
  This is a function to pivot a table
- q) .tidyq.dcast[q;"date,sym,time";"side,level~~price,size"]
+ q) book:.tidyq.dcast[q;"date,sym,time";"price_%side%_%level% ~~ price  - avg price || size_%side%_%level% ~~ size "]
  q) qpd:5*2*4*"i"$16:00-09:30
  q) date:raze(100*qpd)#'2009.01.05+til 5
  q) sym:(raze/)5#enlist qpd#'100?`4
@@ -52,26 +37,30 @@ d) function
  q) size:(500*qpd)?100
  q) quote:([]date;sym;time;side;level;price;size)
  q) q:select from quote where sym=first sym
- q) book:.tidyq.dcast[q;"date,sym,time";"side,level~~price,size"]
+ q) book:.tidyq.dcast[q;"date,sym,time";"price_%side%_%level% ~~ price  - avg price || size_%side%_%level% ~~ size "]
 
 
 .tidyq.melt:{[t;ids;formula]
  k:key .util.parsea ids;
- P:key .util.parsea first formula:"~~" vs formula;
- v:key .util.parsea last formula;
+ p:(`cls`func!"~~" vs) @'"||" vs formula;
+ p:update acls:{`$s where 1=til[ count s:"%"vs x] mod 2 }@'func from p;
+ p:update bcls:{`$first"_"vs x }@'func from p;
  tcols:([]cls:cols[ t]);
  tcols:select from tcols where not cls in k;
  tcols:update cls0:`${"_"vs x}@'string cls from tcols ;
  tcols:update cls1:cls0[;0] from tcols;
- tcols:select from tcols where cls1 in P,count[v]=-1+count@'cls0 ;
- 0!(uj) over {[t;k;v;x] (k,v) xkey ?[t;enlist({not null x};x`cls);0b;(k!k),(v,x`cls1)!( (enlist@'1_x`cls0),x`cls)]}[t;k;v]@'tcols
+ {[x;y] (k xkey x) uj (k:cols[x] inter cols[y]) xkey y} over .tidyq.melt0[t;k;tcols;]@'p
+ }
+
+.tidyq.melt0:{[t;k;tcols;p0]
+ 0!{[kk;x;y] (kk xkey x) uj kk xkey y }[k,p0`acls] over lst:{[t;k;p0;tcols0] ![;();0b;.util.parsea p0`cls] ?[t;enlist(not null@;tcols0`cls);0b;] (k!k),((!) . 1#/:tcols0`cls1`cls),((),p0`acls)!1#/:1_tcols0`cls0 }[t;k;p0]@'select from tcols where cls1 in p0`bcls    
  }
 
 d) function
  tidyq
  .tidyq.melt
  This is a function to pivot a table
- q) .tidyq.melt[book;"date,sym,time";"price,size~~side,level"]
+ q) .tidyq.melt[book;"date,sym,time";"price:price + avg price,side,level ~~ price_%side%_%level% || size,side,level ~~ size_%side%_%level% "]
  q) qpd:5*2*4*"i"$16:00-09:30
  q) date:raze(100*qpd)#'2009.01.05+til 5
  q) sym:(raze/)5#enlist qpd#'100?`4
@@ -86,7 +75,7 @@ d) function
  q) quote:([]date;sym;time;side;level;price;size)
  q) q:select from quote where sym=first sym
  q) book:.tidyq.dcast[q;"date,sym,time";"side,level~~price,size"]
- q) .tidyq.melt[book;"date,sym,time";"price,size~~side,level"]
+ q) .tidyq.melt[book;"date,sym,time";"price:price + avg price,side,level ~~ price_%side%_%level% || size,side,level ~~ size_%side%_%level% "]
 
 
 

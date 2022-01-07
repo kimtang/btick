@@ -25,7 +25,7 @@ require(scales)
 
 human_numbers <- function(x = NULL, smbl =""){
   humanity <- function(y){             
-    
+    round_any = function(x, accuracy, f=round){f(x/ accuracy) * accuracy}
     if (!is.na(y)){
       
        b <- round_any(abs(y) / 1e9, 0.1)
