@@ -11,6 +11,7 @@ d) module
  if[max x~/:(`;::);:.import.repositories];
  `.import.repositories insert cols[.import.repositories]#x ;
  .import.repositories:distinct .import.repositories ;
+ .import.ljson[];
  .import.repositories
   }
 
@@ -165,9 +166,12 @@ d) function
 
 
 .import.ljson:{
- .import.json:`$":qlib.json";
- if[not .import.json~key .import.json;:()];
- .import.config: .j.k "c"$ read1 .import.json;
+ tmp:.import.repositories,enlist[`name`path!`local,enlist"."];
+ tmp:update file:`$.bt.print[":%path%/qlib.json"]@'tmp from tmp;
+ tmp:select from tmp where {x~key x}@'file; 
+ result: raze {.j.k "c"$ read1 x}@'tmp`file;
+ .import.config:()!();
+ if[99h=type result;.import.config:result;];
  .import.config
  }
 

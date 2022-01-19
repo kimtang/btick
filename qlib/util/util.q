@@ -137,3 +137,25 @@ d) function
 .util.pwd0[0b]:{`$system"pwd" }
 
 .util.pwd:{ .util.pwd0[.env.win][] }
+
+.util.radnomSeed:{
+ seed:enlist sum "J"$9 cut reverse string .z.i + "j"$.z.P;
+ system .bt.print["S %0"] seed;     
+ }
+
+
+d) function
+ util
+ .util.radnomSeed
+ Function to set random seed
+ q) .util.radnomSeed[] \ set random seed
+
+
+.util.windowSize:{ lst where not null lst:"J"$ " " vs system["powershell -command \"&{(get-host).ui.rawui.WindowSize;}\""] 3}
+
+
+d) function
+ util
+ .util.windowSize
+ Function to get windows size
+ q) .util.windowSize[] \ set random seed

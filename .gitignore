@@ -6,3 +6,4 @@ plant/~*
 .gitconfig
 qlib/maintHdb/segDB/
 qlib/maintHdb/tmpDB/
+data
