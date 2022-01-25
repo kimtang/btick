@@ -1,13 +1,15 @@
 
 d) module
  todo
- Library for working with treetable
+ Library create a todo list
  q).import.module`todo
 
 .todo.db:`:db/todo
 
-if[`todo in key .import.config;.todo.db:.Q.dd[(hsym`$.import.config . `todo`db);`todo]];
+.bt.addIff[`.todo.addDb]{`todo in key .import.config}
+.bt.add[`.import.ljson;`.todo.addDb]{ .todo.db:.Q.dd[hsym `$.import.config . `todo`db;`todo];}
 
+.bt.action[`.todo.addDb] ()!();
 
 .todo.schema:1!flip `uid`puid`mode`task`stime`etime`description`priority`deadline!"ggsspp*sp"$\:()
 .todo.priority:`high`low`critical`normal
@@ -23,11 +25,7 @@ d) function
 
 .todo.getRaw:{ get .todo.db}
 
-d) function
- todo
- .todo.getAll
- Function to get all todo data
- q).todo.getAll[]
+
 
 .todo.getDeadline0:()!()
 .todo.getDeadline0[`today]:{-1 + "p"$.z.D + 1}
@@ -218,13 +216,13 @@ d) function
  q).todo.activity[`ignore;.z.P;.z.P + 05:00;"ignore me"]
 
 
-.todo.getTask:{select uid:`${first "-"vs x}@'string uid,mode,task,priority,sdeadline:.todo.ptime[.z.P] deadline from .todo.summaryRaw[] where .z.D >= `date$deadline, null etime, not null deadline}
+.todo.summaryToday:{select uid:`${first "-"vs x}@'string uid,mode,task,priority,sdeadline:.todo.ptime[.z.P] deadline from .todo.summaryRaw[] where .z.D >= `date$deadline, null etime, not null deadline}
 
 d) function
  todo
- .todo.getTask
+ .todo.summaryToday
  get today's task
- q).todo.getTask[]
+ q).todo.summaryToday[]
 
 
 .todo.getLongTask:{delete headId,puid,deadline from `deadline xasc select from .todo.summaryLong[] where null etime,not null sdeadline}

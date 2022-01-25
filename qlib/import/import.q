@@ -2,15 +2,18 @@ d) module
  import
  Library to import module into kdb+
  q) .import.module / Autmatically loaded on startup
+ Import module will load a file called qlib.json as well in the current working directory.
+ If you dont have it you can create it with .import.cjson and reload it with .import.ljson.
 
-.import.repositories:flip`name`path!();
+.import.config:(); / important to keep this variable as list so we will trigger .bt.action[`.import.ljson] ()!() at start up.
 
-`.import.repositories insert (`btsrc;getenv `btsrc);
+.import.repositories:1!flip`name`path!();
+
+`.import.repositories upsert (`btsrc;getenv `btsrc);
 
 .import.repository:{[x]
  if[max x~/:(`;::);:.import.repositories];
- `.import.repositories insert cols[.import.repositories]#x ;
- .import.repositories:distinct .import.repositories ;
+ `.import.repositories upsert cols[.import.repositories]#x ;
  .import.ljson[];
  .import.repositories
   }
@@ -23,6 +26,12 @@ d) function
  q) .import.repository` / show all repositories
  q) .import.repository `name`path!(`yourname;"path_to_repository")
 
+
+.bt.add[`.import.ljson;`.import.addRepo]{
+ if[not `repositories in key .import.config;:()];
+ .import.repository update name:`$name from .import.config`repositories;
+ }
+
 .import.summary0:{[t]
  b:enlist[" "]~/:1#/:src:read0 t`fullPath;
  b:{x[;0]!x}value group sums neg[b] + 1+ a:"d)"~/:2#/:src;
@@ -30,7 +39,7 @@ d) function
  }
 
 .import.summary:{  
- repositories:.import.repository[];
+ repositories:0!.import.repository[];
  t:raze {
   ignore:{
   ignorePath:`$.bt.print[":%path%/qlib/.dignore"] x;
@@ -166,29 +175,46 @@ d) function
 
 
 .import.ljson:{
- tmp:.import.repositories,enlist[`name`path!`local,enlist"."];
+ tmp:0!.import.repositories,1!enlist[`name`path!`local,enlist"."];
  tmp:update file:`$.bt.print[":%path%/qlib.json"]@'tmp from tmp;
  tmp:select from tmp where {x~key x}@'file; 
  result: raze {.j.k "c"$ read1 x}@'tmp`file;
- .import.config:()!();
- if[99h=type result;.import.config:result;];
+ if[ `globalJson in key result;
+  globalJson:hsym `$result`globalJson;
+  if[globalJson~key globalJson;
+    gJson:.j.k "c"$ read1 globalJson;
+    result:.util.deepMerge[gJson] result;
+  ];];
+ if[result~();result:()!()];
+ if[.import.config ~ result;:.import.config];
+ .import.config:result;
+ .bt.action[`.import.ljson] ()!();
  .import.config
  }
 
 
 d) variable
  import
- .import.config
+ .import.ljson
  Configuration loaded from qlib.json 
  q) .import.ljson[] / this trigger to reload the configuration file
- q) .import.config
+ q) .import.config / It will also parse a lobal json file from "globalJson" keyword  
 
 
-.import.init:{
- .import.config:()!();
- .import.ljson[];
- if[not `repositories in key .import.config;:()];
- @[.import.repository;;()] @'update name:`$name from .import.config`repositories;
+.import.cjson:{[name;path]
+ if[ `qlib.json in key `:.;'`.import.json.exists];
+ `:qlib.json 0: enlist .j.j (1#`repository)!enlist`name`repositories!(1#name;enlist path)
  }
 
-.import.init[]
+
+d) variable
+ import
+ .import.cjson
+ This will create a qlib.json in the current working directory. 
+ q) .import.cjson[] / this will create the json file
+
+
+.import.module`util;
+
+.import.ljson[]; / we will try to load the json file on startup.
+

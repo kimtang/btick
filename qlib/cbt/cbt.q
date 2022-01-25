@@ -19,17 +19,17 @@ d) module
 
 
 .cbt.summary:{[x]
- if[99h = type x; x:$[0>type x`repository;enlist x;flip x] ]; 
- if[not any 98 99h in type x ;:{select repository,env:`${first "."vs x}@'string env from x where env like "*.json"}ungroup select repository:name,env:key @'`$.bt.print[":%path%/plant"]@'.import.repositories from .import.repositories]; 
+ if[99h = type x; x:$[0>type x`repository;enlist x;flip x] ];
+ if[not any 98 99h in type x ;:{select repository,env:`${first "."vs x}@'string env from x where env like "*.json"}ungroup select repository:name,env:key @'`$.bt.print[":%path%/plant"]@'repositories from repositories:0!.import.repositories];
  x:update file:`$.bt.print["%env%.json"]@'x from x;
- repo:select repository:name,root:`$path from .import.repositories where name in x`repository;
+ repo:select repository:name,root:`$path from (0!.import.repositories) where name in x`repository;
  / if[0=count repo;:()];
  repo:ungroup update file:{key `$.bt.print[":%root%/plant"] x}@'repo,path:{`$.bt.print[":%root%/plant"] x}@'repo,root from repo;
  repo:update path:path .Q.dd'file from repo;
  repo:select from repo where ([]repository;file) in `repository`file#x ;
  repo:update folder:`$.bt.print["%root%/plant"]@'repo,cfg:`${first "."vs x}@'string file from repo;
  tmp:raze .action.parseCfg[.env] @'repo;
- cfg0:(`user`passwd!("yourname";"yourpasswd") ),.import.config`cbt; 
+ cfg0:(`user`passwd!("yourname";"yourpasswd") ),.import.config`cbt;
  select repository,uid:`$.bt.print["%repository%.%uid%"]@'tmp,`$host,port,user:`$count[i]#enlist cfg0`user ,passwd:count[i]#enlist cfg0`passwd from tmp:tmp lj 1!select folder,repository from repo
  }
 
@@ -75,7 +75,7 @@ d) function
  q) .cbt.proc:`btsrc.ex1.admin.bus.0
  f) 1+3
 
-
+.cbt.proc:`
 .cbt.q:.cbt.query[.cbt.proc]
 
 d) function
@@ -86,7 +86,7 @@ d) function
  q) .cbt.q "1+3"
  f) 1+3
 
-.cbt.proc:`
+
 .f.e:{ .f.r:.cbt.query[.cbt.proc] x;.f.r }
 .s.e:{ .s.r:.cbt.query[.cbt.proc] (system;{$[" "= x 0;1_x;x] } over x);.s.r }
 
