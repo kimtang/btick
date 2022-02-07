@@ -7,7 +7,7 @@ args:.Q.def[`name`port!("name";8899);].Q.opt .z.x
 \l qlib.q
 
 
-.import.repository `name`path!(`life;"C:\\Users\\kuent\\Google Drive\\main\\life");
+.import.repository `name`path!(`life1;"C:\\Users\\kuent\\Google Drive\\main\\life");
 
 
 .import.module`util;

@@ -36,5 +36,5 @@
 
 
 
-system"l ",getenv[`BTSRC],"/qlib/import/import.q";
 system"l ",getenv[`BTSRC],"/qlib/os/os.q";
+system"l ",getenv[`BTSRC],"/qlib/import/import.q";

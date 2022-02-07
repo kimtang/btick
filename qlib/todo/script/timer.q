@@ -6,7 +6,7 @@ args:.Q.def[`name`port!("kaizen/timer.q";9909);].Q.opt .z.x
 
 \l qlib.q
 
-.import.repository `name`path!(`life;"C:\\Users\\kuent\\Google Drive\\main\\life");
+.import.repository `name`path!(`life1;"C:\\Users\\kuent\\Google Drive\\main\\life");
 .import.module`todo;
 .import.module`rlang;
 

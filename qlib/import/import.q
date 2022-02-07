@@ -179,6 +179,7 @@ d) function
  tmp:update file:`$.bt.print[":%path%/qlib.json"]@'tmp from tmp;
  tmp:select from tmp where {x~key x}@'file; 
  result: raze {.j.k "c"$ read1 x}@'tmp`file;
+ if[()~result;result:()!() ];
  if[ `globalJson in key result;
   globalJson:hsym `$result`globalJson;
   if[globalJson~key globalJson;
@@ -215,6 +216,7 @@ d) variable
 
 
 .import.module`util;
+
 
 .import.ljson[]; / we will try to load the json file on startup.
 
