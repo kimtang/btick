@@ -159,3 +159,43 @@ d) function
  .util.windowSize
  Function to get windows size
  q) .util.windowSize[] \ set random seed
+
+
+.util.posArg0:{[name;p;lst] enlist[(`posArg0;name;p)],$[not all 10h=type @'lst;lst;enlist lst] }
+.util.optArg0:{[name;p;default;lst] enlist[(`optArg0;name;p;default)],$[not all 10h=type @'lst;lst;enlist lst] }
+.util.arg:{[allArgs]
+ t:update pos:i from([]args: -1_allArgs);
+ t:update mode:args[;0] from t;
+ t:update name:args[;1] from t;
+ t:update trans:{r:x 2;$[type[r] in -10 -11h;r$;r]}@'args from t;
+ t:update default:count[i]#{} from t where mode=`posArg0;
+ t:update default:{x 3}@'args from t where not mode=`posArg0;
+ t:update print:count[i]#enlist "%name%" from t where mode=`posArg0;
+ t:update print:count[i]#enlist "--%name% %default%" from t where not mode=`posArg0; 
+ args:last allArgs;
+ optArgs:{(`$1_/:x)!y} . flip optArgs:args optInd:0 1 +/:where "-"=args[;0];
+ posArgs:args til[ count args] except raze optInd;
+ if[not (count posArgs) = count select from t where mode=`posArg0;'`$" "sv (1#"q";string .z.f),{.bt.print[x`print ]x }@'t];
+ t:update default:{[x;y]x y}'[trans;optArgs name] from t where name in key optArgs;
+ t:update default:{[x;y]x y}'[trans;posArgs] from t where mode=`posArg0;    
+ exec name!default from t
+ }
+
+d) function
+ util
+ .util.arg
+ Function to get windows size
+ q) allArgs:
+       .util.arg
+       .util.posArg0[`pos1;`]
+       .util.posArg0[`pos2;"F"]
+       .util.optArg0[`opt0;`;`noOpt0] 
+       .util.optArg0[`opt1;`;`noOpt1] ("arg0";"-opt0";"opt0";"2.0";"-opt1";"opt1")
+ q) allArgs:
+       .util.arg
+       .util.posArg0[`pos1;`]
+       .util.posArg0[`pos2;"F"]
+       .util.optArg0[`opt0;`;`noOpt0] 
+       .util.optArg0[`opt1;`;`noOpt1] ("arg0";"-opt0";"opt0";"2.0")       
+
+
