@@ -81,9 +81,7 @@ d) function
  q) .util.deepMerge[()!()](1#`a`b)!1#1 2
 
 
-
-
-.util.wlin:{$[.env.win;ssr[;"/";"\\"];(::)]}[]
+.util.wlin:{$["w"=first string .z.o;ssr[;"/";"\\"];(::)]}[]
 
 .util.getFiles:{ $[()~key x;0#`;x ~ key x;x;raze .z.s@'.Q.dd'[x;key x]] }
 
@@ -130,13 +128,13 @@ d) function
 .util.sleep0[1b]:{system .bt.print["timeout %0 /nobreak"] enlist x; }
 .util.sleep0[0b]:{system .bt.print["sleep %0"] enlist x; }
 
-.util.sleep:{[secs] .util.sleep0[.env.win] secs }
+.util.sleep:{[secs] .util.sleep0[.util.isWin] secs }
 
 .util.pwd0:()!()
 .util.pwd0[1b]:{`$system"cd" }
 .util.pwd0[0b]:{`$system"pwd" }
 
-.util.pwd:{ .util.pwd0[.env.win][] }
+.util.pwd:{ .util.pwd0[.util.isWin][] }
 
 .util.radnomSeed:{
  seed:enlist sum "J"$9 cut reverse string .z.i + "j"$.z.P;
@@ -160,24 +158,29 @@ d) function
  Function to get windows size
  q) .util.windowSize[] \ set random seed
 
+.util.isWin:.z.o in`w32`w64
+.util.isLin:not .util.isWin
 
-.util.posArg0:{[name;p;lst] enlist[(`posArg0;name;p)],$[not all 10h=type @'lst;lst;enlist lst] }
+.util.posArg0:{[name;p;default;lst] enlist[(`posArg0;name;p;default)],$[not all 10h=type @'lst;lst;enlist lst] }
 .util.optArg0:{[name;p;default;lst] enlist[(`optArg0;name;p;default)],$[not all 10h=type @'lst;lst;enlist lst] }
+.util.arg:{[allArgs]allArgs}
 .util.arg:{[allArgs]
  t:update pos:i from([]args: -1_allArgs);
  t:update mode:args[;0] from t;
  t:update name:args[;1] from t;
  t:update trans:{r:x 2;$[type[r] in -10 -11h;r$;r]}@'args from t;
- t:update default:count[i]#{} from t where mode=`posArg0;
- t:update default:{x 3}@'args from t where not mode=`posArg0;
+ / t:update default:count[i]#{} from t where mode=`posArg0;
+ / t:update default:{x 3}@'args from t where not mode=`posArg0;
+ t:update default:{x 3}@'args from t;
  t:update print:count[i]#enlist "%name%" from t where mode=`posArg0;
  t:update print:count[i]#enlist "--%name% %default%" from t where not mode=`posArg0; 
  args:last allArgs;
- optArgs:{(`$1_/:x)!y} . flip optArgs:args optInd:0 1 +/:where "-"=args[;0];
+ optArgs:args optInd:0 1 +/:where "-"=args[;0];
+ optArgs:{(`$1_/:x)!y} .  $[0=count optArgs;(();());flip optArgs];
  posArgs:args til[ count args] except raze optInd;
- if[not (count posArgs) = count select from t where mode=`posArg0;'`$" "sv (1#"q";string .z.f),{.bt.print[x`print ]x }@'t];
+ / if[not (count posArgs) = count select from t where mode=`posArg0;'`$" "sv (1#"q";string .z.f),{.bt.print[x`print ]x }@'t];
  t:update default:{[x;y]x y}'[trans;optArgs name] from t where name in key optArgs;
- t:update default:{[x;y]x y}'[trans;posArgs] from t where mode=`posArg0;    
+ t:update default:{[x;y]x y}'[trans;posArgs] from t where {[cnt;w]  w and @[count[w]#0b;;:;1b] cnt#where w}[count posArgs]  mode=`posArg0 ;
  exec name!default from t
  }
 
@@ -187,15 +190,20 @@ d) function
  Function to get windows size
  q) allArgs:
        .util.arg
-       .util.posArg0[`pos1;`]
-       .util.posArg0[`pos2;"F"]
+       .util.posArg0[`pos1;`;`nopos1]
+       .util.posArg0[`pos2;"F";3.0]
        .util.optArg0[`opt0;`;`noOpt0] 
        .util.optArg0[`opt1;`;`noOpt1] ("arg0";"-opt0";"opt0";"2.0";"-opt1";"opt1")
  q) allArgs:
        .util.arg
-       .util.posArg0[`pos1;`]
-       .util.posArg0[`pos2;"F"]
+       .util.posArg0[`pos1;`;`nopos1]
+       .util.posArg0[`pos2;"F";5.0]
        .util.optArg0[`opt0;`;`noOpt0] 
        .util.optArg0[`opt1;`;`noOpt1] ("arg0";"-opt0";"opt0";"2.0")       
-
+ q) allArgs:
+       .util.arg
+       .util.posArg0[`pos1;`;`nopos1]
+       .util.posArg0[`pos2;"F";3.0]
+       .util.optArg0[`opt0;`;`noOpt0] 
+       .util.optArg0[`opt1;`;`noOpt1] ("arg0";"-opt0";"opt0";"-opt1";"opt1")
 

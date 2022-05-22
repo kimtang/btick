@@ -14,7 +14,7 @@
  }
 
 
-.bt.addIff[`.checker.init.win]{ .env.win }
+.bt.addIff[`.checker.init.win]{ .util.isWin }
 .bt.add[`.library.init;`.checker.init.win]{
  folder:`$last "/" vs string .env.arg`folder;
  .checker.procs:(.bt.action[`.pm.init] (`subsys`cmd`proc`debug`print!``statusAll`all,10b),`folder`cfg!(folder;.env.arg`cfg))`result;

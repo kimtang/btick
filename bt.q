@@ -99,7 +99,7 @@ trace:trace0
 outputTrace0:{[data] .bt.stdOut0[ $[ null data`error;`info;`error] ;`bt] .bt.print["%action%:%mode%:%error%"] data }
 outputTrace1:{[data]  }
 
-outputTrace:outputTrace0
+outputTrace:outputTrace1
 
 eiff:{[sym;allData]
  h:hist sym;  

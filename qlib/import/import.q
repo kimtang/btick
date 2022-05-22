@@ -33,6 +33,9 @@ d) function
  }
 
 .import.summary0:{[t]
+ st0:"qlib"vs string t`fullPath; 
+ st1:"behaviour"vs st0 0;
+ .d.folder:$[1=count st1;`qlib;`behaviour];
  b:enlist[" "]~/:1#/:src:read0 t`fullPath;
  b:{x[;0]!x}value group sums neg[b] + 1+ a:"d)"~/:2#/:src;
  {get "\n" sv x}@'src b where a;	
@@ -53,7 +56,7 @@ d) function
  .d.isSummary:1b;
  .import.summary0@'t;
  .d.isSummary:0b;
- if[max x~/:(`;::);:.d.conMod];
+ if[max x~/:(`;::);:select from .d.conMod where folder=`qlib];
  r:0!$[-11h = type x;select from .d.conFunc where (func=x) or module = x;select from .d.conFunc where body ~' x];
  r
  }
@@ -92,6 +95,9 @@ d) function
 .import.module0:flip`uid`module`file`stime`etime`error!()
 
 .import.module1:{[x;y]
+ st0:"qlib"vs string y`fullPath; 
+ st1:"behaviour"vs st0 0;
+ .d.folder:$[1=count st1;`qlib;`behaviour];  
   x:y,(.bt.md[`uid] first .bt.guid0 1),.bt.md[`module] x;
   stime:.z.P;
   error:@[{system x`cmd;`};x;{`$x}];
@@ -133,8 +139,6 @@ d) function
  :raze .import.module1[`$x]@'fileToLoad
  }
 
-
-
 d) function
  import
  .import.module
@@ -149,7 +153,20 @@ d) function
  q) .import.module `tree/util/ / this will load tree/util/*.q
 
 
+.import.loadBehaviour:{}
 
+d) function
+ import
+ .import.loadBehaviour
+ Function to load library.
+ q) .import.loadBehaviour[] / this will show loaded libraries and files 
+ q) .import.loadBehaviour` / this will show loaded libraries and files 
+ q) .import.loadBehaviour `tree / this will load tree/tree.q
+ q) .import.loadBehaviour `tree/tree.q / this will load tree/tree.q
+ q) .import.loadBehaviour `tree/ / this will load tree/*.q
+ q) .import.loadBehaviour `tree/util / this will load tree/util/util.q
+ q) .import.loadBehaviour `tree/util/util.q / this will load tree/util/util.q
+ q) .import.loadBehaviour `tree/util/ / this will load tree/util/*.q
 
 .import.require:{
  if[11h = type x;:.import.require@'x ];

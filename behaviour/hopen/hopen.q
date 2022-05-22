@@ -1,5 +1,18 @@
 
+d) module
+ hopen
+ hopen provides a set of functions to maintain connections in kdb+. After loading it you need to trigger .hopen.init
+ q).behaviour.module`hopen
+
+
 .bt.add[`.library.init;`.hopen.init]{[allData]}
+
+d) function
+ hopen
+ `.hopen.init
+ Start the hopen loop to open connections 
+ q) .bt.action[`.hopen.init] ()!()
+
 
 .poc.con:enlist`time`ftime`ipa`userId`hdl!(.z.P;.z.P;.Q.host .z.a;.z.u;0ni)
 
@@ -16,8 +29,6 @@
 
 .bt.add[`;`.hopen.pw]{[allData] `.pw.con insert cols[.pw.con]#o:allData,`time`result!.z.P,1b;o}
 
-/ `.hopen.po.internal
-
 .bt.addIff[`.hopen.po.internal]{[zu] (not null zu) and zu in exec uid from .hopen.con }
 .bt.add[`.hopen.po;`.hopen.po.internal]{[zu;za;zw]
  update hdl:zw from `.hopen.con where uid = zu;
@@ -31,6 +42,14 @@
  if[null allData`uid;.bt.stdOut0[`error;`hopen] "uid is null";'`.hopen.param];  
  `.hopen.con upsert cols[.hopen.con]#(`user`passwd`hdl!``,0ni),allData;
  }
+
+d) function
+ hopen
+ .hopen.add
+ Add a connection 
+ q) .bt.action[`.hopen.add] `uid`host`port!(`myuid;`localhost;8890)
+ q) .bt.action[`.hopen.add] `uid`host`port`user`passwd!(`myuid;`localhost;8890;`username;"mypasswd")
+ q) .hopen.con / to check the handle  
 
 
 .hopen.connect:{ 
@@ -67,6 +86,12 @@
 .bt.addIff[`.hopen.success]{[result] not 0=count result }
 .bt.add[`.hopen.loop`.hopen.po.internal;`.hopen.success]{} / signal other library
 
+d) function
+ hopen
+ .hopen.success
+ Get notify when a connection was succesful 
+ q) .bt.add[`.hopen.success;`.my.fnc]{[result] result } / result has the structure as from .hopen.con 
+
 .bt.add[`;`.hopen.remove.uid]{[uid]uid0:uid;
  remove:0!select from .hopen.con where uid=uid0;
  delete from `.hopen.con where uid = uid0; 
@@ -74,18 +99,20 @@
  .bt.md[`remove] remove
  }
 
+d) function
+ hopen
+ .hopen.remove.uid
+ Remove a connection using the id
+ q) .bt.action[`.hopen.remove.uid] .bt.md[`uid] uidOfTheProcess 
 
 .bt.add[`.hopen.pc;`.hopen.remove.hdl]{[zw]
  update hdl:0ni from `.hopen.con where hdl = zw;
  }
 
-
-/ 
-
-
-
-
-
+d) function
+ hopen
+ .hopen.pc
+ get notify when a connection has been closed. In this case hopen will try to reopen
+ q) .bt.add[`.hopen.pc;`.my.fnc]{[zw] zw } / zw is the closed handle  
 
 
-select from .bt.history where action = `.hopen.loop
