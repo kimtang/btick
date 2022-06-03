@@ -26,7 +26,7 @@
  .util.posArg0[`cmd;`;`noCmd]
  .util.posArg0[`proc;`;`noProc]
  .util.optArg0[`btsrc;`;`$getenv`BTSRC]  
- .util.optArg0[`folder;`;`$getenv[`BTSRC],"/plant"] 
+ .util.optArg0[`folder;`;`$"plant"] 
  .util.optArg0[`cfg;`;`] 
  .util.optArg0[`subsys;`;`]
  .util.optArg0[`trace;"J";0]

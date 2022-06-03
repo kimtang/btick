@@ -207,3 +207,19 @@ d) function
        .util.optArg0[`opt0;`;`noOpt0] 
        .util.optArg0[`opt1;`;`noOpt1] ("arg0";"-opt0";"opt0";"-opt1";"opt1")
 
+
+.util.showJson:{
+ global:1_string .Q.dd[;`.btick] hsym `$getenv $[.util.isWin;`USERPROFILE;`HOME];
+ tmp:0!.import.repositories,1!flip`name`path!(`local`global;(enlist".";global));      
+ tmp:update file:`$.bt.print[":%path%/qlib.json"]@'tmp from tmp;
+ tmp:select name,path,file:1_/:string file from tmp where {x~key x}@'file;
+ :tmp 
+ }
+
+
+d) function
+ util
+ .util.showJson
+ Function to show the path of the json file
+ q) .util.showJson[] \ set random seed
+

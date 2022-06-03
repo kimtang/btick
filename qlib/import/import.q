@@ -192,18 +192,21 @@ d) function
 
 
 .import.ljson:{
- tmp:0!.import.repositories,1!enlist[`name`path!`local,enlist"."];
+ global:1_string .Q.dd[;`.btick] hsym `$getenv $[.util.isWin;`USERPROFILE;`HOME];
+ tmp:0!.import.repositories,1!flip`name`path!(`local`global;(enlist".";global));
+ tmp:update priority:0wj^(`global`local!0 1) name from tmp; 
+ / tmp:0!.import.repositories,1!enlist[`name`path!`local,enlist"."]; 
  tmp:update file:`$.bt.print[":%path%/qlib.json"]@'tmp from tmp;
  tmp:select from tmp where {x~key x}@'file; 
- result: raze {.j.k "c"$ read1 x}@'tmp`file;
- if[()~result;result:()!() ];
- if[ `globalJson in key result;
-  globalJson:hsym `$result`globalJson;
-  if[globalJson~key globalJson;
-    gJson:.j.k "c"$ read1 globalJson;
-    result:.util.deepMerge[gJson] result;
-  ];];
- if[result~();result:()!()];
+ tmp:update cfg:{.j.k "c"$ read1 x}@'file from tmp;
+ result:.util.deepMerge over (exec cfg from `priority xasc tmp),2#enlist()!();
+ / if[ `globalJson in key result;
+ /  globalJson:hsym `$result`globalJson;
+ /  if[globalJson~key globalJson;
+ /    gJson:.j.k "c"$ read1 globalJson;
+ /    result:.util.deepMerge[gJson] result;
+ /  ];];
+ / if[result~();result:()!()];
  if[.import.config ~ result;:.import.config];
  .import.config:result;
  .bt.action[`.import.ljson] ()!();
