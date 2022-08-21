@@ -28,7 +28,7 @@ d) module
  repo:update path:path .Q.dd'file from repo;
  repo:select from repo where ([]repository;file) in `repository`file#x ;
  repo:update folder:`$.bt.print["%root%/plant"]@'repo,cfg:`${first "."vs x}@'string file from repo;
- tmp:raze .action.parseCfg[.env] @'repo;
+ tmp:raze {.action.parseCfg x,``btsrc!(();`$getenv[`BTSRC])} @'repo;
  cfg0:(`user`passwd!("yourname";"yourpasswd") ),.import.config`cbt;
  select repository,uid:`$.bt.print["%repository%.%uid%"]@'tmp,`$host,port,user:`$count[i]#enlist cfg0`user ,passwd:count[i]#enlist cfg0`passwd from tmp:tmp lj 1!select folder,repository from repo
  }
@@ -93,7 +93,7 @@ d) function
 
 .cbt.sbl:{[x]
  summary:.cbt.summary x;
- cfg:(.bt.md[`path] "../cfg"),.import.config`cbt;
+ cfg:(.bt.md[`path] "cfg"),.import.config`cbt;
  (`$.bt.print[":%path%/system.sbl"] cfg) 0:  .bt.print["/ %uid%:%host%:%port%:%user%:%passwd%:"]@'summary
  }
 
