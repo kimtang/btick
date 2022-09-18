@@ -6,31 +6,7 @@
  q createsystem.q
 \
 
-.env.win:"w"=first string .z.o;
-.env.lin:not .env.win;
-.env.qhome:$[not ""~getenv `QHOME;hsym `$getenv `QHOME;.env.win;`$":C:\\q";hsym`$getenv[`HOME],"/q"];
-
-if[""~getenv`BTSRC;
- 0N!"Please define the missing variable BTSRC to point to the btick implementation";
- exit 0;
- ];
-
-if[ not`bt in key `;system "l ",getenv[`BTSRC],"/bt.q"];
-
-\c 1000 1000
-
-
-.env.btsrc:getenv`BTSRC
-.env.libs:1#`util
-.env.behaviours:0#`
-.env.arg:.Q.def[`folder`env`subsys`proc`debug!`plant```all,0b] .Q.opt { rest:-2#("status";"all"),rest:x (til count x)except  w:raze 0 1 +/:where "-"=first each x;(x w),(("-cmd";"-proc"),rest) 0 2 1 3 } .z.x
-
-
-if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
-
-
-{@[system;;()] .bt.print["l %btsrc%/lib/%lib%/%lib%.q"] .env , enlist[`lib]!enlist x}@'.env.libs;
-{@[system;;()] .bt.print["l %btsrc%/behaviour/%behaviour%/%behaviour%.q"] .env , enlist[`behaviour]!enlist x}@'.env.behaviours;
+\l qlib.q
 
 
 .cs.input:{ -2 x; read0 0}
@@ -106,11 +82,18 @@ if[not .env.arg`debug;.bt.outputTrace:.bt.outputTrace1];
  {[allData;subsystem]  (`$.bt.print[":plant/%systemName%/schemas/%subsystem%/%subsystem%.json"] (enlist[`subsystem]!enlist subsystem),allData) 0: enlist .j.j @[.cs.schema;`tname;:;string subsystem] }[allData]@'allData`subsystems
  }
 
-.bt.add[`.createsystem.createSchema;`.createsystem.exit]{[allData]
+.bt.add[`.createsystem.createSchema;`.createsystem.qlib;]{[allData]
+ -2"Now we will create qlib file";
+ (`$.bt.print[":qlib/.dignore"]allData)0:();
+ (`$.bt.print[":qlib/%systemName%/%systemName%.q"]allData)0:{[allData;x] .bt.print[x]allData}[allData]@'("d) module";" %systemName%";" Library for %systemName%";" q).import.module`%systemName%";"";".%systemName%.summary:{}";"";"d) function";" %systemName%";" .%systemName%.summary";" Function to show summary";" q).%systemName%.summary[]");
+
+ } 
+
+.bt.add[`.createsystem.qlib;`.createsystem.exit]{[allData]
  -2"Everything created. We will exit now";	
  exit 0;
  } 
 
-allData:.bt.action[`.createsystem.init] .env.arg;
+allData:.bt.action[`.createsystem.init] ()!();
 
 /

@@ -11,12 +11,12 @@ d) module
 
 / .bt.putAction `.action.parse.cfg
 
-.action.parseCfg:{[env;allData]
- allVar:.action.createVar[env;allData];
+.action.parseCfg:{[allData]
+ allVar:.action.createVar[allData];
  .cfg:allVar`cfg;
  .global:allVar`global;
  .core:allVar`core;
- .action.parseCfg1[env;allVar;allData]
+ .action.parseCfg1[allVar;allData]
  }
 
 
@@ -24,13 +24,13 @@ d) function
  action
  .action.parseCfg
  return the parsed config file with side effect
- q) .action.parseCfg[.env] `folder`cfg`subsys`process`id`trace!(`pathTo/plant;`horseracing;`scrapeData;`dev;0j;0j)
- q) .action.parseCfg[.env] `folder`cfg`subsys`process`id`trace!(`$getenv[ `btsrc],"/plant";`ex1;`scrapeData;`dev;0j;0j)
+ q) .action.parseCfg `btsrc`folder`cfg`subsys`process`id`trace!(`$getenv`btsrc;`pathTo/plant;`horseracing;`scrapeData;`dev;0j;0j)
+ q) .action.parseCfg `btsrc`folder`cfg`subsys`process`id`trace!(`$getenv`btsrc;`$getenv[ `btsrc],"/plant";`ex1;`scrapeData;`dev;0j;0j)
 
 
-.action.parseCfg0:{[env;allData]
- allVar:.action.createVar[env;allData];
- .action.parseCfg1[env;allVar;allData]
+.action.parseCfg0:{[allData]
+ allVar:.action.createVar[allData];
+ .action.parseCfg1[allVar;allData]
  }
 
 
@@ -38,10 +38,10 @@ d) function
  action
  .action.parseCfg0
  return the parsed config file without side effect
- q) .action.parseCfg0[.env] `folder`cfg`subsys`process`id`trace!(`pathTo/plant;`horseracing;`scrapeData;`dev;0j;0j)
- q) .action.parseCfg0[.env] `folder`cfg`subsys`process`id`trace!(`$getenv[ `btsrc],"/plant";`ex1;`scrapeData;`dev;0j;0j)
+ q) .action.parseCfg0 `btsrc`folder`cfg`subsys`process`id`trace!(`$getenv`btsrc;`pathTo/plant;`horseracing;`scrapeData;`dev;0j;0j)
+ q) .action.parseCfg0 `btsrc`folder`cfg`subsys`process`id`trace!(`$getenv`btsrc;`$getenv[ `btsrc],"/plant";`ex1;`scrapeData;`dev;0j;0j)
 
-.action.parseCfg1:{[env;allVar;allData]
+.action.parseCfg1:{[allVar;allData]
  t:{[allData;allVar]  ([]folder:allData`folder;env:first `$(allVar`global)`env;subsys:key allVar`cfg;val:value allVar`cfg)}[allData;allVar];
  t:update cfg:allData`cfg from t;
  t:update process:key @'val[;`process], library:{value[x]@\:`library}@'val[;`process], qlib:{{((.bt.md[`qlib] ""),x) `qlib}@'value x}@'val[;`process], arg:{value[x]@\:`arg}@'val[;`process] from t;
@@ -59,7 +59,7 @@ d) function
  / t:update host:{string .z.h}@'mergeArg[;`host],port:{[library;mergeArg;id] .action.calcPort[first `noPort ^ desc (k!k:key .action.calcPort) library] [mergeArg;id]}'[library;mergeArg;id] from t;
  t:update proc:.Q.dd'[process;id] from t;
  t:update uid:.Q.dd'[env;flip(subsys;process;id)] from t;
- param:env,allVar`global;
+ param:allData,allVar`global;
  t:update hdb: {[param;x] .bt.print["%plantsrc%/%data%/%env%/%subsys%/hdb"] param,x}[param]@'t from t;
  t:update audit: {[param;x] .bt.print["%plantsrc%/%audit%/%env%/%subsys%/%process%/%id%"] param,x}[param]@'t from t;
  t:update gData: {[param;x] .bt.print["%plantsrc%/%data%/%env%/%subsys%/%process%"] param,x}[param]@'t from t;
@@ -72,15 +72,15 @@ d) function
  }
 
 
-.action.createVar:{[env;allData]
+.action.createVar:{[allData]
  cfg : .j.k "c"$read1 `$ .bt.print[":%folder%/%cfg%.json"] allData;
- core: .j.k "c"$read1 `$ .bt.print[":%btsrc%/core/core.json"] env;
+ core: .j.k "c"$read1 `$ .bt.print[":%btsrc%/core/core.json"] allData;
  ik:key[cfg`global] inter key core;
  core:(`global,ik)#core;
  cfg:.util.deepMerge[core]cfg;
  global: cfg`global;
  cfg:``global _ cfg;
- `cfg`global`core!(cfg;global;core)   
+ `cfg`global`core!(cfg;global;core)
  }
 
 
