@@ -54,6 +54,9 @@ d) function
  .import.summary0@'t;
  .d.isSummary:0b;
  if[max x~/:(`;::);:.d.conMod];
+ k:first k where x ~/:get@'.Q.dd[`;]@'k:key `;
+ if[not null k;x:k;];
+ if[max k:x ~/: .Q.dd[`;]@'key `; x:first key [`] where k ];
  r:0!$[-11h = type x;select from .d.conFunc where (func=x) or module = x;select from .d.conFunc where body ~' x];
  r
  }
@@ -204,7 +207,7 @@ d) variable
 
 .import.cjson:{[name;path]
  if[ `qlib.json in key `:.;'`.import.json.exists];
- `:qlib.json 0: enlist .j.j (1#`repository)!enlist`name`repositories!(1#name;enlist path)
+ `:qlib.json 0: enlist .j.j (1#`repositories)!enlist enlist`name`path!(name;path)
  }
 
 

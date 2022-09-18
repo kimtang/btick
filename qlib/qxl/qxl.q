@@ -35,7 +35,7 @@ d) module
 d) function
  qxl
  .qxl.t2d
- Function to give a sumnmary of the rlang module
+ Function to parse table as a dictionary with types given in the first element.
  q) .qxl.t2d ((`b;`old;"10");(`b;`old1;"01"))
 
 
