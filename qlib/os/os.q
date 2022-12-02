@@ -20,9 +20,10 @@ d) function
 
 .os.treeIgnore0:{[ignore;t]
  s:update ksym:key each fullPath,kparent:child from t;
+ mnum:max t`child; 
  s:select from s where not fullPath ~' ksym;
  s:update knum:count@'ksym,kfullPath:fullPath{.Q.dd[x]@/:y}'ksym from s;
- s:update kchild:knum{y + til x}'(1+max[child] + 0^prev sums knum ) from s;
+ s:update kchild:knum{y + til x}'(1+mnum + 0^prev sums knum ) from s;
  s:cols[t]#ungroup select sym:ksym,parent:kparent,fullPath:kfullPath,child:kchild from s;
  select from s where not fullPath in ignore
  }
