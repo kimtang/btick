@@ -44,7 +44,11 @@ d) function
 
 .util.croot:{enlist[`]!enlist x}
 .util.cinit:{([] sym:key x; v:value x) }
-.util.untree:{raze {$[not 99h = type x`v;enlist[x];(@[x;`v;:;::] ), ([]sym: x[`sym] .Q.dd' key x`v;v:value x`v) ] }@'x }
+.util.untree:{raze{
+  if[not 99h = type x`v;:enlist x];
+  if[ 98h = type key x`v;:enlist x];
+  (@[x;`v;:;::] ),([]sym: x[`sym] .Q.dd' key x`v;v:value x`v) 
+ }@'x }
 
 .util.ctable:{
  a:.util.untree over .util.cinit .util.croot x;
@@ -64,7 +68,11 @@ d) function
  b,0!select v:raze v by sym from update sym:-1_/:sym,v:sym{ (-1 # x)!enlist y }'v from a
  } 
 
-.util.cdict:{{x[0;`v]} .util.tree1 over .util.tree0 x}
+.util.cdict:{
+ r:.util.tree1 over  .util.tree0 x;
+ if[not r[0;`sym] ~ 0#`; :r[0;`sym]!enlist r[0;`v] ];
+ r[0;`v]
+ }
 
 .util.deepMerge:{[default;arg]
  .util.cdict delete mode from 0!select by sym from (update mode:`default from .util.ctable default),update mode:`arg from .util.ctable arg

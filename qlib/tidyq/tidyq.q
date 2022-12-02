@@ -16,7 +16,7 @@ d) module
  p:(`cls`func!"~~" vs) @'"||" vs formula;
  p:update acls:{`$s where 1=til[ count s:"%"vs x] mod 2 }@'cls from p;
  p:update afunc:.util.parsea@'func from p;
- (key k xkey t) lj (uj) over .tidyq.dcast0[t;k;]@'p
+ (key?[t;();k!k;()]) lj (uj) over .tidyq.dcast0[t;k;]@'p
  }
 
 d) function
@@ -53,7 +53,11 @@ d) function
  }
 
 .tidyq.melt0:{[t;k;tcols;p0]
- 0!{[kk;x;y] (kk xkey x) uj kk xkey y }[k,p0`acls] over lst:{[t;k;p0;tcols0] ![;();0b;.util.parsea p0`cls] ?[t;enlist(not null@;tcols0`cls);0b;] (k!k),((!) . 1#/:tcols0`cls1`cls),((),p0`acls)!1#/:1_tcols0`cls0 }[t;k;p0]@'select from tcols where cls1 in p0`bcls    
+ lst:{[t;k;p0;tcols0] ![;();0b;.util.parsea p0`cls] ?[t;enlist(not null@;tcols0`cls);0b;] (k!k),((!) . 1#/:tcols0`cls1`cls),((),p0`acls)!1#/:1_tcols0`cls0 }[t;k;p0]@'select from tcols where cls1 in p0`bcls;
+ nlst:first 1#0#lst 0;
+ nkey:key[nlst] except k,p0`acls;
+ nlst:@[nlst;nkey;:;count[nkey]#{}];
+ 1_0!{[kk;x;y] (kk xkey x) uj kk xkey y }[k,p0`acls] over @[lst;0;{y,x};nlst]
  }
 
 d) function

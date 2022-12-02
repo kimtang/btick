@@ -190,23 +190,22 @@ d) function
  q) .import.require `tree/util/ / this will load tree/util/*.q
 
 
+.import.getHome:{
+ global:1_string .Q.dd[;`.btick] hsym `$getenv $[.util.isWin;`USERPROFILE;`HOME];
+ global  
+ }
+
+d) variable
+ import
+ .import.getHome
+ Home directory where the config file lives 
+ q) .import.getHome[] / this shows user home directory
+
 
 .import.ljson:{
- global:1_string .Q.dd[;`.btick] hsym `$getenv $[.util.isWin;`USERPROFILE;`HOME];
- tmp:0!.import.repositories,1!flip`name`path!(`local`global;(enlist".";global));
- tmp:update priority:0wj^(`global`local!0 1) name from tmp; 
- / tmp:0!.import.repositories,1!enlist[`name`path!`local,enlist"."]; 
- tmp:update file:`$.bt.print[":%path%/qlib.json"]@'tmp from tmp;
- tmp:select from tmp where {x~key x}@'file; 
+ tmp:.import.sjson[]; 
  tmp:update cfg:{.j.k "c"$ read1 x}@'file from tmp;
  result:.util.deepMerge over (exec cfg from `priority xasc tmp),2#enlist()!();
- / if[ `globalJson in key result;
- /  globalJson:hsym `$result`globalJson;
- /  if[globalJson~key globalJson;
- /    gJson:.j.k "c"$ read1 globalJson;
- /    result:.util.deepMerge[gJson] result;
- /  ];];
- / if[result~();result:()!()];
  if[.import.config ~ result;:.import.config];
  .import.config:result;
  .bt.action[`.import.ljson] ()!();
@@ -234,6 +233,22 @@ d) variable
  This will create a qlib.json in the current working directory. 
  q) .import.cjson[] / this will create the json file
 
+
+.import.sjson:{
+ global:1_string .Q.dd[;`.btick] hsym `$getenv $[.util.isWin;`USERPROFILE;`HOME];
+ tmp:0!.import.repositories,1!flip`name`path!(`local`global;(enlist".";global));
+ tmp:update priority:0wj^(`global`local!0 1) name from tmp;
+ / tmp:0!.import.repositories,1!enlist[`name`path!`local,enlist"."];
+ tmp:update file:`$.bt.print[":%path%/qlib.json"]@'tmp from tmp;
+ tmp:select from tmp where {x~key x}@'file;
+ tmp
+ }
+
+d) variable
+ import
+ .import.sjson
+ This will show different json configuration files available. 
+ q) .import.sjson[] / this will create the json file
 
 .import.module`util;
 

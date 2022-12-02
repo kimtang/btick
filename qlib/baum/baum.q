@@ -141,6 +141,14 @@ sort:{[formula;t]
 
 \d .
 
+.baum.parseA:{ {((,) scan key x)#\:x} first@'.baum.parsea x}
+.baum.parseT:{ raze {((,) scan key x)#\:x}@'x}
+
+.baum.parse:{
+ if[10 = abs type x; .baum.parseA x] ;
+ .baum.parseT x
+ }
+
 .baum.open:{[formula;l] if[formula~"";:l]; l,enlist formula}
 
 d) function
@@ -157,8 +165,8 @@ d) function
 .baum.tbaum:{[t;formula;l]
  G:key .baum.parsea first formula:"~~" vs formula;
  A:.baum.parsea A:last formula;
- P:([]n:enlist(0#`)!first 0#/:t G;v:enlist 1b); 
- n:raze {((,) scan key x)#\:x}@'{first@'.baum.parsea x}@'l;
+ P:([]n:enlist(0#`)!first 0#/:t G;v:enlist 1b);
+ n:raze .baum.parse @'l;
  P:1!P,([]n;v:1b);
  1!.baum.construct[t;G;P;A]
  }

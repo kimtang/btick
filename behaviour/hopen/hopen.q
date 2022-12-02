@@ -54,7 +54,7 @@ d) function
 
 .hopen.connect:{ 
    hp:`$.bt.print[":%host%:%port%:%user%:%passwd%"] x;
-   hp:@[hopen;(hp;$[.z.h=x`host;1000;300]);0ni];
+   hp:@[hopen;(hp;$[.z.h=x`host;1000;2300]);0ni];
    @[x;`hdl;:;hp]
    }
 

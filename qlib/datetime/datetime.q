@@ -17,4 +17,19 @@ d) function
  q).datetime.week .z.D
  q).datetime.week .z.D + til 7
 
+.datetime.getYearStart:{[x] if[x~(::);x:.z.D]; r:`date$min@'allM @'where @'(`year$now)=`year$allM:(`month$now:(),x) -\: til 12;$[0>type x;first r;r] }
+
+d) function
+ datetime
+ .datetime.getYearStart
+ Function to get the start of the year
+ q) 2022.01.01 2022.01.01 ~ .datetime.getYearStart x:2022.02.01 2022.02.01
+
+.datetime.getYearEnd:{ -1+`date$ 12+`month$ .datetime.getYearStart x }
+
+d) function
+ datetime
+ .datetime.getYearEnd
+ Function to get the start of the year
+ q) 2022.12.01 2022.01.01 ~ .datetime.getYearEnd x:2022.02.01 2022.02.01
 
