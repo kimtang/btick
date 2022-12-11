@@ -69,15 +69,13 @@ d) function
  remote
  .remote.query
  Function to give a query of available connection
- q) .remote.proc:`kx_platform_hdb
+ q) .f.proc:`kx_platform_hdb
  q) .remote.query[`] "1+3"
  f) 1+3
 
-
-.remote.proc:`
 .remote.q:{
-  r:.remote.query[;x]@'.remote.proc;
-  if[0<type .remote.proc;:r ];
+  r:.remote.query[;x]@'.f.proc;
+  if[0<type .f.proc;:r ];
   if[not null r`error;'r`error];
   r`result
  }
@@ -88,13 +86,13 @@ d) function
  remote
  .remote.q
  Function to give a query of available connection
- q) .remote.proc:`kx_platform_hdb
+ q) .f.proc:`kx_platform_hdb
  q) .remote.q "1+3"
  f) 1+3
 
-
 .f.q:{ .f.r:.remote.q x;.f.r }
 .f.e:{ .f.q x }
+.f.proc:`
 .s.e:{ .s.r:.f.q (system;{$[" "= x 0;1_x;x] } over x);.s.r }
 
  

@@ -234,7 +234,7 @@ d) variable
  import
  .import.cjson
  This will create a qlib.json in the current working directory. 
- q) .import.cjson[] / this will create the json file
+ q) .import.cjson[`tmp;`:pathtotmp]
 
 
 .import.sjson:{

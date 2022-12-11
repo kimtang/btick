@@ -30,7 +30,7 @@ d) function
  rlang
  .rlang.setv
  Function to setup path to PATH and R_HOME
- q) variable:.rlang.summary[];variable:update val:enlist["C:\\Program Files\\R\\R-4.1.1\\bin\\i386"] from variable where val like"*R-4.1.1\\bin\\x64*"  ;.rlang.setv variable;
+ q) variable:.rlang.summary[];variable:update val:count[i]#enlist["C:\\Program Files\\R\\R-4.1.3\\bin\\i386"] from variable where val like"*R-4.1.3\\bin\\x64*"  ;.rlang.setv variable;
 
 
 .rlang.init:{
