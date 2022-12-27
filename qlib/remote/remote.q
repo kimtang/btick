@@ -92,14 +92,14 @@ d) function
 
 .f.q:{ .f.r:.remote.q x;.f.r }
 .f.e:{ .f.q x }
-.f.proc:`
+.f.proc:`self
 .s.e:{ .s.r:.f.q (system;{$[" "= x 0;1_x;x] } over x);.s.r }
 
  
 .remote.sbl:{[x]
  summary:.remote.summary x;
- cfg:(.bt.md[`path] "../cfg"),.import.config`remote;
- (`$.bt.print[":%path%/system.sbl"] cfg) 0:  .bt.print["/ %uid%:%host%:%port%:%user%:%passwd%:"]@'summary
+ cfg:(.bt.md[`path] "cfg"),.import.config`remote;
+ (`$.bt.print[":%path%/system.sbl"] cfg) 0: .bt.print["/ %uid%:%host%:%port%:%user%:%passwd%"]@'summary
  }
 
  
@@ -108,7 +108,7 @@ d) function
  remote
  .remote.sbl
  Function to write a config file for sbl. Path can be config in the qlib.json. "remote":{"path": "../cfg","user":"yourname","passwd":"yourpasswd"}
- q) .remote.sbl `repository`env!`btsrc`ex1
+ q) .remote.sbl []
 
  
 .remote.duplicate0:()!()
@@ -125,9 +125,10 @@ d) function
 .remote.duplicate:{[x]
  if[(not type[x] in 10 -11h) or max x~/:(`;::);:.import.doc`.remote.duplicate];
  if[10h=abs type x;x:`$x];
- result:.remote.q x;
- if[not 100h = type result;x set result;:x ];
- l:count get[ result]1;
+ result:.remote.q ({type get x};x);
+ if[not 100h = result;:x ];
+ result:.remote.q ({get get x};x);
+ l:count result 1;
  x set .remote.duplicate0[l][string x]
  }
 
@@ -150,6 +151,8 @@ d) function
  result:.remote.q x;
  if[not 100h = type result;x set result;:x ];
  l:(get[ result]3) except `;
+ l:l where not l like ".z*";
+ l:l where 100h=.remote.q ({ {type get x} @' x};l);
  (x set result),.remote.duplicate@'l
  }
 

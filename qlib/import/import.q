@@ -85,7 +85,7 @@ d) function
 d) function
  import
  .import.doc
- Function to show all available modules
+ Function to show documentation about the module
  q) .import.doc[] / show all modules
  q) .import.doc` / show all modules
  q) .import.doc`os / show all function in module os
@@ -145,7 +145,7 @@ d) function
 d) function
  import
  .import.module
- Function to load library.
+ Function to load library
  q) .import.module[] / this will show loaded libraries and files 
  q) .import.module` / this will show loaded libraries and files 
  q) .import.module `tree / this will load tree/tree.q
@@ -161,7 +161,7 @@ d) function
 d) function
  import
  .import.loadBehaviour
- Function to load library.
+ Function to load behaviour
  q) .import.loadBehaviour[] / this will show loaded libraries and files 
  q) .import.loadBehaviour` / this will show loaded libraries and files 
  q) .import.loadBehaviour `tree / this will load tree/tree.q

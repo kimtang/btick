@@ -35,7 +35,7 @@ d) function
  .bt.md[`result]select from .hopen.con where uid = zu
  }
 
-.hopen.con:1!enlist`uid`host`port`user`passwd`hdl!(`;`;0nj;`;enlist"";0ni)
+.hopen.con:1!enlist`uid`host`port`user`passwd`hdl!(`self;.z.h;"j"$system"p";`;enlist"";0i)
 
 .bt.add[`;`.hopen.add]{[allData]
  if[not min `uid`host`port in key allData;.bt.stdOut0[`error;`hopen] "Uid,host and port are missing";'`.hopen.param];
