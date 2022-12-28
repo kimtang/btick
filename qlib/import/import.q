@@ -208,6 +208,7 @@ d) variable
 .import.ljson:{
  tmp:.import.sjson[]; 
  tmp:update cfg:{.j.k "c"$ read1 x}@'file from tmp;
+ if[0=count tmp;:.import.config];
  result:.util.deepMerge over (exec cfg from `priority xasc tmp),2#enlist()!();
  if[.import.config ~ result;:.import.config];
  .import.config:result;
