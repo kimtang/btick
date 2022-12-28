@@ -206,7 +206,7 @@ d) variable
 
 
 .import.ljson:{
- tmp:.import.sjson[]; 
+ tmp:select from .import.sjson[] where json; 
  tmp:update cfg:{.j.k "c"$ read1 x}@'file from tmp;
  if[0=count tmp;:.import.config];
  result:.util.deepMerge over (exec cfg from `priority xasc tmp),2#enlist()!();
@@ -244,7 +244,7 @@ d) variable
  tmp:update priority:0wj^(`global`local!0 1) name from tmp;
  / tmp:0!.import.repositories,1!enlist[`name`path!`local,enlist"."];
  tmp:update file:`$.bt.print[":%path%/qlib.json"]@'tmp from tmp;
- tmp:select from tmp where {x~key x}@'file;
+ tmp:update json:{x~key x}@'file from tmp;
  tmp
  }
 
