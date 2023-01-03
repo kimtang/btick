@@ -9,8 +9,6 @@ d) module
 .action.calcPort[`dynamicPort]:{[mergeArg;id] id + get  .bt.print[$[10h=type mergeArg`dynamicPort;::;string]mergeArg`dynamicPort ] mergeArg }
 .action.calcPort[`noPort]:{[mergeArg;id] 0nj}
 
-/ .bt.putAction `.action.parse.cfg
-
 .action.parseCfg:{[allData]
  allVar:.action.createVar[allData];
  .cfg:allVar`cfg;
@@ -73,7 +71,8 @@ d) function
 
 
 .action.createVar:{[allData]
- cfg : .j.k "c"$read1 `$ .bt.print[":%folder%/%cfg%.json"] allData;
+ cfg :$[()~key file:`$.bt.print[":%folder%/%cfg%.json"]allData;.j.k "\n"sv system .bt.print["yq -o=json %folder%/%cfg%.yml"]allData; .j.k "c"$read1 file];
+ / cfg : .j.k "c"$read1 `$ .bt.print[":%folder%/%cfg%.json"] allData;
  core: .j.k "c"$read1 `$ .bt.print[":%btsrc%/core/core.json"] allData;
  ik:key[cfg`global] inter key core;
  core:(`global,ik)#core;

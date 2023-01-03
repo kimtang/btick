@@ -14,6 +14,7 @@ d) module
 .bt.addIff[`.action.set.cfg]{[result] 1=count result}
 .bt.add[`.action.parse.cfg;`.action.set.cfg]{[result]
  .proc:result 0;
+ (`$.bt.print [":%folder%/%env%/pm/%uid%"] .proc)set .z.i;
  .proc.za:.Q.host .z.a;
  .behaviour.module@' .proc.library;
  .proc

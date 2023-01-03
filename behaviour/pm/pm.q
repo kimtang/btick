@@ -1,4 +1,4 @@
-/ pm.q:localhost:8888::
+/ pm.q:localhost:9088::
 
 
 / 
@@ -20,8 +20,8 @@ d) module
  t:([]root:enlist `$.bt.print[":%folder%"] allData); 
  t:update sroot:`${1_string x}@'root from t;
  t:ungroup update file:key@'root from t;
- t:select from t where file like "*.json"; 
- t:update cfg:{`$ -5_/:string x}@file from t;
+ t:select from t where max file like/:("*.json";"*.yml"); 
+ t:update cfg:`${first "." vs string x}@'file from t;
  t:update cmd:.bt.print["q pm.q -folder %sroot% -cfg %cfg% status all"]@'t from t;
  enlist[`result]!enlist t 
  }
@@ -55,17 +55,26 @@ d) module
  // result:result lj 1!select cmd,pid from .pm2.getLinStatus[];
  result:select from result where (proc in allData`proc) or `all=allData`proc,(subsys in allData`subsys) or null allData`subsys;  
  result:update pm2:.bt.print["q pm.q -folder %folder% -cfg %cfg% -subsys %subsys% status %proc%"]@'result from result; 
- .bt.md[`result] result  	
+ .bt.md[`result] result  
  }
 
-.pm2.getLinStatus:{
+.pm2.getLinStatus:{[x;y]
  tbl:system "ps -e -o %p -o ,%C, -o %mem -o ,%a";
  update name:{first " "vs x}@'cmd from `pid`cpu`mem`cmd xcol( "JFF*";", ") 0: tbl
  }
 
-.pm2.getWinStatus:{
+.pm2.getWinStatus:{[result;allData]
   tbl:system "tasklist /V /FI \"IMAGENAME eq q.exe\" /FO CSV";
-  `name`pid`mem`cputime`cmd xcol( "*J  *  **";", ") 0: tbl
+  tbl:`name`pid`mem`cputime`cmd xcol( "*J  *  **";", ") 0: tbl;
+  pmFile:`$.bt.print[":%folder%/%cfg%/pm"] allData;
+  pms:(0#`)!0#0ni;
+  if[not ()~key pmFile;pms:get pmFile];
+  pms:{value[x]!key x} pms;
+  pids:update cmd: {.bt.print["-cfg %cfg% -subsys %subsys% -process %process% -id %id%"] `cfg`subsys`process`id!"."vs x}@'string pms pid from tbl where pid in key pms;
+  pids:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""),  .Q.opt " " vs x}@'cmd from pids;
+  result:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""), .Q.opt " " vs x}@'cmd from result; 
+  result:result lj 1!select args,pid from pids;
+  result
  }
 
 .pm2.getOsStatus:$[.util.isWin;.pm2.getWinStatus;.pm2.getLinStatus]
@@ -78,11 +87,11 @@ d) module
 .bt.addIff[`.pm.win.addPid]{[cmd] .util.isWin and not cmd=`json }
 .bt.add[`.pm.parseEnv;`.pm.win.addPid]{[result;allData]
  result:update cmd:{.bt.print["q %btsrc%/action.q -folder %folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id% -trace %trace%"] .env.arg,.env,x}@'result from result;
- result:update startcmd:.bt.print["start \"%cmd%\" /MIN %cmd%"]@'result from result;
- pids:.pm2.getWinStatus[];
- pids:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""),  .Q.opt " " vs x}@'cmd from pids;
- result:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""), .Q.opt " " vs x}@'cmd from result; 
- result:result lj 1!select args,pid from pids;
+ result:update startcmd:.bt.print["start \"%cmd%\" %cmd%"]@'result from result;
+ result:.pm2.getWinStatus[result] .env.arg;
+ / pids:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""),  .Q.opt " " vs x}@'cmd from pids;
+ / result:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""), .Q.opt " " vs x}@'cmd from result; 
+ / result:result lj 1!select args,pid from pids;
  result:select from result where (proc in allData`proc) or `all=allData`proc,(subsys in allData`subsys) or null allData`subsys,(library {any x in y}\: allData`library) or null allData`library;  
  result:update pm2:.bt.print["q pm.q -folder %folder% -cfg %cfg% -subsys %subsys% status %proc%"]@'result from result; 
  / result:select from result where .z.h = `$host;
@@ -115,7 +124,8 @@ d) module
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.start]{[result]
  result:select from result where .z.h = `$host;
  {@[system;x;()]}@'exec startcmd from result where null pid;
- result:result lj 1!select cmd,pid from .pm2.getOsStatus [];
+ .util.sleep 4;
+ result:.pm2.getWinStatus[result] .env.arg;
  result:select subsys,proc,port,pid,pm2 from result;
  .bt.md[`result] result
  }
@@ -125,7 +135,7 @@ d) module
  result:select from result where .z.h = `$host;
  {@[system ;x;()]}@'.bt.print[.pm2.killstr] @'select from result where not null pid;
  result:update pid:0nj from result;
- result:result lj 1!select cmd,pid from .pm2.getOsStatus[];
+ result:.pm2.getWinStatus[result] .env.arg;
  result:select subsys,proc,port,pid,pm2 from result;
  .bt.md[`result] result
  }
@@ -135,7 +145,7 @@ d) module
  result:select from result where .z.h = `$host;
  {@[system ;x;()]}@'.bt.print[.pm2.killstr] @'select from result where not null pid;
  {@[system;x;()]}@'exec startcmd from result where null pid;
- result:result lj 1!select cmd,pid from .pm2.getOsStatus[];
+ result:.pm2.getWinStatus[result] .env.arg;
  result:select subsys,proc,port,pid,pm2 from result;
  .bt.md[`result] result
  }  

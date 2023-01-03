@@ -10,7 +10,7 @@
 
 \c 1000 1000
 
-.import.module`action`behaviour;
+.import.module`util`action`behaviour;
 .behaviour.module`pm;
 
 .bt.addCatch[`]{[error] .bt.stdOut0[`error;`pm] .bt.print["Please investigate the following error: %0"] enlist error;'error};
