@@ -13,12 +13,12 @@ d) module
   ];
  }
 
-.remote.con:flip`uid`host`port`user`passwd!"ssjs*"$\:()
+.remote.con:1!flip`uid`host`port`user`passwd!"ssjs*"$\:()
 
 
 .remote.summary:{[x]
- if[max x~/:(::;`);:.remote.con];
- select from .remote.con where uid = x
+ if[max x~/:(::;`);:0!.remote.con];
+ 0!select from .remote.con where uid = x
  }
 
  
@@ -30,7 +30,7 @@ d) function
  q) .remote.summary[]  / show all available repository
 
 
-.remote.add:{[x] `.remote.con insert x }
+.remote.add:{[x] `.remote.con upsert x }
 
  
 d) function

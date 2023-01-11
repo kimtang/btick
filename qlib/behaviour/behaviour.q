@@ -51,13 +51,13 @@ d) function
  if[11h = type x;:.behaviour.module@'x ];
  if[max x~/:(`;::);:select by module from .behaviour.module0];
  if[-11h = type x;x:string x];
- repositories:.import.repository[]; 
+ repositories:.import.repository[];
  t:raze {
   ignore:{
   ignorePath:`$.bt.print[":%path%/behaviour/.dignore"] x;
   if[not {x~key x}ignorePath ;:()];
   {[x;v]`$ .bt.print[":%path%/behaviour/%val%"]x,.bt.md[`val]v }[x]@'read0 ignorePath
-  } x;  
+  } x;
   .os.treeIgnore[ignore] .bt.print[":%path%/behaviour"] x
   }@'repositories;
  / t:.os.tree .bt.print[":%btsrc%/qlib"] .env;
@@ -72,7 +72,7 @@ d) function
    ];
 
  if[not (".q" ~ -2#x) or ("/" ~ last x);
-   fileToLoad:select from t where max fullPath like/:{ .bt.print[":%path%/behaviour/%module%/%module%.q"] x,y}[.bt.md[`module] x]@'repositories;
+   fileToLoad:select from t where max fullPath like/:{ .bt.print[":%path%/behaviour/%folder%/%module%.q"] x,y}[`module`folder!(x;first "."vs  x)]@'repositories;
    ];
 
  / if[fileToLoad~();:'`module_not_found];

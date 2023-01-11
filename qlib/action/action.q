@@ -58,10 +58,10 @@ d) function
  t:update proc:.Q.dd'[process;id] from t;
  t:update uid:.Q.dd'[env;flip(subsys;process;id)] from t;
  param:allData,allVar`global;
- t:update hdb: {[param;x] .bt.print["%plantsrc%/%data%/%env%/%subsys%/hdb"] param,x}[param]@'t from t;
- t:update audit: {[param;x] .bt.print["%plantsrc%/%audit%/%env%/%subsys%/%process%/%id%"] param,x}[param]@'t from t;
- t:update gData: {[param;x] .bt.print["%plantsrc%/%data%/%env%/%subsys%/%process%"] param,x}[param]@'t from t;
- t:update data: {[param;x] .bt.print["%plantsrc%/%data%/%env%/%subsys%/%process%/%id%"] param,x}[param]@'t from t;
+ t:update hdb: {[param;x] .bt.print["%data%/%env%/%subsys%/hdb"] param,x}[param]@'t from t;
+ t:update audit: {[param;x] .bt.print["%audit%/%env%/%subsys%/%process%/%id%"] param,x}[param]@'t from t;
+ t:update gData: {[param;x] .bt.print["%data%/%env%/%subsys%/%process%"] param,x}[param]@'t from t;
+ t:update data: {[param;x] .bt.print["%data%/%env%/%subsys%/%process%/%id%"] param,x}[param]@'t from t;
  t:update gfile: {[param;x] .bt.print["%folder%/%env%/%subsys%/%process%/global"] param,x}[param]@'t from t;
  t:update lfile: {[param;x] .bt.print["%folder%/%env%/%subsys%/%process%/%id%"] param,x}[param]@'t from t;
  t:update gcorefile: {[param;x] .util.wlin .bt.print["%btsrc%/core/core/%subsys%/%process%/global"] param,x}[param]@'t from t;
