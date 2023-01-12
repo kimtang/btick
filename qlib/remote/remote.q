@@ -73,6 +73,22 @@ d) function
  q) .remote.query[`] "1+3"
  f) 1+3
 
+.remote.qthrow:{[proc;query]
+ r:.remote.query[proc;query];
+ if[not null r`error;'r`error]; 
+ r `result 
+ }
+
+ 
+d) function
+ remote
+ .remote.qthrow
+ Function to give a query of available connection
+ q) .f.proc:`kx_platform_hdb
+ q) .remote.qthrow[`kx_platform_hdb] "1+3"
+ f) 1+3
+
+
 .remote.q:{
   r:.remote.query[;x]@'.f.proc;
   if[0<type .f.proc;:r ];
