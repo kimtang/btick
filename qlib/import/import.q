@@ -29,7 +29,7 @@ d) function
 
 .bt.add[`.import.ljson;`.import.addRepo]{
  if[not `repositories in key .import.config;:()];
- .import.repository update name:`$name from .import.config`repositories;
+ .import.repository {([]name:key x;path:value x)} .import.config`repositories;
  }
 
 .import.summary0:{[t]
@@ -227,16 +227,27 @@ d) variable
 
 .import.cjson:{[name;path]
  if[ `qlib.json in key `:.;'`.import.json.exists];
- `:qlib.json 0: enlist .j.j (1#`repositories)!enlist enlist`name`path!(name;path)
+ `:qlib.json 0: enlist .j.j (1#`repositories)!enlist (enlist name)!enlist path
+ }
+
+d) variable
+ import
+ .import.cjson
+ This will create a local qlib.json in the current working directory. 
+ q) .import.cjson[`tmp;`pathtotmp]
+
+.import.gljson:{[name;path]
+ global:.Q.dd[;`.btick] hsym `$getenv $[.util.isWin;`USERPROFILE;`HOME];
+ if[ `qlib.json in key global ;'`.import.json.exists];
+ .Q.dd[global;`qlib.json] 0: enlist .j.j (1#`repositories)!enlist (enlist name)!enlist path
  }
 
 
 d) variable
  import
- .import.cjson
- This will create a qlib.json in the current working directory. 
- q) .import.cjson[`tmp;`:pathtotmp]
-
+ .import.gljson
+ This will create a global qlib.json in the global directory. 
+ q) .import.gljson[`tmp;`pathtotmp]
 
 .import.sjson:{
  global:1_string .Q.dd[;`.btick] hsym `$getenv $[.util.isWin;`USERPROFILE;`HOME];
