@@ -91,3 +91,29 @@ d) function
  q) .action.createVar[.env] `folder`cfg`subsys`process`id`trace!(`$getenv[ `btsrc],"/plant";`ex1;`scrapeData;`dev;0j;0j)
 
 
+.action.parseSchema:{[allData]
+ core:`$.bt.print[":%btsrc%/core/core/schemas"] allData;
+ plant:`$.bt.print[":%folder%/%env%/schemas"] allData;
+ t:([]plant:`core`plant; path:(core;plant) );
+ t:ungroup update subsys: key@'path from t;
+ t:update path:path .Q.dd'subsys  from t;
+ t:ungroup update file: key@'path from t;
+ t:update path:path .Q.dd'file from t;
+ t:select from t where file like "*.json";
+ t:update src:{@[{"c"$read1 x};x;enlist""]}@'path from t;
+ t:update json:.j.k@'src from t;
+ t:(select subsys from t),'exec `tname`column`addTime`tipe`rattr`hattr`tick`rsubscriber`hsubscriber`upd`ocolumn#/:{(`ocolumn`upd`addTime`tick`rsubscriber`hsubscriber!("";"(::)"),0b,3#enlist"default"),x} @'json from t;
+ t:update ocolumn:column from t where 0=count each ocolumn;
+ t:update tname:`$tname,column:`${","vs x}@'column,tick:`${","vs x}@'tick,rsubscriber:`${","vs x}@'rsubscriber,hsubscriber:`${","vs x}@'hsubscriber,ocolumn:`${","vs x}@'ocolumn from t;
+ t:update schema:column{enlist x!y$\:()}'tipe from t;
+ t:update upd:get@'upd from t; 
+ `core`plant`con!(core;plant;t)     
+ }
+
+
+d) function
+ action
+ .action.parseSchema
+ return all global variables
+ q) .action.parseSchema[.env] `folder`cfg`subsys`process`id`trace!(`pathTo/plant;`horseracing;`scrapeData;`dev;0j;0j)
+ q) .action.parseSchema[.env] `folder`cfg`subsys`process`id`trace!(`$getenv[ `btsrc],"/plant";`ex1;`scrapeData;`dev;0j;0j) 

@@ -30,7 +30,7 @@ d) function
  q) .remote.summary[]  / show all available repository
 
 
-.remote.add:{[x] `.remote.con upsert x }
+.remote.add:{[x] `.remote.con upsert (cols `.remote.con)#x }
 
  
 d) function
