@@ -101,11 +101,12 @@ d) function
  st0:"qlib"vs string y`fullPath; 
  st1:"behaviour"vs st0 0;
  .d.folder:$[1=count st1;`qlib;`behaviour];  
-  x:y,(.bt.md[`uid] first .bt.guid0 1),.bt.md[`module] x;
-  stime:.z.P;
-  error:@[{system x`cmd;`};x;{`$x}];
-  etime:.z.P;
-  `.import.module0 insert r:cols[.import.module0]#x,`stime`etime`error!(stime;etime;error);    
+ x:y,(.bt.md[`uid] first .bt.guid0 1),.bt.md[`module] x;
+ stime:.z.P;
+ `.import.module0 insert r:cols[.import.module0]#x,`stime`etime`error!(stime;0np;`); 
+ error:@[{system x`cmd;`};x;{`$x}];
+ etime:.z.P;
+ .import.module0:0!(1!.import.module0) upsert r:cols[.import.module0]#x,`stime`etime`error!(stime;etime;error);    
  }
 
 .import.module:{

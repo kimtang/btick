@@ -109,7 +109,9 @@ d) function
 .f.q:{ .f.r:.remote.q x;.f.r }
 .f.e:{ .f.q x }
 .f.proc:`self
-.s.e:{ .s.r:.f.q (system;{$[" "= x 0;1_x;x] } over x);.s.r }
+
+.s.q:{ (system;{$[" "= x 0;1_x;x] } over x)}
+.s.e:{ .s.r:.f.q .s.q x;.s.r }
 
  
 .remote.sbl:{[x]

@@ -89,7 +89,13 @@ d) function
 
 .rlang.con:{distinct `$ ssr[;"`";""] each res where {x like "`*"} res:{raze y vs/:x} over enlist[enlist x]," $(,~=<-)"}
 
-.r.e:{ if[not .rlang.calc;:0N!"R turned off"]; .rlang.Rset t:.rlang.con x;.rlang.rcmd str:ssr[;"`";""] x;"r)",1_str; }
+.r.e:{ 
+ if[not .rlang.calc;:0N!"R turned off"];
+ .rlang.Rset t:.rlang.con x;
+ .r.r:.rlang.rget0 str:ssr[;"`";""] x;
+ .r.r
+ }
+
 .p.e:{  .r.e "print(",x,")" }
 
 .rlang.conv:()!()
