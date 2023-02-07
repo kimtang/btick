@@ -1,16 +1,13 @@
 / pm.heartbeat.q:localhost:8877::
 
-.bt.scheduleIn[.bt.action[`.pm.heartbeat.init];;00:00:01] enlist .env.arg;
-
-.bt.add[`.pm.heartbeat.init;`.pm.heartbeat.parse.cfg]{
+.bt.add[`.pm.heartbeat.init;`.pm.heartbeat.parse.cfg]{[allData]
  .pm.heartbeat.heartbeatTime:(.env.result`uid)!count[.env.result]#0nt;	
  r:select uid,`$host,port from .sys where subsys = `admin, process = `ctp;
  if[0=count r;'`.pm.heartbeat.no_admin_ctp_configured];
  adminCtp:first update hp:`$.bt.print[":%host%:%port%"]@'r from r;
- .env.loadBehaviour `hopen;
+ .behaviour.require`hopen;
  .pm.heartbeat.adminCtp:@[;`hdl;:;0n] adminCtp;
  .pm.heartbeat.counter:0;
- .bt.action[`.hopen.init] ()!();
  .bt.action[`.hopen.add] `uid`host`port#.pm.heartbeat.adminCtp;
  }
 
@@ -32,7 +29,7 @@
  1(10b!("not_connected";"connected")) null .pm.heartbeat.adminCtp.hdl;	
  1"\n";
  .pm.heartbeat.counter:(.pm.heartbeat.counter + 1) mod 4; 
- show {([]beat:@[````;;:;`$"*"]@'(.pm.heartbeat.counter + til count x) mod 4 ;uid:key x;time:?[00:00:03>23:59:59^.z.T - value x;0nt;.z.T - value x ];heartbeat:?[00:00:03>23:59:59^.z.T - value x ;`;`$"no heartbeat"] )} .env.result.uid#.pm.heartbeat.heartbeatTime	
+ show {([]beat:@[````;;:;`$"*"]@'(.pm.heartbeat.counter + til count x) mod 4 ;uid:key x;time:?[00:00:09>23:59:59^.z.T - value x;0nt;.z.T - value x ];heartbeat:?[00:00:09>23:59:59^.z.T - value x ;`;`$"no heartbeat"] )} .env.result.uid#.pm.heartbeat.heartbeatTime	
  }
 
 upd:{[tname;data] 

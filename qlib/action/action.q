@@ -3,6 +3,17 @@ d) module
  action provides a set of functions that help you to read the config file. 
  q).import.module`action
 
+.action.parseArg:{
+  .util.arg
+   .util.optArg0[`process;`;`noProcess]
+   .util.optArg0[`id;"J";0ni]
+   .util.optArg0[`btsrc;`;`$getenv`BTSRC]  
+   .util.optArg0[`folder;`;`$getenv[`BTSRC],"/plant"] 
+   .util.optArg0[`cfg;`;`] 
+   .util.optArg0[`subsys;`;`]
+   .util.optArg0[`trace;"J";0]
+   x    
+ }
 
 .action.calcPort:()!()
 .action.calcPort[`setPort]:{[mergeArg;id] get .bt.print[$[10h=type mergeArg`setPort;::;string]mergeArg`setPort ] mergeArg   }

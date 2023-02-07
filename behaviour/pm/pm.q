@@ -86,9 +86,9 @@ d) module
 
 .bt.addIff[`.pm.win.addPid]{[cmd] .util.isWin and not cmd=`json }
 .bt.add[`.pm.parseEnv;`.pm.win.addPid]{[result;allData]
- result:update cmd:{.bt.print["q %btsrc%/action.q -folder %folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id% -trace %trace%"] .env.arg,.env,x}@'result from result;
+ result:update cmd:{.bt.print["q %btsrc%/action.q -folder %folder% -cfg %cfg% -subsys %subsys% -process %process% -id %id% -trace %trace%"] x,y}[allData]@'result from result;
  result:update startcmd:.bt.print["start \"%cmd%\" %cmd%"]@'result from result;
- result:.pm2.getWinStatus[result] .env.arg;
+ result:.pm2.getWinStatus[result] allData;
  / pids:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""),  .Q.opt " " vs x}@'cmd from pids;
  / result:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""), .Q.opt " " vs x}@'cmd from result; 
  / result:result lj 1!select args,pid from pids;
@@ -167,9 +167,11 @@ d) module
  }
 
 .bt.addIff[`.pm.os.heartbeat]{[cmd;result] cmd = `heartbeat}
-.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.heartbeat]{[result]
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.heartbeat]{[result;allData]
  .env.result:result;
- system .bt.print["l %btsrc%/behaviour/pm/pm.heartbeat.q"] .env;
+ .behaviour.require `pm.heartbeat;
+ .bt.scheduleIn[.bt.action[`.pm.heartbeat.init];;00:00:01] enlist allData;
+ / system .bt.print["l %btsrc%/behaviour/pm/pm.heartbeat.q"] .env;
  } 
 
 .bt.addIff[`.pm.os.info]{[cmd;result] cmd = `info}

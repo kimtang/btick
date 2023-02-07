@@ -5,7 +5,7 @@ d) module
  q).behaviour.module`hopen
 
 
-.bt.add[`.library.init;`.hopen.init]{[allData]}
+.bt.add[`;`.hopen.init]{[allData]}
 
 d) function
  hopen
@@ -116,3 +116,4 @@ d) function
  q) .bt.add[`.hopen.pc;`.my.fnc]{[zw] zw } / zw is the closed handle  
 
 
+.bt.action[`.hopen.init] ()!();

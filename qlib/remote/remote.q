@@ -3,15 +3,11 @@ d) module
  remote provides connections to your bt plant
  q).import.module`remote
 
+.import.require`util`rlang`behaviour;
+.behaviour.require`hopen;
  
 
-.remote.init:{[x]
- .import.require`util`rlang;
-  if[not `hopen in key `;
-   system .bt.print["l %btsrc%/behaviour/hopen/hopen.q"] (1#`btsrc)!enlist getenv`btsrc;
-   .bt.action[`.hopen.init] ()!();
-  ];
- }
+.remote.init:{[x]}
 
 .remote.con:1!flip`uid`host`port`user`passwd!"ssjs*"$\:()
 
@@ -30,7 +26,9 @@ d) function
  q) .remote.summary[]  / show all available repository
 
 
-.remote.add:{[x] `.remote.con upsert (cols `.remote.con)#x }
+.remote.add:{[x]
+  `.remote.con upsert (cols `.remote.con)#x
+ }
 
  
 d) function
@@ -116,11 +114,10 @@ d) function
  
 .remote.sbl:{[x]
  summary:.remote.summary x;
- cfg:(.bt.md[`path] "cfg"),.import.config`remote;
- (`$.bt.print[":%path%/system.sbl"] cfg) 0: .bt.print["/ %uid%:%host%:%port%:%user%:%passwd%"]@'summary
+ path:.bt.md[`path]  1_ ssr[;":./";":"] string {[x] if[max key[ x] like "*sublime-project";:x]; .Q.dd[x;`..] }/[4; `:.];
+ (`$.bt.print[":%path%/cfg/system.sbl"] path) 0: .bt.print["/ %uid%:%host%:%port%:%user%:%passwd%"]@'summary
  }
 
- 
 
 d) function
  remote

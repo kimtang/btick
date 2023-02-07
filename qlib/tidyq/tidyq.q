@@ -57,7 +57,8 @@ d) function
  nlst:first 1#0#lst 0;
  nkey:key[nlst] except k,p0`acls;
  nlst:@[nlst;nkey;:;count[nkey]#{}];
- 1_0!{[kk;x;y] (kk xkey x) uj kk xkey y }[k,p0`acls] over @[lst;0;{y,x};nlst]
+ / 1_0!{[kk;x;y] (kk xkey x) uj kk xkey y }[k,p0`acls] over @[lst;0;{y,x};nlst]
+ 1_0!?[;();{x!x} k,p0`acls;()] raze @[lst;0;{y,x};nlst]
  }
 
 d) function

@@ -73,10 +73,10 @@ d) function
  .rlang.Rset0[`nodes] nodes;
  .rlang.Rset0[`colors] colors; 
  "r" "net <- graph_from_data_frame(d=behaviours, vertices=nodes ,directed=T) ";
- "r" "v1 <- subcomponent(net, which(V(net)$name=='.action.init'), 'all')";
- "r" "net1 <- subgraph(net, v1)";
- "p" "plot(net1, vertex.size=4, edge.arrow.size=.5, vertex.label.color='black', vertex.label.dist=1.5)";
- "p" "legend('topleft',bty = 'n',legend=colors$module,fill=colors$color, border=NA)";
+ / "r" "v1 <- subcomponent(net, which(V(net)$name=='.action.init'), 'all')";
+ / "r" "net1 <- subgraph(net, v1)";
+ "p" "plot(net, vertex.size=4, edge.arrow.size=.5, vertex.label.color='black', vertex.label.dist=1.5)";
+ / "p" "legend('topleft',bty = 'n',legend=colors$module,fill=colors$color, border=NA)";
  }
 
 d) function

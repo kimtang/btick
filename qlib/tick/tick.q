@@ -7,7 +7,7 @@ d) module
 .tick.addTime0:()!()
 .tick.addTime0[0h]:{[data] enlist[.z.p],data }
 .tick.addTime0[98h]:{[data] `time xcols update time:.z.p from data } / table
-.tick.addTime0[99h]:{[data] @[data;`time;:;.z.p]  } /dictionary
+.tick.addTime0[99h]:{[data] (`time,key[data])# @[;`time;:;.z.p] (.bt.md[`]{}), data  } /dictionary
 .tick.addTime:{[data] .tick.addTime0[ $[type[data] in 0 98 99h;type data;0h] ] data }
 
 .tick.addDate0:()!()

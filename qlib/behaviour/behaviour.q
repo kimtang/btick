@@ -110,3 +110,17 @@ d) function
  q) .behaviour.doc`.hopen.add
 
 
+.behaviour.require:{ 
+ if[x in .behaviour.module0`module;:()];
+ :.behaviour.module x  
+ }
+
+d) function
+ behaviour
+ .behaviour.require
+ Load only once
+ q) .behaviour.require`hopen / load hopen only once
+
+
+
+
