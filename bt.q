@@ -196,3 +196,5 @@ addDelay[`]`.bt.no_delay
 
 
 errors:{select from .bt.history where not null error}
+
+.z.exit:{ .bt.action[`.z.exit] enlist[`arg]!enlist x }

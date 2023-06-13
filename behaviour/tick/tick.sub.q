@@ -37,7 +37,7 @@ upd:{[tname;data]
 
 .bt.addIff[`.tick.replay.logFiles]{[logFiles] 1 <= count select from logFiles where not replayed }
 .bt.add[`.tick.init.logFiles`.tick.replay.logFiles;`.tick.replay.logFiles]{[logFiles;result] 
- {@[-11!;x;()]}@'exec file from logFiles where not replayed;
+ {@[-11!;x;()]}@'.Q.dd[hsym`$.proc`cwd;]@'exec `${1_x}@'string file from logFiles where not replayed;
  logFiles:update replayed:1b from logFiles;
  nlogFiles:ungroup update file: {`dontcare,x ".tick.logFiles"}@' hdl,replayed:0b from result;
  nlogFiles:update replayed:1b from nlogFiles where file = `dontcare;
@@ -53,7 +53,9 @@ upd:{[tname;data]
  {-11!x`j`L;}@'{
  	subsys0:first exec subsys from .tick.con where hdl = x;
  	con:select subsys,tname,rsubscriber:.proc.uid from .tick.schemas where subsys = subsys0;
- 	x (`.bt.action;`.tick.sub;`uid`con!(.proc`uid;con)) 
+ 	r:x (`.bt.action;`.tick.sub;`uid`con!(.proc`uid;con));
+    r[`L]: .Q.dd[hsym`$.proc`cwd;]`$1_string r`L; 
+    r
  	}@'hdls;	
  }
 

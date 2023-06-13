@@ -1,7 +1,7 @@
 
-.tick.zd:17 3 6
+.tick.zd:17 2 6
 
-.bt.add[`.bus.handshake;`.tick.init.schemas]{
+.bt.add[`.library.init;`.tick.init.schemas]{
  .tick.uid: `$.bt.print["%subsys%.%process%.%id%"] .proc;
  .tick.schemas:select from .schemas.con where subsys = .proc`subsys,((`default;.tick.uid) {max x in y}/:tick);
  .tick.c:exec tname!column from .tick.schemas;
@@ -20,10 +20,18 @@
  }
 
 
+.bt.add[`.tick.init.schemas;`.tick.cleanUp]{
+ if[()~`$.bt.print[":%data%/staging/%date%"] aData:.proc,.bt.md[`date] .z.D;:()];
+ if[not ()~`$.bt.print[":%data%/staging/%date%.old"]aData;@[system;;()] .bt.print["rm -rf %data%/staging/%date%.old"]aData];
+ @[system;;()] .bt.print["mv %data%/staging/%date% %data%/staging/%date%.old"] aData;
+ }
+
+
+/ .bt.add[`.bus.handshake;`.tick.init.schemas]{}
+
+
 .bt.addIff[`.tick.waitForTick]{[data] 1 = count select from data where uid = .tick.con`uid }
-.bt.add[`.bus.avail;`.tick.waitForTick]{
- `topic`data!(`.tick.askForLogs;.tick.con)
- } 
+.bt.add[`.bus.avail;`.tick.waitForTick]{ `topic`data!(`.tick.askForLogs;.tick.con) } 
 
 .bt.addOnlyBehaviour[`.tick.waitForTick]`.bus.sendTweet
 

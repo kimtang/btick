@@ -64,6 +64,14 @@ d) module
  }
 
 .pm2.getWinStatus:{[result;allData]
+  lines: system .bt.print["pwsh --command \"%0\""] enlist"Get-Process -Name q* | select Id,CommandLine | ConvertTo-Csv -NoTypeInformation"; 
+  tbl:`id`cmd xcol ("I*";", ") 0: lines;
+  result:update args:{raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""), .Q.opt " " vs x}@'cmd from result;
+  result:result lj 1!select args:{ raze raze value `cfg`subsys`process`id #(`cfg`subsys`process`id!4#""),  .Q.opt " " vs last "action.q" vs x }@'cmd,pid:id from tbl;
+  result
+ }
+
+.pm2.getWinStatusOld:{[result;allData]
   tbl:system "tasklist /V /FI \"IMAGENAME eq q.exe\" /FO CSV";
   tbl:`name`pid`mem`cputime`cmd xcol( "*J  *  **";", ") 0: tbl;
   pmFile:`$.bt.print[":%folder%/%cfg%/pm"] allData;
@@ -121,41 +129,41 @@ d) module
  } 
 
 .bt.addIff[`.pm.os.start]{[cmd] cmd = `start}
-.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.start]{[result]
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.start]{[result;allData]
  result:select from result where .z.h = `$host;
  {@[system;x;()]}@'exec startcmd from result where null pid;
  .util.sleep 4;
- result:.pm2.getWinStatus[result] .env.arg;
+ result:.pm2.getWinStatus[result] allData;
  result:select subsys,proc,port,pid,pm2 from result;
  .bt.md[`result] result
  }
 
 .bt.addIff[`.pm.os.kill]{[cmd] cmd in `kill`stop}
-.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.kill]{[result]
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.kill]{[result;allData]
  result:select from result where .z.h = `$host;
  {@[system ;x;()]}@'.bt.print[.pm2.killstr] @'select from result where not null pid;
  result:update pid:0nj from result;
- result:.pm2.getWinStatus[result] .env.arg;
+ result:.pm2.getWinStatus[result] allData;
  result:select subsys,proc,port,pid,pm2 from result;
  .bt.md[`result] result
  }
 
 .bt.addIff[`.pm.os.restart]{[cmd] cmd = `restart}
-.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.restart]{[result]
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.restart]{[result;allData]
  result:select from result where .z.h = `$host;
  {@[system ;x;()]}@'.bt.print[.pm2.killstr] @'select from result where not null pid;
  {@[system;x;()]}@'exec startcmd from result where null pid;
- result:.pm2.getWinStatus[result] .env.arg;
+ result:.pm2.getWinStatus[result] allData;
  result:select subsys,proc,port,pid,pm2 from result;
  .bt.md[`result] result
  }  
 
 .bt.addIff[`.pm.os.debug]{[cmd;result] cmd = `debug}
-.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.debug]{[result]
+.bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.debug]{[result;allData]
  if[not 1=count result;1 "Only one process is allowed in debug mode";:()];
  result:result 0;
  if[not null result`pid;{@[system ;x;()]} .bt.print[.pm2.killstr] result];
- .env.arg:@[;`cmd;:;`start].env.arg;
+ .env.arg:@[;`cmd;:;`start]allData;
  .env.arg:@[;`process;:;first` vs .env.arg`proc] .env.arg;
  .env.arg:@[;`id;:;"J"$string last` vs .env.arg`proc] .env.arg;
  .bt.history:1#.bt.history;
@@ -188,8 +196,8 @@ d) module
 
 .bt.addIff[`.pm.os.sbl]{[cmd;result] cmd = `sbl}
 .bt.add[`.pm.win.addPid`.pm.linux.addPid;`.pm.os.sbl]{[result]
- 1 "We will create ../cfg/system.sbl";
- `:../cfg/system.sbl 0: .bt.print["/ %uid%:%host%:%port%::"] @'select uid:.Q.dd'[env;flip (subsys;process;id)],host:`localhost,port from result where not null port
+ 1 "We will create cfg/system.sbl";
+ `:cfg/system.sbl 0: .bt.print["/ %uid%:%host%:%port%::"] @'select uid:.Q.dd'[env;flip (subsys;process;id)],host:`localhost,port from result where not null port
  } 
 
 .bt.addIff[`.pm.os.sblh]{[cmd;result] cmd = `sblh}

@@ -1,0 +1,11 @@
+{
+	"docker":{
+		"daemon":{
+			"host":"localhost",
+			"port":2375
+		},
+		"openapi":{
+			"json":"v1.41.json"
+		}
+	}
+}

@@ -8,6 +8,8 @@ d) module
 
 .rselenium.config: (``remoteDriver)!enlist[::;] `browserName`port`remoteServerAddr!("chrome";4444f;"localhost")
 
+.rselenium.con:0#`
+
 .rselenium.init:{[x]
  if[`rselenium in key .import.config;.rselenium.config:(.bt.md[`]{}), .util.deepMerge[.rselenium.config] .import.config`rselenium ];
  update port:"j"$port from `.rselenium.config.remoteDriver;
@@ -25,8 +27,9 @@ d) module
 
 
 .rselenium.summary:{[x]
- if[max x~/:(::;`);:0!.rselenium.con];
- 0!select from .rselenium.con where uid = x
+  .rselenium.con
+ / if[max x~/:(::;`);:0!.rselenium.con];
+ / 0!select from .rselenium.con where uid = x
  }
 
  
@@ -43,6 +46,7 @@ d) function
    if[`RSelenium~`$class[ 0]`package;.rselenium.conClose name ];
    ];
  driver:"r" .bt.print["%name%<-remoteDriver(browserName = \"%browserName%\")"] (.bt.md[`name]name),.rselenium.config`remoteDriver;
+ .rselenium.con:distinct .rselenium.con,name;
  name
  }
 
@@ -62,7 +66,8 @@ d) function
  q) .rselenium.conClose[]  / show all available repository
 
 
-.rselenium.conOpen:{[x] {(`$x`names)!y } .  "r" .bt.print["%name%$open()"] .bt.md[`name]x }
+.rselenium.conOpen:{[x]   {(`$x`names)!y } .  "r" .bt.print["%name%$open()"] .bt.md[`name]x }
+/ .rselenium.conOpen:{[x] r:{(`$x`names)!y } .  "r" .bt.print["%name%$open()"] .bt.md[`name]x;.rselenium.con:distinct .rselenium.con,r;r }
 
 d) function
  rselenium
@@ -151,6 +156,27 @@ d) function
  select the first node and return as text
  q) .rselenium.node_text[remDir] ""
 
+.rselenium.node_attr:{[remDir;attr0;selector]
+ "r" .bt.print["%remDir%$getPageSource()[[1]] %pipe% read_html() %pipe% html_node('%selector%') %pipe% html_attr('%attr0%')"] `remDir`selector`pipe`attr0!(remDir;selector;"%>%";attr0)
+ } 
+
+d) function
+ rselenium
+ .rselenium.node_attr
+ select the first node and return as text
+ q) .rselenium.node_attr[remDir;"";"value"]
+
+
+.rselenium.nodes_attr:{[remDir;attr0;selector]
+ "r" .bt.print["%remDir%$getPageSource()[[1]] %pipe% read_html() %pipe% html_nodes('%selector%') %pipe% html_attr('%attr0%')"] `remDir`selector`pipe`attr0!(remDir;selector;"%>%";attr0)
+ } 
+
+d) function
+ rselenium
+ .rselenium.nodes_attr
+ select the first node and return as text
+ q) .rselenium.nodes_attr[remDir;"";"value"] 
+
 
 .rselenium.node_table:{[remDir;selector]
  .rselenium.toTbl "r" .bt.print["%remDir%$getPageSource()[[1]] %pipe% read_html() %pipe% html_node('%selector%') %pipe% html_table(fill=TRUE)"] `remDir`selector`pipe!(remDir;selector;"%>%")
@@ -174,7 +200,7 @@ d) function
 .rselenium.wetest:{[name;maxTry;sec;selector]
  wetest:{[name;selector] not "b"$ first "r" .bt.print["tryCatch({%name%$findElement(using = 'css', \"%selector%\")},error = function(e){NULL}) %pipe% is.null "] `name`selector`pipe!(name;selector;"%>%") };
  while[maxTry-:1;
-  if[wetest[name]selector;:1b];
+  if[wetest[name]ssr[;"\"";"\\\""]selector;:1b];
   .util.sleep sec;
  ];
  :0b
@@ -216,11 +242,42 @@ d) function
  q) .rselenium.clickElement[remDr] "body > div.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.quick-base.login-dialog.ui-dialog-buttons > div.ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix > div > button > span"
 
 
+.rselenium.getCurrentUrl:{[x]first "r" .bt.print["%name%$getCurrentUrl()"] .bt.md[`name]x}
 
+d) function
+ rselenium
+ .rselenium.getCurrentUrl
+ navigate to a page
+ q) .rselenium.getCurrentUrl remDir
+
+
+.rselenium.closeWindow:{[x]first "r" .bt.print["%name%$closeWindow()"] .bt.md[`name]x}
+
+d) function
+ rselenium
+ .rselenium.closeWindow
+ close a window
+ q) .rselenium.closeWindow remDir
+
+.rselenium.closeall:{[x]first "r" .bt.print["%name%$closeall()"] .bt.md[`name]x}
+
+d) function
+ rselenium
+ .rselenium.closeall
+ close a window
+ q) .rselenium.closeall remDir
+
+
+.bt.add[`.z.exit;`.rselenium.exit]{ .rselenium.closeWindow@'.rselenium.con;.rselenium.closeall@'.rselenium.con}
 
 .rselenium.init[] 
 
 /
 
+x:0
+
+.bt.action[`.z.exit] enlist[`arg]!enlist 0
+
+.z.exit
 
 remDir<-remoteDriver(browserName = "chrome")

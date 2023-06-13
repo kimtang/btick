@@ -98,6 +98,7 @@ d) function
 .import.module0:flip`uid`module`file`stime`etime`error!()
 
 .import.module1:{[x;y]
+ old:.d.folder;  
  st0:"qlib"vs string y`fullPath; 
  st1:"behaviour"vs st0 0;
  .d.folder:$[1=count st1;`qlib;`behaviour];  
@@ -107,6 +108,7 @@ d) function
  error:@[{system x`cmd;`};x;{`$x}];
  etime:.z.P;
  .import.module0:0!(1!.import.module0) upsert r:cols[.import.module0]#x,`stime`etime`error!(stime;etime;error);    
+ .d.folder:old;
  }
 
 .import.module:{

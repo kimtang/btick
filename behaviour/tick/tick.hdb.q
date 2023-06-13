@@ -72,7 +72,3 @@
 .bt.addIff[`.tick.hdb.reload]{[data] data[`uid] = .tick.lead   }
 
 / 
-
-tables[]
-
-select from property

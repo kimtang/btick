@@ -32,3 +32,11 @@ end:{(neg union/[w[;;0]])@\:(`.u.end;x)}
 /  data:.tick.addCols[tname;data]; / now distribute to the 
 /  .u.pub[tname;data];
 /  }
+
+/
+
+.u.upd
+
+.u.t
+
+nextRace

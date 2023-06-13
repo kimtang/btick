@@ -13,8 +13,7 @@ d) function
  return the where column from a select statement
  q) .util.parsec "not null a, b=`h"
 
-
-.util.parseb:{ if[not 10h=type x;:x]; parse["select by ",x," from t"]3}
+.util.parseb:{ if[not 10h=type x;:x];if[max (1b;"")~\:x;:1b]; parse["select by ",x," from t"]3}
 
 d) function
  util
@@ -22,7 +21,7 @@ d) function
  return the by column from a select statement
  q) .util.parseb "not null a, tmp:b=`h"
 
-.util.parsea:{ if[not 10h=type x;:x];if[""~x;:()!()];; parse["select ",x," from t"]4}
+.util.parsea:{ if[not 10h=type x;:x];if[""~x;:()!()]; parse["select ",x," from t"]4}
 
 d) function
  util

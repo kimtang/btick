@@ -47,6 +47,7 @@ d) function
  .rlang.calc:1b;
  if[not `.rlang.ts in  exec arg[;0] from .bt.tme where null runAt,-11h = type@'arg[;0];.bt.action[`.rlang.ts] ()!();];
  "r" "library(ggplot2)";
+ "r" "Sys.setenv(TZ='GMT')";
  "r" .bt.print["source('%BTSRC%/qlib/rlang/ggplot2_formatter.r')"] `zo`BTSRC! (.z.o;ssr [getenv `BTSRC;"\\";"/"]);
  }
 
@@ -114,9 +115,8 @@ d) function
 
 .rlang.Rget:{x:(),x; .rlang.Rset t:.rlang.con x:$[10h=abs type x;x;string x];.rlang.rget0 ssr[;"`";""] x }
 
-.rlang.Rframe:{ 
-    t:.rlang.Rget x;
-    arg:{y!x} . flip 2 cut t 0;
+.rlang.Rframe0:{ [t]
+    arg:t 0;
     nme:`$arg`names;
     rns:arg`row.names;
     mat:{ .rlang.frame_[0h=type x]  x } each t[1];
@@ -124,6 +124,16 @@ d) function
      /(nme;rns;mat)
      flip ((`$"row_names"),nme)!enlist[rns],mat 
  }
+
+
+.rlang.Rframe:{  .rlang.Rframe0 .rlang.Rget x }
+
+d) function
+ rlang
+ .rlang.Rframe
+ Function to set the variable
+ q).rlang.Rframe `mpg
+
 
 / file:"rlang/ggplot2_formatter.r"
 / repo:`btsrc

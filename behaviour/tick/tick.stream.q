@@ -16,9 +16,15 @@
  }
 
 .bt.add[`.tick.init.schemas;`.tick.stream.iLogFile]{
- .tick.nLogFile:0;	
- .tick.logFiles:`$();
  .tick.d:.z.D;
+ folder:`$.bt.print[":%data%/tick"] .proc;
+ t:([]folder;file:key folder);
+ t:update date:"D"$ -2_/:string file from t;
+ t:update nLogFile:"J"$ 11_/:string file from t;
+ t:update path:.Q.dd'[folder;file] from t ;
+ t:select from t where date = .tick.d;
+ .tick.nLogFile:$[0=count t;0;1+max t`nLogFile ]; 
+ .tick.logFiles:$[0=count t;`$();t`path ];
  .tick.L: `$.bt.print[":%data%/tick/%d%.%nLogFile%"] .tick,.proc;
  .[.tick.L;();:;()];
  .tick.l:hopen .tick.L;
@@ -45,6 +51,7 @@
 .bt.addDelay[`.tick.stream.eod]{`tipe`time!(`at;.tick.d + .tick.eodTime )}
 .bt.add[`.tick.stream.iLogFile`.tick.stream.eod;`.tick.stream.eod]{
  tmp:.tick;
+ .tick.d:.tick.d+1;
  hclose .tick.l;
  .tick.nLogFile:0;	
  .tick.logFiles:`$();
@@ -53,7 +60,6 @@
  .tick.l:hopen .tick.L;
  .tick.i:0;
  .tick.j:0;
- .tick.d:.tick.d+1;
  :`topic`data!(`.tick.eod; .proc,`d`logFiles#tmp )
  }
 

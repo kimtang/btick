@@ -128,3 +128,5 @@ d) function
  return all global variables
  q) .action.parseSchema[.env] `folder`cfg`subsys`process`id`trace!(`pathTo/plant;`horseracing;`scrapeData;`dev;0j;0j)
  q) .action.parseSchema[.env] `folder`cfg`subsys`process`id`trace!(`$getenv[ `btsrc],"/plant";`ex1;`scrapeData;`dev;0j;0j) 
+
+

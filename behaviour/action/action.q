@@ -57,7 +57,7 @@ d) module
  t:ungroup update file:.util.getFiles@'folder from t;
  t:update file:.util.wlin@'1_/:string file from t;
  t:update name: { last .proc.del vs x}@'file from t; 
- t:update suffix: `${ {x 1}"." vs x}@'name from t;
+ t:update suffix: `${ last"." vs x}@'name from t;
  t:update cmd:{"l ",x }@'file from t;
  t:update error:{@[{system x;`};x;{`$x}] }@'cmd from t where suffix=`q;
  t:update error:{[name;file] .[{[name;file] name set get file;`};(`$name;hsym`$file);{`$x}] }'[name;file] from t where suffix=`;

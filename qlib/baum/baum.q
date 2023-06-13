@@ -119,9 +119,9 @@ valid:{[p;g]
  1!(0!p)i}
 
 
-parsec:{first parse["select from t where ", x]2}
-parseb:{ parse["select by ",x," from t"]3}
-parsea:{ parse["select ",x," from t"]4}
+parsec:{ if[-11h=type x;x:string x] ; first parse["select from t where ", x]2}
+parseb:{ if[-11h=type x;x:string x] ; parse["select by ",x," from t"]3}
+parsea:{ if[-11h=type x;x:string x] ; parse["select ",x," from t"]4}
 
 open:{[formula;l] if[formula~"";:l]; l,enlist formula}
 
@@ -145,7 +145,11 @@ sort:{[formula;t]
 .baum.parseT:{ raze {((,) scan key x)#\:x}@'x}
 
 .baum.parse:{
- if[10 = abs type x; .baum.parseA x] ;
+ if[ 10h = abs type x; :.baum.parseA x ];
+ if[ ` ~ x; :() ];
+ if[ -11h = type x; :.baum.parseA string x ];
+ if[ 11h = type x; :.baum.parseA string  x 0 ]; 
+ if[(abs type x) in 11 10h ; :.baum.parseA x] ;
  .baum.parseT x
  }
 

@@ -3,7 +3,7 @@ d) module
  process management library in btick 
  q).import.module`pm
 
-.import.require`behaviour`util`action`behaviour`pm;
+.import.require`behaviour`util`action`behaviour;
 .behaviour.module`pm;
 
 .pm.parseArg:{[zx]
@@ -23,7 +23,7 @@ d) module
 
 
 d) function
- remote
+ pm
  .pm.parseArg
  Function to give a parse pm arguments to be used
  q) .pm.parseArg "-folder plant -cfg vas status all" / parse arguments for pm
@@ -35,8 +35,10 @@ d) function
  
 
 d) function
- remote
+ pm
  .pm.main
  Function to execute pm commands 
  q) .pm.main "-folder plant"
  q) .pm.main "-folder plant -cfg vas status all"
+
+

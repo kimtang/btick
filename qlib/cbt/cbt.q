@@ -73,10 +73,10 @@ d) function
  .rlang.Rset0[`nodes] nodes;
  .rlang.Rset0[`colors] colors; 
  "r" "net <- graph_from_data_frame(d=behaviours, vertices=nodes ,directed=T) ";
- / "r" "v1 <- subcomponent(net, which(V(net)$name=='.action.init'), 'all')";
- / "r" "net1 <- subgraph(net, v1)";
- "p" "plot(net, vertex.size=4, edge.arrow.size=.5, vertex.label.color='black', vertex.label.dist=1.5)";
- / "p" "legend('topleft',bty = 'n',legend=colors$module,fill=colors$color, border=NA)";
+ "r" "v1 <- subcomponent(net, which(V(net)$name=='.action.init'), 'all')";
+ "r" "net1 <- subgraph(net, v1)";
+ "p" "plot(net1, vertex.size=4, edge.arrow.size=.5, vertex.label.color='black', vertex.label.dist=1.5)";
+ "p" "legend('topleft',bty = 'n',legend=colors$module,fill=colors$color, border=NA)";
  }
 
 d) function
@@ -85,5 +85,34 @@ d) function
  Function to plot the behaviour of the bt process
  q) .cbt.igraph[]  / plot own behaviour
  q) .cbt.igraph .bt.behaviours / plot the behaviours
+
+.cbt.cschema:{[plantFolder;env;subsys;tname;data]
+ path:.Q.dd[hsym plantFolder;]env,`schemas,subsys, .Q.dd[tname]`json;
+ tipe:@[;where (tipe=" ") or ( tipe = upper tipe);:;"*"] tipe: exec t from mdata:meta data;
+ rattr:raze exec string (`$"*")^f from mdata;
+ hattr:raze exec string (`$"*")^f from mdata;
+ column:","sv string cols data ;
+ schema:(!) . flip 2 cut (
+  `tname;tname;
+  `column;column;
+  `tipe;tipe;
+  `rattr;rattr;
+  `hattr;hattr;
+  `tick;"default";
+  `rsubscriber;"default";
+  `hsubscriber;"default";
+  `addTime; 1b;
+  `ocolumn; column;
+  `upd; "{x}"       
+  );
+ path 0: enlist .j.j schema
+ }
+
+d) function
+ action
+ .cbt.cschema
+ create schema
+ q) .cbt.cschema[`plant;`baum;`subsys;`myname] ([]a:1 2 3;b: 4 5 6) 
+
 
 .cbt.init[]

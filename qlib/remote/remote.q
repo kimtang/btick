@@ -39,7 +39,7 @@ d) function
 
  
 
-.remote.query:{[proc;query]
+.remote.query0:{[mode;proc;query]
  if[not -11h = type proc;:.remote.summary[] ];
  if[0=count select from .hopen.con where uid = proc;
    allProcs:.remote.summary proc;
@@ -55,21 +55,32 @@ d) function
    procData:first 0!select from .hopen.con where uid = proc;
  ];
 
- if[null procData`hdl;'`.remote.proc_not_connected];
+ / if[null procData`hdl;'`.remote.proc_not_connected];
  st:.z.P;
- r:@[{`result`error!(x y;`)}[procData`hdl];query;{`result`error!(();`$x)}];
+ if[null procData`hdl; : (`result`error!(();`.remote.proc_not_connected)),`st`et`proc!st,.z.P,proc  ];
+ r:@[{`result`error!(x y;`)}[mode procData`hdl];query;{`result`error!(();`$x)}];
  et:.z.P;
  :r,`st`et`proc!st,et,proc
  }
 
+.remote.query:{[proc;query] .remote.query0[(::);proc;query] }
  
 d) function
  remote
  .remote.query
  Function to give a query of available connection
- q) .f.proc:`kx_platform_hdb
- q) .remote.query[`] "1+3"
+ q) .remote.query[`kx_platform_hdb] "1+3"
  f) 1+3
+
+.remote.async:{[proc;query] .remote.query0[neg;proc;query] }
+ 
+d) function
+ remote
+ .remote.async
+ Function to give a async of available connection
+ q) .remote.async[`kx_platform_hdb] "1+3"
+ f) 1+3
+
 
 .remote.qthrow:{[proc;query]
  r:.remote.query[proc;query];
@@ -94,8 +105,6 @@ d) function
   r`result
  }
 
- 
-
 d) function
  remote
  .remote.q
@@ -104,12 +113,38 @@ d) function
  q) .remote.q "1+3"
  f) 1+3
 
+.remote.a:{
+  r:.remote.async[;x]@'.f.proc;
+  if[0<type .f.proc;:r ];
+  if[not null r`error;'r`error];
+  r`result
+ }
+
+d) function
+ remote
+ .remote.a
+ Function to give a query of available connection
+ q) .f.proc:`kx_platform_hdb
+ q) .remote.a "1+3"
+
+
 .f.q:{ .f.r:.remote.q x;.f.r }
-.f.e:{ .f.q x }
+.f.a:{ .f.r:.remote.a x;.f.r }
+/ .f.e:{ .f.q x }
+
+.f.e:{ x:"||" vs x;if[1=count x;:.f.q x 0];r:.f.q .bt.print[x 0]get x 1; if[2=count x;:r]; (parse x 2) set r;r  }
+
 .f.proc:`self
 
-.s.q:{ (system;{$[" "= x 0;1_x;x] } over x)}
-.s.e:{ .s.r:.f.q .s.q x;.s.r }
+.s.mode:`batch
+/ .s.mode:`pwsh
+
+.s.batch:{system x}
+.s.pwsh:{system .bt.print[ "pwsh -command \"%0\" " ] enlist ssr[;"\"";"\\\""] x  }
+
+.s.q0:{[mode;x] (.s mode;{$[" "= x 0;1_x;x] } over x)}
+.s.q:{ .s.q0[.s.mode] x }
+.s.e:{ .s.r:.f.q .s.q r:.bt.print[r 0] get {$[1<count x;x 1;"()!()"] } r:"||" vs x;.s.r }
 
  
 .remote.sbl:{[x]
