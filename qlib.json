@@ -7,5 +7,17 @@
 		"openapi":{
 			"json":"v1.41.json"
 		}
+	},
+	"kfk":{
+	 	"publisher":{
+	  		"metadata_broker_list":"localhost:9092",
+	  		"statistics_interval_ms":"10000",
+	  		"queue_buffering_max_ms":"1",
+	  		"fetch_wait_max_ms":"10"
+	 	},
+	 	"consumer":{
+			"metadata_broker_list":"localhost:9092",
+			"group_id": "0"
+	 	}
 	}
 }

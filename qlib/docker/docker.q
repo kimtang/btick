@@ -120,10 +120,12 @@ d) function
  allContainers:.docker.paths.get "/containers/json";
  if[0=count allContainers;:()];
  allContainers:(`$ lower string cols allContainers ) xcol allContainers ;
- tmp:select name:`${1_x}@'names[;0],host:hostconfig,port:ports,`$id from allContainers;
+ tmp:`name`port xasc select name:`${1_x}@'names[;0],host:hostconfig,port:ports,`$id from allContainers;
  tmp1:ungroup  select name,port:{ r:x where {all `IP`PrivatePort`PublicPort`Type in key x}@'x;if["b"$count r;:r];:flip`IP`PrivatePort`PublicPort`Type!(enlist"nohost";enlist 0ni;enlist 0ni;enlist `) }@'port,id from tmp;
  tmp2:`uid`port xasc select uid:`${ssr[x;"-";"."]}@'string name,host:{if[x~"0.0.0.0";:`localhost];`$x }@'port[;`IP],port:"j"$port[;`PublicPort],id from tmp1;
- `uid`id xcols update uid:.Q.dd'[uid;i],id:`$6#/:string id,user:`,passwd:count[i]#enlist"",cid:id from tmp2
+ r:`uid`id xcols update uid:.Q.dd'[uid;i],id:`$6#/:string id,user:`,passwd:count[i]#enlist"",cid:id from tmp2;
+ if[x~`subl;: 0!select by host,port from r where host like "localhost" ];
+ r
  }
 
 d) function

@@ -3,18 +3,27 @@
 if[not `bt in key `;system "l bt.q"];
 
 \d .r
-dll:`:C:/q/r/rserver/w32/rserver
+
+dll:.bt.print["%btsrc%/qlib/rlang/r/rserver/%zo%/rserver"] `btsrc`zo!(getenv`btsrc;.z.o)
+
+// dll:`:C:/q/r/rserver/w32/rserver
 nsc:"kdb."
 i:0; / index to store the anonymous variable
 s:.z.o;
 
 calc:1b;
 
-Rclose:$[s~`w32;.r.dll 2:(`rclose;1);{[x]}]
-Ropen:$[s~`w32; .r.dll  2:(`ropen;1) ;{[x]}] 
-Rcmd:$[s~`w32; .r.dll   2:(`rcmd;1);{[x]}]  
-Rget:$[s~`w32; .r.dll   2:(`rget;1);{[x]}]  
-Rset:$[s~`w32;.r.dll   2:(`rset;2);{[x;y]}]
+/ Rclose:$[s~`w32;.r.dll 2:(`rclose;1);{[x]}]
+/ Ropen:$[s~`w32; .r.dll  2:(`ropen;1) ;{[x]}] 
+/ Rcmd:$[s~`w32; .r.dll   2:(`rcmd;1);{[x]}]  
+/ Rget:$[s~`w32; .r.dll   2:(`rget;1);{[x]}]  
+/ Rset:$[s~`w32; .r.dll   2:(`rset;2);{[x;y]}]
+
+Rclose:.r.dll 2:(`rclose;1)
+Ropen: .r.dll  2:(`ropen;1)
+Rcmd:  .r.dll   2:(`rcmd;1)
+Rget:  .r.dll   2:(`rget;1)
+Rset:  .r.dll   2:(`rset;2)
 
 Rset_      : ()!()
 Rset_[1b] : { t:@[value;x;()];t:$[100h=type t ;();t];if[0<count t; .r.Rset[string x;t] ]; :x} / for symbol

@@ -145,8 +145,13 @@ d) function
 .s.q0:{[mode;x] (.s mode;{$[" "= x 0;1_x;x] } over x)}
 .s.q:{ .s.q0[.s.mode] x }
 .s.e:{ .s.r:.f.q .s.q r:.bt.print[r 0] get {$[1<count x;x 1;"()!()"] } r:"||" vs x;.s.r }
-
+.b.e:{ .b.r:.remote.query[`self;] .s.q r:.bt.print[r 0] get {$[1<count x;x 1;"()!()"] } r:"||" vs x;
+  if[not null .b.r`error;'.b.r`error ];
+  .b.r`result
+ }
  
+
+
 .remote.sbl:{[x]
  summary:.remote.summary x;
  path:.bt.md[`path]  1_ ssr[;":./";":"] string {[x] if[max key[ x] like "*sublime-project";:x]; .Q.dd[x;`..] }/[4; `:.];
